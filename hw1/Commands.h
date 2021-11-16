@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <list>
+#include <string>
 
 #define COMMAND_ARGS_MAX_LENGTH (200)
 #define COMMAND_MAX_ARGS (20)
@@ -98,6 +99,7 @@ class JobsList {
 		bool stopped;	
 	};
 	
+	int next_id = 1;
 	std::vector<Command> jobs;
 	std::list<int> vacant_ids;
  public:
@@ -156,7 +158,9 @@ class HeadCommand : public BuiltInCommand {
 
 class SmallShell {
  private:
-	// TODO: Add your data members
+	JobsList jobs_list;
+	std::string prompt = "smash";
+
 	SmallShell();
  public:
 	Command *CreateCommand(const char* cmd_line);
