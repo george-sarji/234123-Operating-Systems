@@ -4,6 +4,7 @@
 #include <vector>
 #include <list>
 #include <string>
+#include <time.h>
 
 #define COMMAND_ARGS_MAX_LENGTH (200)
 #define COMMAND_MAX_ARGS (20)
@@ -92,11 +93,13 @@ class JobsList {
 			background	Boolean if the process is background or not
 			to_delete	Flag to check whether to delete process or not
 			stopped		Activity status of process
+			inserted 	Time (in seconds) when the job was first inserted
 		*/
 		int job_id, p_id;
 		bool background;
 		bool to_delete;
-		bool stopped;	
+		bool stopped;
+		time_t inserted;
 	};
 	
 	int next_id = 1;
