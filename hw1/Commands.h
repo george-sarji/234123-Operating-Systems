@@ -9,6 +9,7 @@
 class Command {
 // TODO: Add your data members
  public:
+    int test;
   Command(const char* cmd_line);
   virtual ~Command();
   virtual void execute() = 0;
