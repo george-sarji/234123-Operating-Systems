@@ -2,29 +2,31 @@
 #define SMASH_COMMAND_H_
 
 #include <vector>
-#include <list>
 #include <string>
-#include <time.h>
+#include <list>
+#include "time.h"
 
-using  namespace std;
+using namespace std;
 #define COMMAND_ARGS_MAX_LENGTH (200)
 #define COMMAND_MAX_ARGS (20)
 
-class Command {
-// TODO: Add your data members
- public:
-	Command(const char* cmd_line);
-	virtual ~Command();
+class Command
+{
+	// TODO: Add your data members
+public:
+	Command(const char *cmd_line) {}
+	virtual ~Command() {}
 	virtual void execute() = 0;
 	//virtual void prepare();
 	//virtual void cleanup();
 	// TODO: Add your extra methods if needed
 };
 
-class BuiltInCommand : public Command {
- public:
-  explicit BuiltInCommand(const char* cmd_line): Command(cmd_line){}
-  virtual ~BuiltInCommand() = default;
+class BuiltInCommand : public Command
+{
+public:
+	explicit BuiltInCommand(const char *cmd_line) : Command(cmd_line) {}
+	virtual ~BuiltInCommand() = default;
 };
 //
 //class ExternalCommand : public Command {
@@ -52,115 +54,32 @@ class BuiltInCommand : public Command {
 //  //void cleanup() override;
 //};
 //
-class ChangeDirCommand : public BuiltInCommand {
-    string path;
+class ChangeDirCommand : public BuiltInCommand
+{
+	string path;
+
 public:
-// TODO: Add your data members public:
-  ChangeDirCommand(const char* cmd_line,string&  plastPwd):BuiltInCommand(cmd_line),path(plastPwd){}
-  virtual ~ChangeDirCommand() {}
-    void execute() override;
-};
-
-class GetCurrDirCommand : public BuiltInCommand {
- public:
-  explicit GetCurrDirCommand(const char* cmd_line):BuiltInCommand(cmd_line){}
-  virtual ~GetCurrDirCommand() {}
-  void execute() override;
-};
-
-class ShowPidCommand : public BuiltInCommand {
- public:
-	  explicit ShowPidCommand(const char* cmd_line);
-  virtual ~ShowPidCommand() {}
-  void execute() override;
-};
-
-class JobsList;
-class QuitCommand : public BuiltInCommand {
-// TODO: Add your data members public:
-	QuitCommand(const char* cmd_line, JobsList* jobs);
-	virtual ~QuitCommand() {}
+	// TODO: Add your data members public:
+	ChangeDirCommand(const char *cmd_line, string &plastPwd) : BuiltInCommand(cmd_line), path(plastPwd) {}
+	virtual ~ChangeDirCommand() {}
 	void execute() override;
 };
 
-
-
-
-class JobsList {
- public:
-	class JobEntry {
-		/*
-			Member descriptions
-			job_id		Current job ID
-			p_id		Current process ID
-			background	Boolean if the process is background or not
-			to_delete	Flag to check whether to delete process or not
-			stopped		Activity status of process
-			inserted 	Time (in seconds) when the job was first inserted
-		*/
-		int job_id, p_id;
-		bool background;
-		bool to_delete;
-		bool stopped;
-		time_t inserted;
-	};
-	
-	int next_id = 1;
-	std::vector<JobEntry> jobs;
-	std::list<int> vacant_ids;
- public:
-	JobsList();
-	~JobsList();
-	void addJob(Command* cmd, bool isStopped = false);
-	void printJobsList();
-	void killAllJobs();
-	void removeFinishedJobs();
-	JobEntry * getJobById(int jobId);
-	void removeJobById(int jobId);
-	JobEntry * getLastJob(int* lastJobId);
-	JobEntry *getLastStoppedJob(int *jobId);
-	// TODO: Add extra methods or modify exisitng ones as needed
-};
-
-class JobsCommand : public BuiltInCommand {
- // TODO: Add your data members
- public:
-	JobsCommand(const char* cmd_line, JobsList* jobs);
-	virtual ~JobsCommand() {}
+class GetCurrDirCommand : public BuiltInCommand
+{
+public:
+	explicit GetCurrDirCommand(const char *cmd_line) : BuiltInCommand(cmd_line) {}
+	virtual ~GetCurrDirCommand() {}
 	void execute() override;
 };
 
-class KillCommand : public BuiltInCommand {
- // TODO: Add your data members
- public:
-	KillCommand(const char* cmd_line, JobsList* jobs);
-	virtual ~KillCommand() {}
+class ShowPidCommand : public BuiltInCommand
+{
+public:
+	explicit ShowPidCommand(const char *cmd_line);
+	virtual ~ShowPidCommand() {}
 	void execute() override;
 };
-
-class ForegroundCommand : public BuiltInCommand {
- // TODO: Add your data members
- public:
-	ForegroundCommand(const char* cmd_line, JobsList* jobs);
-	virtual ~ForegroundCommand() {}
-	void execute() override;
-};
-
-class BackgroundCommand : public BuiltInCommand {
- // TODO: Add your data members
- public:
-	BackgroundCommand(const char* cmd_line, JobsList* jobs);
-	virtual ~BackgroundCommand() {}
-	void execute() override;
-};
-
-class HeadCommand : public BuiltInCommand {
- public:
-	HeadCommand(const char* cmd_line);
-	virtual ~HeadCommand() {}
-	void execute() override;
-};
-
 
 //class JobsList;
 //class QuitCommand : public BuiltInCommand {
@@ -176,9 +95,27 @@ class HeadCommand : public BuiltInCommand {
 //class JobsList {
 // public:
 //  class JobEntry {
+
+/*
+			Member descriptions
+			job_id		Current job ID
+			p_id		Current process ID
+			background	Boolean if the process is background or not
+			to_delete	Flag to check whether to delete process or not
+			stopped		Activity status of process
+			inserted 	Time (in seconds) when the job was first inserted
+		*/
+// int job_id, p_id;
+// bool background;
+// bool to_delete;
+// bool stopped;
+// time_t inserted;
 //   // TODO: Add your data members
 //  };
 // // TODO: Add your data members
+// int next_id = 1;
+// 	std::vector<JobEntry> jobs;
+// 	std::list<int> vacant_ids;
 // public:
 //  JobsList();
 //  ~JobsList();
@@ -232,30 +169,31 @@ class HeadCommand : public BuiltInCommand {
 //  void execute() override;
 //};
 
-
-class SmallShell {
+class SmallShell
+{
 public:
-    std::vector<Command*> bk_jobs;
-    std::vector<Command*> stopped_jobs;
-    std::vector<string> paths;
-    int curr_path;
- private:
-	JobsList jobs_list;
-	std::string prompt = "smash";
+	std::vector<Command *> bk_jobs;
+	std::vector<Command *> stopped_jobs;
+	std::vector<string> paths;
+	int curr_path;
 
-	SmallShell():bk_jobs(),stopped_jobs(),paths(100,""),curr_path(0){}
- public:
-	Command *CreateCommand(const char* cmd_line);
-	SmallShell(SmallShell const&)      = delete; // disable copy ctor
-	void operator=(SmallShell const&)  = delete; // disable = operator
-	static SmallShell& getInstance() // make SmallShell singleton
+private:
+	// TODO: Add your data members
+	SmallShell() : bk_jobs(), stopped_jobs(), paths(100, ""), curr_path(0) {}
+
+public:
+	Command *CreateCommand(const char *cmd_line);
+	Command *createBuiltInCommand(vector<string> &args);
+	SmallShell(SmallShell const &) = delete;	 // disable copy ctor
+	void operator=(SmallShell const &) = delete; // disable = operator
+	static SmallShell &getInstance()			 // make SmallShell singleton
 	{
 		static SmallShell instance; // Guaranteed to be destroyed.
 		// Instantiated on first use.
 		return instance;
 	}
 	~SmallShell();
-	void executeCommand(const char* cmd_line);
+	void executeCommand(const char *cmd_line);
 	// TODO: add extra methods as needed
 };
 
