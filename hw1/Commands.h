@@ -136,8 +136,8 @@ private:
 	std::list<int> vacant_ids;
 
 public:
-	JobsList();
-	~JobsList();
+	JobsList(): next_id(1), jobs(), vacant_ids() {}
+	~JobsList() = default;
 	void addJob(Command *cmd, bool isStopped = false);
 	void printJobsList();
 	void killAllJobs();
@@ -193,12 +193,11 @@ class SmallShell
 
 private:
 	// TODO: Add your data members
-	SmallShell() : bk_jobs(), stopped_jobs(), paths(), curr_path(0) {}
+	SmallShell() = default;
 	std::vector<Command *> bk_jobs;
 	std::vector<Command *> stopped_jobs;
 	JobsList jobs;
 	std::list<string> paths;
-	int curr_path;
 	std::string prompt = "smash";
 
 public:
