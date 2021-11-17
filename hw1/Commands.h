@@ -11,7 +11,7 @@ using namespace std;
 #define COMMAND_MAX_ARGS (20)
 
 enum JOB_TYPE {
-	STOPPED,
+	STOP,
 	BACKGROUND
 };
 enum COMMAND_STATUS {
