@@ -145,7 +145,7 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
 	{
 		if (args[1].empty())
 			return nullptr;
-		if (args[1] == "-")
+		else if (args[1].compare("-") == 0)
 		{
 			if (paths.empty())
 			{
@@ -159,10 +159,10 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
 			}
 			string path = paths.back();
 			paths.pop_back();
-
+			cout << args[1].c_str() << endl;
 			return new ChangeDirCommand(args[1].c_str(), args[1]);
 		}
-		if (args[0] == "..")
+		else if (args[1].compare("..") == 0)
 		{
 			if (paths.empty())
 			{
