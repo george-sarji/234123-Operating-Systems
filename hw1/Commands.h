@@ -103,7 +103,7 @@ class JobsList {
 	};
 	
 	int next_id = 1;
-	std::vector<Command> jobs;
+	std::vector<JobEntry> jobs;
 	std::list<int> vacant_ids;
  public:
 	JobsList();
