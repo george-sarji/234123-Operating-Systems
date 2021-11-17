@@ -10,8 +10,22 @@ using namespace std;
 #define COMMAND_ARGS_MAX_LENGTH (200)
 #define COMMAND_MAX_ARGS (20)
 
+enum JOB_TYPE {
+	STOP,
+	BACKGROUND
+};
+enum COMMAND_STATUS {
+	ACTIVE,
+	STOPPED,
+	FINISH
+};
+
+
 class Command
 {
+	COMMAND_STATUS status;
+	int job_id;
+	std::vector<string> arguments;
 	// TODO: Add your data members
 public:
 	Command(const char *cmd_line) {}
@@ -92,11 +106,13 @@ public:
 //
 //
 //
-//class JobsList {
-// public:
-//  class JobEntry {
+class JobsList
+{
+public:
+	class JobEntry
+	{
 
-/*
+		/*
 			Member descriptions
 			job_id		Current job ID
 			p_id		Current process ID
@@ -105,30 +121,33 @@ public:
 			stopped		Activity status of process
 			inserted 	Time (in seconds) when the job was first inserted
 		*/
-// int job_id, p_id;
-// bool background;
-// bool to_delete;
-// bool stopped;
-// time_t inserted;
-//   // TODO: Add your data members
-//  };
-// // TODO: Add your data members
-// int next_id = 1;
-// 	std::vector<JobEntry> jobs;
-// 	std::list<int> vacant_ids;
-// public:
-//  JobsList();
-//  ~JobsList();
-//  void addJob(Command* cmd, bool isStopped = false);
-//  void printJobsList();
-//  void killAllJobs();
-//  void removeFinishedJobs();
-//  JobEntry * getJobById(int jobId);
-//  void removeJobById(int jobId);
-//  JobEntry * getLastJob(int* lastJobId);
-//  JobEntry *getLastStoppedJob(int *jobId);
-//  // TODO: Add extra methods or modify exisitng ones as needed
-//};
+		int job_id, p_id;
+		bool to_delete;
+		time_t timestamp;
+		JOB_TYPE type;
+		Command* command;
+		// TODO: Add your data members
+	};
+
+private:
+	// TODO: Add your data members
+	int next_id = 1;
+	std::vector<JobEntry> jobs;
+	std::list<int> vacant_ids;
+
+public:
+	JobsList(): next_id(1), jobs(), vacant_ids() {}
+	~JobsList() = default;
+	void addJob(Command *cmd, bool isStopped = false);
+	void printJobsList();
+	void killAllJobs();
+	void removeFinishedJobs();
+	JobEntry *getJobById(int jobId);
+	void removeJobById(int jobId);
+	JobEntry *getLastJob(int *lastJobId);
+	JobEntry *getLastStoppedJob(int *jobId);
+	// TODO: Add extra methods or modify exisitng ones as needed
+};
 //
 //class JobsCommand : public BuiltInCommand {
 // // TODO: Add your data members
@@ -171,15 +190,15 @@ public:
 
 class SmallShell
 {
-public:
-	std::vector<Command *> bk_jobs;
-	std::vector<Command *> stopped_jobs;
-	std::vector<string> paths;
-	int curr_path;
 
 private:
 	// TODO: Add your data members
-	SmallShell() : bk_jobs(), stopped_jobs(), paths(100, ""), curr_path(0) {}
+	SmallShell() = default;
+	std::vector<Command *> bk_jobs;
+	std::vector<Command *> stopped_jobs;
+	JobsList jobs;
+	std::list<string> paths;
+	std::string prompt = "smash";
 
 public:
 	Command *CreateCommand(const char *cmd_line);
