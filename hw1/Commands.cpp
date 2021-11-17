@@ -1,12 +1,14 @@
 #include <unistd.h>
 #include <string.h>
+#include <string>
 #include <iostream>
 #include <vector>
 #include <sstream>
 #include <sys/wait.h>
 #include <iomanip>
 #include "Commands.h"
-
+#include <cerrno>
+#include <set>
 using namespace std;
 
 #if 0
@@ -20,14 +22,20 @@ using namespace std;
 #define FUNC_EXIT()
 #endif
 
+std::string WHITESPACE (" \t\f\v\n\r");
+set<string> BuiltinTable {"cd","chprompt","showpid","pwd","jobs","kill","fg","bg","quit"};
+
+
 string _ltrim(const std::string& s)
 {
+    std::string WHITESPACE (" \t\f\v\n\r");
   size_t start = s.find_first_not_of(WHITESPACE);
   return (start == std::string::npos) ? "" : s.substr(start);
 }
 
 string _rtrim(const std::string& s)
 {
+    std::string WHITESPACE (" \t\f\v\n\r");
   size_t end = s.find_last_not_of(WHITESPACE);
   return (end == std::string::npos) ? "" : s.substr(0, end + 1);
 }
@@ -37,29 +45,31 @@ string _trim(const std::string& s)
   return _rtrim(_ltrim(s));
 }
 
-int _parseCommandLine(const char* cmd_line, char** args) {
-  FUNC_ENTRY()
-  int i = 0;
-  std::istringstream iss(_trim(string(cmd_line)).c_str());
-  for(std::string s; iss >> s; ) {
-    args[i] = (char*)malloc(s.length()+1);
-    memset(args[i], 0, s.length()+1);
-    strcpy(args[i], s.c_str());
-    args[++i] = NULL;
-  }
-  return i;
-
-  FUNC_EXIT()
-}
+//int _parseCommandLine(const char* cmd_line, char** args) {
+//  FUNC_ENTRY()
+//  int i = 0;
+//  std::istringstream iss(_trim(string(cmd_line)).c_str());
+//  for(std::string s; iss >> s; ) {
+//    args[i] = (char*)malloc(s.length()+1);
+//    memset(args[i], 0, s.length()+1);
+//    strcpy(args[i], s.c_str());
+//    args[++i] = NULL;
+//  }
+//  return i;
+//
+//  FUNC_EXIT()
+//}
 
 bool _isBackgroundComamnd(const char* cmd_line) {
   const string str(cmd_line);
+    std::string WHITESPACE (" \t\f\v\n\r");
   return str[str.find_last_not_of(WHITESPACE)] == '&';
 }
 
 void _removeBackgroundSign(char* cmd_line) {
   const string str(cmd_line);
   // find last character other than spaces
+    std::string WHITESPACE (" \t\f\v\n\r");
   unsigned int idx = str.find_last_not_of(WHITESPACE);
   // if all characters are spaces then return
   if (idx == string::npos) {
@@ -77,42 +87,177 @@ void _removeBackgroundSign(char* cmd_line) {
 
 // TODO: Add your implementation for classes in Commands.h 
 
-SmallShell::SmallShell() {
-// TODO: add your implementation
-}
-
+//SmallShell::SmallShell() {
+//// TODO: add your implementation
+//}
+//
 SmallShell::~SmallShell() {
 // TODO: add your implementation
 }
 
+//Command *SmallShell::createBuiltInCommand(vector<string> &args) {
+//    return nullptr;
+//}
+
 /**
 * Creates and returns a pointer to Command class which matches the given command line (cmd_line)
 */
-Command * SmallShell::CreateCommand(const char* cmd_line) {
-	// For example:
-/*
-  string cmd_s = _trim(string(cmd_line));
-  string firstWord = cmd_s.substr(0, cmd_s.find_first_of(" \n"));
+vector<string> analyseTheLine(const char* cmd_line) {
+    string cmd_s = cmd_line;
+    vector<string> args(20,"");
+    cmd_s = _trim(string(cmd_s));
+    int i =0;
+    for (vector<string>::iterator index = args.begin() ; index != args.end() ; index++) {
+        string arg = cmd_s.substr(0, cmd_s.find_first_of(WHITESPACE));
+        if ( arg.empty() ) {
 
-  if (firstWord.compare("pwd") == 0) {
-    return new GetCurrDirCommand(cmd_line);
-  }
-  else if (firstWord.compare("showpid") == 0) {
-    return new ShowPidCommand(cmd_line);
-  }
-  else if ...
-  .....
-  else {
-    return new ExternalCommand(cmd_line);
-  }
-  */
-  return nullptr;
+            break;
+        }
+        args[i]=arg;
+        cmd_s =cmd_s.substr(arg.size());
+        cmd_s = _trim(string(cmd_s));
+        i++;
+    }
+    return args;
 }
+Command *SmallShell::createBuiltInCommand(vector<string> &args){
+    if(args[0] == "pwd"){
+//        if(!args[1].empty()) return nullptr;
+        return new GetCurrDirCommand(args[0].c_str());
+    }
+    if(args[0] == "showpid"){
+//        if(!args[1].empty()) {
+//            return nullptr;
+//        }
+        return new ShowPidCommand(args[0].c_str());
+    }
+    if(args[0] == "cd"){
+        if (args[1].empty())return nullptr;
+        if (args[1]=="-") {
+            if (paths.empty()) {
+                cout << "smash error: cd: OLDPWD not set " << endl;
+                return nullptr;
+            }
+            if(! args[2].empty()){
+                cout<<"smash error: cd: too many arguments"<<endl;
+           return nullptr;
+            }
+            string path = paths[--curr_path];
+
+            return new ChangeDirCommand(args[1].c_str(),args[1]);
+        }
+        if (args[0]==".."){
+            if(paths.empty()){
+                return nullptr;
+            }
+            string str = paths[curr_path];
+
+
+        }
+
+        if (! args[2].empty()) {
+            cout<<"smash error: cd: too many arguments"<<endl;
+        } else{
+            string path = paths[curr_path++];
+            return new ChangeDirCommand(args[0].c_str(),args[1]);
+        }
+//        if (args[0]=="kill"){
+//            if (!args[3].empty()){
+//                cout <<"smash error: kill: invalid arguments"<<endl;
+//                return nullptr;
+//            }
+//            return
+//        }
+    }
+    return nullptr;
+}
+Command * SmallShell::CreateCommand(const char* cmd_line){
+    vector<string> args = analyseTheLine(cmd_line);
+    const bool is_in = BuiltinTable.find(args[0]) != BuiltinTable.end();
+    if(is_in){
+         Command* comm = createBuiltInCommand(args);
+//         vector<string> tmp(20,"");
+//         args = tmp;
+        return comm;
+    }
+    vector<string> tmp(20,"");
+    args = tmp;
+    return nullptr;
+}
+//Command * SmallShell::CreateCommand(const char* cmd_line) {
+//	// For example:
+//
+//  string cmd_s = _trim(string(cmd_line));
+//  string firstWord = cmd_s.substr(0, cmd_s.find_first_of(" \n"));
+//  if (firstWord.compare("pwd") == 0) {
+//      string sec_word = cmd_s.substr(firstWord.size(), cmd_s.size());
+//      if (sec_word.empty()) return new GetCurrDirCommand(cmd_line);
+//      return nullptr;
+//  }
+//   if (firstWord.compare("showpid") == 0) {
+//
+//       string sec_word = cmd_s.substr(firstWord.size(), cmd_s.size());
+//       if (sec_word.empty()) return new ShowPidCommand(cmd_line);
+//    return nullptr;
+//  }
+//   if (firstWord.compare("cd") == 0) {
+//       string sec_word = cmd_s.substr(firstWord.size(), cmd_s.size());
+//       sec_word = _trim(sec_word);
+//       string first_arg = sec_word.substr(0,sec_word.find_first_of(WHITESPACE));
+//       string third_word = sec_word.substr(first_arg.size(), sec_word.size());
+//       if ( first_arg.compare("-")==0){
+//            if (paths.empty()) {
+//                cout << "smash error: cd: OLDPWD not set "<<endl;
+//                return nullptr;
+//            }
+//            else{
+//
+//            }
+//       }
+//       if ( ! third_word.empty()){
+//           cout<<"smash error: cd: too many arguments"<<endl;
+//           return nullptr;
+//       }
+////       paths[curr_path++]=sec_word;
+//       return new ChangeDirCommand(cmd_line,first_arg);
+//   }
+//  return nullptr;
+//}
 
 void SmallShell::executeCommand(const char *cmd_line) {
   // TODO: Add your implementation here
-  // for example:
-  // Command* cmd = CreateCommand(cmd_line);
-  // cmd->execute();
+
+   Command* cmd = CreateCommand(cmd_line);
+   if (! cmd)
+       return;
+   cmd->execute();
+   delete cmd;
   // Please note that you must fork smash process for some commands (e.g., external commands....)
+}
+
+void ShowPidCommand::execute() {
+    int pid = getpid();
+    cout << "smash pid is " << pid << endl;
+
+}
+
+ShowPidCommand::ShowPidCommand(const char *cmd_line) : BuiltInCommand(cmd_line) {
+
+}
+
+void GetCurrDirCommand::execute() {
+    char path[100];
+    getcwd(path,100);
+    string str(path);
+    cout<<str<<endl;
+
+}
+
+void ChangeDirCommand::execute() {
+    cout <<"the path is " << path.c_str()<< endl;
+    int res = chdir(path.c_str());
+    if ( res < 0) {
+         cout << strerror(errno) << endl;
+    }
+
 }
