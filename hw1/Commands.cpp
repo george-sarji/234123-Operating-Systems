@@ -12,37 +12,36 @@
 using namespace std;
 
 #if 0
-#define FUNC_ENTRY()  \
-  cout << __PRETTY_FUNCTION__ << " --> " << endl;
+#define FUNC_ENTRY() \
+	cout << __PRETTY_FUNCTION__ << " --> " << endl;
 
-#define FUNC_EXIT()  \
-  cout << __PRETTY_FUNCTION__ << " <-- " << endl;
+#define FUNC_EXIT() \
+	cout << __PRETTY_FUNCTION__ << " <-- " << endl;
 #else
 #define FUNC_ENTRY()
 #define FUNC_EXIT()
 #endif
 
-std::string WHITESPACE (" \t\f\v\n\r");
-set<string> BuiltinTable {"cd","chprompt","showpid","pwd","jobs","kill","fg","bg","quit"};
+std::string WHITESPACE(" \t\f\v\n\r");
+set<string> BuiltinTable{"cd", "chprompt", "showpid", "pwd", "jobs", "kill", "fg", "bg", "quit"};
 
-
-string _ltrim(const std::string& s)
+string _ltrim(const std::string &s)
 {
-    std::string WHITESPACE (" \t\f\v\n\r");
-  size_t start = s.find_first_not_of(WHITESPACE);
-  return (start == std::string::npos) ? "" : s.substr(start);
+	std::string WHITESPACE(" \t\f\v\n\r");
+	size_t start = s.find_first_not_of(WHITESPACE);
+	return (start == std::string::npos) ? "" : s.substr(start);
 }
 
-string _rtrim(const std::string& s)
+string _rtrim(const std::string &s)
 {
-    std::string WHITESPACE (" \t\f\v\n\r");
-  size_t end = s.find_last_not_of(WHITESPACE);
-  return (end == std::string::npos) ? "" : s.substr(0, end + 1);
+	std::string WHITESPACE(" \t\f\v\n\r");
+	size_t end = s.find_last_not_of(WHITESPACE);
+	return (end == std::string::npos) ? "" : s.substr(0, end + 1);
 }
 
-string _trim(const std::string& s)
+string _trim(const std::string &s)
 {
-  return _rtrim(_ltrim(s));
+	return _rtrim(_ltrim(s));
 }
 
 //int _parseCommandLine(const char* cmd_line, char** args) {
@@ -60,39 +59,44 @@ string _trim(const std::string& s)
 //  FUNC_EXIT()
 //}
 
-bool _isBackgroundComamnd(const char* cmd_line) {
-  const string str(cmd_line);
-    std::string WHITESPACE (" \t\f\v\n\r");
-  return str[str.find_last_not_of(WHITESPACE)] == '&';
+bool _isBackgroundComamnd(const char *cmd_line)
+{
+	const string str(cmd_line);
+	std::string WHITESPACE(" \t\f\v\n\r");
+	return str[str.find_last_not_of(WHITESPACE)] == '&';
 }
 
-void _removeBackgroundSign(char* cmd_line) {
-  const string str(cmd_line);
-  // find last character other than spaces
-    std::string WHITESPACE (" \t\f\v\n\r");
-  unsigned int idx = str.find_last_not_of(WHITESPACE);
-  // if all characters are spaces then return
-  if (idx == string::npos) {
-    return;
-  }
-  // if the command line does not end with & then return
-  if (cmd_line[idx] != '&') {
-    return;
-  }
-  // replace the & (background sign) with space and then remove all tailing spaces.
-  cmd_line[idx] = ' ';
-  // truncate the command line string up to the last non-space character
-  cmd_line[str.find_last_not_of(WHITESPACE, idx) + 1] = 0;
+void _removeBackgroundSign(char *cmd_line)
+{
+	const string str(cmd_line);
+	// find last character other than spaces
+	std::string WHITESPACE(" \t\f\v\n\r");
+	unsigned int idx = str.find_last_not_of(WHITESPACE);
+	// if all characters are spaces then return
+	if (idx == string::npos)
+	{
+		return;
+	}
+	// if the command line does not end with & then return
+	if (cmd_line[idx] != '&')
+	{
+		return;
+	}
+	// replace the & (background sign) with space and then remove all tailing spaces.
+	cmd_line[idx] = ' ';
+	// truncate the command line string up to the last non-space character
+	cmd_line[str.find_last_not_of(WHITESPACE, idx) + 1] = 0;
 }
 
-// TODO: Add your implementation for classes in Commands.h 
+// TODO: Add your implementation for classes in Commands.h
 
 //SmallShell::SmallShell() {
 //// TODO: add your implementation
 //}
 //
-SmallShell::~SmallShell() {
-// TODO: add your implementation
+SmallShell::~SmallShell()
+{
+	// TODO: add your implementation
 }
 
 //Command *SmallShell::createBuiltInCommand(vector<string> &args) {
@@ -102,87 +106,104 @@ SmallShell::~SmallShell() {
 /**
 * Creates and returns a pointer to Command class which matches the given command line (cmd_line)
 */
-vector<string> analyseTheLine(const char* cmd_line) {
-    string cmd_s = cmd_line;
-    vector<string> args(20,"");
-    cmd_s = _trim(string(cmd_s));
-    int i =0;
-    for (vector<string>::iterator index = args.begin() ; index != args.end() ; index++) {
-        string arg = cmd_s.substr(0, cmd_s.find_first_of(WHITESPACE));
-        if ( arg.empty() ) {
+vector<string> analyseTheLine(const char *cmd_line)
+{
+	string cmd_s = cmd_line;
+	vector<string> args(20, "");
+	cmd_s = _trim(string(cmd_s));
+	int i = 0;
+	for (vector<string>::iterator index = args.begin(); index != args.end(); index++)
+	{
+		string arg = cmd_s.substr(0, cmd_s.find_first_of(WHITESPACE));
+		if (arg.empty())
+		{
 
-            break;
-        }
-        args[i]=arg;
-        cmd_s =cmd_s.substr(arg.size());
-        cmd_s = _trim(string(cmd_s));
-        i++;
-    }
-    return args;
+			break;
+		}
+		args[i] = arg;
+		cmd_s = cmd_s.substr(arg.size());
+		cmd_s = _trim(string(cmd_s));
+		i++;
+	}
+	return args;
 }
-Command *SmallShell::createBuiltInCommand(vector<string> &args){
-    if(args[0] == "pwd"){
-//        if(!args[1].empty()) return nullptr;
-        return new GetCurrDirCommand(args[0].c_str());
-    }
-    if(args[0] == "showpid"){
-//        if(!args[1].empty()) {
-//            return nullptr;
-//        }
-        return new ShowPidCommand(args[0].c_str());
-    }
-    if(args[0] == "cd"){
-        if (args[1].empty())return nullptr;
-        if (args[1]=="-") {
-            if (paths.empty()) {
-                cout << "smash error: cd: OLDPWD not set " << endl;
-                return nullptr;
-            }
-            if(! args[2].empty()){
-                cout<<"smash error: cd: too many arguments"<<endl;
-           return nullptr;
-            }
-            string path = paths[--curr_path];
+Command *SmallShell::createBuiltInCommand(vector<string> &args)
+{
+	if (args[0] == "pwd")
+	{
+		//        if(!args[1].empty()) return nullptr;
+		return new GetCurrDirCommand(args[0].c_str());
+	}
+	if (args[0] == "showpid")
+	{
+		//        if(!args[1].empty()) {
+		//            return nullptr;
+		//        }
+		return new ShowPidCommand(args[0].c_str());
+	}
+	if (args[0] == "cd")
+	{
+		if (args[1].empty())
+			return nullptr;
+		else if (args[1].compare("-") == 0)
+		{
+			if (paths.empty())
+			{
+				cout << "smash error: cd: OLDPWD not set " << endl;
+				return nullptr;
+			}
+			if (!args[2].empty())
+			{
+				cout << "smash error: cd: too many arguments" << endl;
+				return nullptr;
+			}
+			string path = paths.back();
+			paths.pop_back();
+			cout << args[1].c_str() << endl;
+			return new ChangeDirCommand(args[1].c_str(), args[1]);
+		}
+		else if (args[1].compare("..") == 0)
+		{
+			if (paths.empty())
+			{
+				return nullptr;
+			}
+			string str = paths.back();
+		}
 
-            return new ChangeDirCommand(args[1].c_str(),args[1]);
-        }
-        if (args[0]==".."){
-            if(paths.empty()){
-                return nullptr;
-            }
-            string str = paths[curr_path];
-
-
-        }
-
-        if (! args[2].empty()) {
-            cout<<"smash error: cd: too many arguments"<<endl;
-        } else{
-            string path = paths[curr_path++];
-            return new ChangeDirCommand(args[0].c_str(),args[1]);
-        }
-//        if (args[0]=="kill"){
-//            if (!args[3].empty()){
-//                cout <<"smash error: kill: invalid arguments"<<endl;
-//                return nullptr;
-//            }
-//            return
-//        }
-    }
-    return nullptr;
+		if (!args[2].empty())
+		{
+			cout << "smash error: cd: too many arguments" << endl;
+		}
+		else
+		{
+			string path = paths.back();
+			return new ChangeDirCommand(args[0].c_str(), args[1]);
+		}
+		//        if (args[0]=="kill"){
+		//            if (!args[3].empty()){
+		//                cout <<"smash error: kill: invalid arguments"<<endl;
+		//                return nullptr;
+		//            }
+		//            return
+		//        }
+	}
+	return nullptr;
 }
-Command * SmallShell::CreateCommand(const char* cmd_line){
-    vector<string> args = analyseTheLine(cmd_line);
-    const bool is_in = BuiltinTable.find(args[0]) != BuiltinTable.end();
-    if(is_in){
-         Command* comm = createBuiltInCommand(args);
-//         vector<string> tmp(20,"");
-//         args = tmp;
-        return comm;
-    }
-    vector<string> tmp(20,"");
-    args = tmp;
-    return nullptr;
+Command *SmallShell::CreateCommand(const char *cmd_line)
+{
+	vector<string> args = analyseTheLine(cmd_line);
+	const bool is_in = BuiltinTable.find(args[0]) != BuiltinTable.end();
+	if (is_in)
+	{
+		Command *comm = createBuiltInCommand(args);
+		//         vector<string> tmp(20,"");
+		//         args = tmp;
+		return comm;
+	}
+	vector<string> tmp(20, "");
+	args = tmp;
+	return nullptr;
 }
 //Command * SmallShell::CreateCommand(const char* cmd_line) {
 //	// For example:
@@ -224,40 +245,42 @@ Command * SmallShell::CreateCommand(const char* cmd_line){
 //  return nullptr;
 //}
 
-void SmallShell::executeCommand(const char *cmd_line) {
-  // TODO: Add your implementation here
+void SmallShell::executeCommand(const char *cmd_line)
+{
+	// TODO: Add your implementation here
 
-   Command* cmd = CreateCommand(cmd_line);
-   if (! cmd)
-       return;
-   cmd->execute();
-   delete cmd;
-  // Please note that you must fork smash process for some commands (e.g., external commands....)
+	Command *cmd = CreateCommand(cmd_line);
+	if (!cmd)
+		return;
+	cmd->execute();
+	delete cmd;
+	// Please note that you must fork smash process for some commands (e.g., external commands....)
 }
 
-void ShowPidCommand::execute() {
-    int pid = getpid();
-    cout << "smash pid is " << pid << endl;
-
+void ShowPidCommand::execute()
+{
+	int pid = getpid();
+	cout << "smash pid is " << pid << endl;
 }
 
-ShowPidCommand::ShowPidCommand(const char *cmd_line) : BuiltInCommand(cmd_line) {
-
+ShowPidCommand::ShowPidCommand(const char *cmd_line) : BuiltInCommand(cmd_line)
+{
 }
 
-void GetCurrDirCommand::execute() {
-    char path[100];
-    getcwd(path,100);
-    string str(path);
-    cout<<str<<endl;
-
+void GetCurrDirCommand::execute()
+{
+	char path[100];
+	getcwd(path, 100);
+	string str(path);
+	cout << str << endl;
 }
 
-void ChangeDirCommand::execute() {
-    cout <<"the path is " << path.c_str()<< endl;
-    int res = chdir(path.c_str());
-    if ( res < 0) {
-         cout << strerror(errno) << endl;
-    }
-
+void ChangeDirCommand::execute()
+{
+	cout << "the path is " << path.c_str() << endl;
+	int res = chdir(path.c_str());
+	if (res < 0)
+	{
+		cout << strerror(errno) << endl;
+	}
 }
