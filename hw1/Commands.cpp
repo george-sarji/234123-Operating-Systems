@@ -8,7 +8,7 @@
 #include <iomanip>
 #include "Commands.h"
 #include <cerrno>
-#include <set>
+#include <algorithm>
 using namespace std;
 
 #if 0
@@ -285,18 +285,19 @@ void ChangeDirCommand::execute()
 	}
 }
 
-void JobsList::deleteFinishedJobs() {
+void JobsList::removeFinishedJobs() {
     for (auto iterator=jobs.begin(); iterator != jobs.end(); iterator++ ){
         if(iterator->to_delete){
             jobs.erase(iterator);
         }
     }
+    std::sort(jobs.begin(),jobs.end());
 }
 
 void JobsList::printJobsList() {
-    deleteFinishedJobs();
+    removeFinishedJobs();
     for (auto iterator=jobs.begin(); iterator != jobs.end(); iterator++ ){
-        string stop ="";
+        string stop;
         time_t t1;
         time(&t1);
         Command* cmd =iterator->command;
@@ -308,8 +309,46 @@ void JobsList::printJobsList() {
         for (auto iterator1 = cmd->arguments.begin(); iterator1 != cmd->arguments.end();iterator1++){
             cout << *iterator1<<" ";
         }
-        cout<<":"<<iterator->p_id <<" " << time_elapsed << " sec" <<endl;
+        cout<<":"<<iterator->p_id <<" " << time_elapsed << " sec" <<stop << endl;
     }
+
+}
+
+JobsList::JobEntry *JobsList::getLastStoppedJob(int *jobId) {
+    int i=0;
+    int reIndex = -1;
+    for (auto & job : jobs){
+        if (job.command->status == STOPPED) {
+            reIndex = i;
+        }
+        i++;
+    }
+    if (reIndex == -1)
+    return nullptr;
+    return &jobs[i];
+}
+
+JobsList::JobEntry *JobsList::getLastJob(int *lastJobId) {
+    return &jobs.back();
+}
+
+JobsList::JobEntry *JobsList::getJobById(int jobId) {
+    int i=0;
+    int reIndex = -1;
+    for (auto & job : jobs){
+        if (job.job_id == jobId) {
+            reIndex = i;
+        }
+        i++;
+    }
+    if (reIndex == -1)
+        return nullptr;
+    return &jobs[i];
+}
+
+void JobsList::removeJobById(int jobId) {
+    JobEntry* jop = getJobById(jobId);
+    jop->to_delete= true;
 
 }
 

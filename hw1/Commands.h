@@ -151,18 +151,17 @@ public:
 private:
 	// TODO: Add your data members
 	int next_id = 1;
-	std::set<JobEntry> jobs;
+	std::vector<JobEntry> jobs;
 	std::list<int> vacant_ids;
 
 public:
 	JobsList(): next_id(1), jobs(), vacant_ids() {}
 	~JobsList() = default;
 	void addJob(Command *cmd, bool isStopped = false);
-    void deleteFinishedJobs();
 	void printJobsList();
 	void killAllJobs();
 	void removeFinishedJobs();
-	JobEntry *getJobById(int jobId);
+    JobEntry * getJobById(int jobId);
 	void removeJobById(int jobId);
 	JobEntry *getLastJob(int *lastJobId);
 	JobEntry *getLastStoppedJob(int *jobId);
