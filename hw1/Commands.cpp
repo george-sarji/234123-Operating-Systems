@@ -284,3 +284,33 @@ void ChangeDirCommand::execute()
 		cout << strerror(errno) << endl;
 	}
 }
+
+void JobsList::deleteFinishedJobs() {
+    for (auto iterator=jobs.begin(); iterator != jobs.end(); iterator++ ){
+        if(iterator->to_delete){
+            jobs.erase(iterator);
+        }
+    }
+}
+
+void JobsList::printJobsList() {
+    deleteFinishedJobs();
+    for (auto iterator=jobs.begin(); iterator != jobs.end(); iterator++ ){
+        string stop ="";
+        time_t t1;
+        time(&t1);
+        Command* cmd =iterator->command;
+        double time_elapsed = difftime(t1,iterator->timestamp);
+        if (cmd->status == STOPPED) {
+             stop = "(stopped)";
+        }
+        cout <<"["<<iterator->job_id<<"]";
+        for (auto iterator1 = cmd->arguments.begin(); iterator1 != cmd->arguments.end();iterator1++){
+            cout << *iterator1<<" ";
+        }
+        cout<<":"<<iterator->p_id <<" " << time_elapsed << " sec" <<endl;
+    }
+
+}
+
+

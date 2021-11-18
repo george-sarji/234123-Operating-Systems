@@ -5,6 +5,7 @@
 #include <string>
 #include <list>
 #include "time.h"
+#include <set>
 
 using namespace std;
 #define COMMAND_ARGS_MAX_LENGTH (200)
@@ -23,11 +24,12 @@ enum COMMAND_STATUS {
 
 class Command
 {
+public:
 	COMMAND_STATUS status;
 	int job_id;
 	std::vector<string> arguments;
 	// TODO: Add your data members
-public:
+
 	Command(const char *cmd_line) {}
 	virtual ~Command() {}
 	virtual void execute() = 0;
@@ -121,24 +123,42 @@ public:
 			stopped		Activity status of process
 			inserted 	Time (in seconds) when the job was first inserted
 		*/
+    public:
 		int job_id, p_id;
 		bool to_delete;
 		time_t timestamp;
 		JOB_TYPE type;
 		Command* command;
+		bool operator==(JobEntry& jobEntry){
+            return job_id== jobEntry.job_id && p_id==jobEntry.p_id;
+		}
+
+		bool operator!=(JobEntry& jobEntry){
+            return ! this->operator==(jobEntry);
+		}
+
+		bool operator>(JobEntry jobEntry){
+            return job_id > jobEntry.job_id;
+		}
+
+		bool operator<(JobEntry jobEntry){
+            return ! this->operator>(jobEntry);
+		}
+
 		// TODO: Add your data members
 	};
 
 private:
 	// TODO: Add your data members
 	int next_id = 1;
-	std::vector<JobEntry> jobs;
+	std::set<JobEntry> jobs;
 	std::list<int> vacant_ids;
 
 public:
 	JobsList(): next_id(1), jobs(), vacant_ids() {}
 	~JobsList() = default;
 	void addJob(Command *cmd, bool isStopped = false);
+    void deleteFinishedJobs();
 	void printJobsList();
 	void killAllJobs();
 	void removeFinishedJobs();
