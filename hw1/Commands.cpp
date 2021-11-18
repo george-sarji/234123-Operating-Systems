@@ -390,3 +390,8 @@ void JobsList::killAllJobs() {
 }
 
 
+void KillCommand::execute() {
+
+     kill(jobsList->getJobById(job_id)->p_id,9);
+     jobsList->removeJobById(job_id);
+}
