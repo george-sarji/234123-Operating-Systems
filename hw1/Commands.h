@@ -124,6 +124,10 @@ public:
 			inserted 	Time (in seconds) when the job was first inserted
 		*/
     public:
+	    JobEntry(int Jop_id,int p_id,Command* command1,JOB_TYPE jobType):job_id(Jop_id),p_id(p_id),to_delete(false),
+	    timestamp(),type(jobType),command(command1){
+	        time(&timestamp);
+	    }
 		int job_id, p_id;
 		bool to_delete;
 		time_t timestamp;
@@ -152,7 +156,7 @@ private:
 	// TODO: Add your data members
 	int next_id = 1;
 	std::vector<JobEntry> jobs;
-	std::list<int> vacant_ids;
+	std::vector<int> vacant_ids;
 
 public:
 	JobsList(): next_id(1), jobs(), vacant_ids() {}

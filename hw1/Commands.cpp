@@ -9,6 +9,8 @@
 #include "Commands.h"
 #include <cerrno>
 #include <algorithm>
+#include <csignal>
+
 using namespace std;
 
 #if 0
@@ -350,6 +352,41 @@ void JobsList::removeJobById(int jobId) {
     JobEntry* jop = getJobById(jobId);
     jop->to_delete= true;
 
+}
+
+void JobsList::addJob(Command *cmd, bool isStopped) {
+    JOB_TYPE type;
+    if ( isStopped){
+        type = STOP;
+    }
+    else{
+        type = BACKGROUND;
+    }
+    if (vacant_ids.empty()){
+        JobEntry jop(vacant_ids[0],getpid(),cmd,type);
+        vacant_ids.erase(vacant_ids.begin());
+        jobs.push_back(jop);
+        return;
+    }
+    JobEntry jop(next_id,getpid(),cmd,type);
+    vacant_ids.erase(vacant_ids.begin());
+    jobs.push_back(jop);
+    next_id++;
+}
+
+void JobsList::killAllJobs() {
+    cout <<"smash: sending SIGKILL signal to "<<jobs.size()<< "jobs:"<<endl;
+    for (auto & job : jobs){
+      cout<<job.p_id<<":";
+      for (auto & arg :job.command->arguments){
+          cout <<arg;
+      }
+      cout << endl;
+      kill(job.p_id,9);
+    }
+    jobs.clear();
+    vacant_ids.clear();
+    next_id=1;
 }
 
 
