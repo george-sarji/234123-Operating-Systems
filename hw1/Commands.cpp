@@ -185,7 +185,7 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
 
 	}
 	if (args[0].compare("kill")==0){
-        if(! args[3].empty() || args[1]!= "-9"){
+        if(! args[3].empty() || args[1]!= "-9" || args[2].empty()){
             cout <<"smash error: kill: invalid arguments"<<endl;
             return nullptr;
         }
@@ -194,7 +194,7 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
             return new KillCommand(args[0].c_str(),&jobs,stoi(job_id));
         }
         else{
-            cout <<"smash error: kill: job-id" << stoi((job_id))<<" does not exist" <<endl;
+            cout <<"smash error: kill: job-id " << stoi((job_id))<<" does not exist" <<endl;
         }
 
     }
