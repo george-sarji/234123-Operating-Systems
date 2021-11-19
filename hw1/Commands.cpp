@@ -182,7 +182,8 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
 			string path = paths.back();
 			return new ChangeDirCommand(args[0].c_str(), args[1]);
 		}
-		        if (args[0]=="kill"){
+		        if (args[0].compare("kill")==0){
+		            cout <<"I AM HERE" << endl;
 		            if(! args[3].empty() || args[2]!= "-9"){
 		                cout <<"smash error: kill: invalid arguments"<<endl;
                         return nullptr;
