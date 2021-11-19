@@ -137,15 +137,15 @@ public:
             return job_id== jobEntry.job_id && p_id==jobEntry.p_id;
 		}
 
-		bool operator!=(const JobEntry& jobEntry){
+		bool operator!=(const JobEntry& jobEntry) const{
             return ! this->operator==(jobEntry);
 		}
 
-		bool operator>(const JobEntry&  jobEntry){
+		bool operator>(const JobEntry&  jobEntry) const{
             return job_id > jobEntry.job_id;
 		}
 
-		bool operator<(const JobEntry& jobEntry){
+		bool operator<(const JobEntry& jobEntry) const {
             return ! this->operator>(jobEntry);
 		}
 
