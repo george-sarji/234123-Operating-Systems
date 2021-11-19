@@ -27,6 +27,14 @@ using namespace std;
 std::string WHITESPACE(" \t\f\v\n\r");
 set<string> BuiltinTable{"cd", "chprompt", "showpid", "pwd", "jobs", "kill", "fg", "bg", "quit"};
 
+bool isNumber(const string& str)
+{
+    for (char const &c : str) {
+        if (std::isdigit(c) == 0) return false;
+    }
+    return true;
+}
+
 string _ltrim(const std::string &s)
 {
 	std::string WHITESPACE(" \t\f\v\n\r");
@@ -219,6 +227,9 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
                 return nullptr;
 	        }
 	        else {
+	            if (isNumber(args[1])){
+	                cout <<"smash error: fg: job-id "<< args[1] <<"does not exist" <<endl;
+	            }
 	            cout << "smash error: fg: invalid arguments"<< endl;
 	        }
 	    }
