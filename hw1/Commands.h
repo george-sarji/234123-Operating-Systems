@@ -230,7 +230,7 @@ private:
 	std::string prompt = "smash";
 
 public:
-	Command *CreateCommand(char *cmd_line);
+	Command *CreateCommand(const char *cmd_line);
 	Command *createBuiltInCommand(vector<string> &args);
 	SmallShell(SmallShell const &) = delete;	 // disable copy ctor
 	void operator=(SmallShell const &) = delete; // disable = operator
@@ -241,7 +241,7 @@ public:
 		return instance;
 	}
 	~SmallShell();
-	void executeCommand(char *cmd_line);
+	void executeCommand(const char *cmd_line);
 	// TODO: add extra methods as needed
 };
 

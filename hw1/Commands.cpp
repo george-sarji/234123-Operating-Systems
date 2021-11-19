@@ -116,16 +116,17 @@ SmallShell::~SmallShell()
 /**
 * Creates and returns a pointer to Command class which matches the given command line (cmd_line)
 */
-vector<string> analyseTheLine(char *cmd_line)
+vector<string> analyseTheLine(const char *cmd_line)
 {
+
 	string cmd_s = cmd_line;
 	vector<string> args(20, "");
 	cmd_s = _trim(string(cmd_s));
 	string first_word =cmd_s.substr(0, cmd_s.find_first_of(" \n"));
 
 	if ( _isBackgroundComamnd(first_word.c_str()) ){
-	    _removeBackgroundSign(cmd_line);
-        string cmd_s1 = cmd_line;
+        string cmd_s1 = cmd_s;
+        cmd_s1.erase(remove(cmd_s1.begin(),cmd_s1.end(),"&"),cmd_s1.end());
         cmd_s1 = _trim(string(cmd_s1));
         first_word =cmd_s1.substr(0, cmd_s1.find_first_of(" \n"));
         if ( BuiltinTable.find(first_word) == BuiltinTable.end()){
@@ -259,7 +260,7 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
 	}
 	return nullptr;
 }
-Command *SmallShell::CreateCommand(char *cmd_line)
+Command *SmallShell::CreateCommand(const char *cmd_line)
 {
 	vector<string> args = analyseTheLine(cmd_line);
 	const bool is_in = BuiltinTable.find(args[0]) != BuiltinTable.end();
@@ -314,7 +315,7 @@ Command *SmallShell::CreateCommand(char *cmd_line)
 //  return nullptr;
 //}
 
-void SmallShell::executeCommand(char *cmd_line)
+void SmallShell::executeCommand(const char *cmd_line)
 {
 	// TODO: Add your implementation here
 
