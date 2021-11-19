@@ -133,19 +133,19 @@ public:
 		time_t timestamp;
 		JOB_TYPE type;
 		Command* command;
-		bool operator==(JobEntry& jobEntry){
+		bool operator==(const JobEntry& jobEntry){
             return job_id== jobEntry.job_id && p_id==jobEntry.p_id;
 		}
 
-		bool operator!=(JobEntry& jobEntry){
+		bool operator!=(const JobEntry& jobEntry){
             return ! this->operator==(jobEntry);
 		}
 
-		bool operator>(JobEntry jobEntry){
+		bool operator>(const JobEntry&  jobEntry){
             return job_id > jobEntry.job_id;
 		}
 
-		bool operator<(JobEntry jobEntry){
+		bool operator<(const JobEntry& jobEntry){
             return ! this->operator>(jobEntry);
 		}
 
