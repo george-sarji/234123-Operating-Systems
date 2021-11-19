@@ -189,7 +189,7 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
             cout <<"smash error: kill: invalid arguments"<<endl;
             return nullptr;
         }
-        string job_id = args[1].substr(args[1].find_first_of("-"));
+        string job_id = args[2];
         if(jobs.getJobById(stoi(job_id))){
             return new KillCommand(args[0].c_str(),&jobs,stoi(job_id));
         }
