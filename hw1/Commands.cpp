@@ -129,6 +129,7 @@ vector<string> analyseTheLine(const char *cmd_line)
         cmd_s1.erase(cmd_s1.find_first_of("&"),1);
         cmd_s1 = _trim(string(cmd_s1));
         first_word =cmd_s1.substr(0, cmd_s1.find_first_of(" \n"));
+        cout <<"the word is " <<first_word<<endl;
         if ( BuiltinTable.find(first_word) == BuiltinTable.end()){
             cmd_s = cmd_s1;
         }
