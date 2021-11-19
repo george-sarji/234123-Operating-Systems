@@ -129,6 +129,11 @@ vector<string> analyseTheLine(const char *cmd_line)
 	}
 	return args;
 }
+
+void exeuteFgCommand(const std::vector<string> & args) {
+
+}
+
 Command *SmallShell::createBuiltInCommand(vector<string> &args)
 {
 	if (args[0] == "pwd")
@@ -198,6 +203,26 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
         }
 
     }
+	if (args[0].compare("fg") == 0){
+	    if(args[1].empty()){
+	        if (jobs.empty()){
+	            cout << "smash error: fg: jobs list is empty"<<endl;
+	        }
+	        else{
+//                JobsList::JobEntry * cmd = jobs.getJobById(stoi(args[1]));
+//	            exeuteFgCommand(cmd->command->arguments);
+                return nullptr;
+	        }
+	    } else{
+	        if(JobsList::JobEntry * cmd = jobs.getJobById(stoi(args[1]))){
+	            exeuteFgCommand(cmd->command->arguments);
+                return nullptr;
+	        }
+	        else {
+	            cout << "smash error: fg: invalid arguments"<< endl;
+	        }
+	    }
+	}
 	return nullptr;
 }
 Command *SmallShell::CreateCommand(const char *cmd_line)

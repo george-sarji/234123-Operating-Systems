@@ -157,9 +157,10 @@ private:
 	int next_id = 1;
 	std::vector<JobEntry> jobs;
 	std::vector<int> vacant_ids;
+	int size = jobs.size();
 
 public:
-	JobsList(): next_id(1), jobs(), vacant_ids() {}
+	JobsList(): next_id(1), jobs(), vacant_ids() ,size(){}
 	~JobsList() = default;
 	void addJob(Command *cmd, bool isStopped = false);
 	void printJobsList();
@@ -169,6 +170,9 @@ public:
 	void removeJobById(int jobId);
 	JobEntry *getLastJob(int *lastJobId);
 	JobEntry *getLastStoppedJob(int *jobId);
+	bool empty(){
+        return size == 0;
+	}
 	// TODO: Add extra methods or modify exisitng ones as needed
 };
 //
