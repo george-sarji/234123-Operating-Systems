@@ -133,7 +133,7 @@ public:
 		time_t timestamp;
 		JOB_TYPE type;
 		Command* command;
-		bool operator==(const JobEntry& jobEntry){
+		bool operator==(const JobEntry& jobEntry) const{
             return job_id== jobEntry.job_id && p_id==jobEntry.p_id;
 		}
 
