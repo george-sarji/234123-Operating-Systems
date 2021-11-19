@@ -123,10 +123,15 @@ vector<string> analyseTheLine(char *cmd_line)
 	cmd_s = _trim(string(cmd_s));
 	string first_word =cmd_s.substr(0, cmd_s.find_first_of(" \n"));
 
-	if ( _isBackgroundComamnd(first_word.c_str()) && (BuiltinTable.find(first_word) != BuiltinTable.end() ) ){
+	if ( _isBackgroundComamnd(first_word.c_str()) ){
 	    _removeBackgroundSign(cmd_line);
-        cmd_s = cmd_line;
-        cmd_s = _trim(string(cmd_s));
+        string cmd_s1 = cmd_line;
+        cmd_s1 = _trim(string(cmd_s1));
+        first_word =cmd_s1.substr(0, cmd_s1.find_first_of(" \n"));
+        if ( BuiltinTable.find(first_word) == BuiltinTable.end()){
+            cmd_s = cmd_s1;
+        }
+
 	}
 	int i = 0;
 	for (vector<string>::iterator index = args.begin(); index != args.end(); index++)
