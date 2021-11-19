@@ -116,11 +116,18 @@ SmallShell::~SmallShell()
 /**
 * Creates and returns a pointer to Command class which matches the given command line (cmd_line)
 */
-vector<string> analyseTheLine(const char *cmd_line)
+vector<string> analyseTheLine(char *cmd_line)
 {
 	string cmd_s = cmd_line;
 	vector<string> args(20, "");
 	cmd_s = _trim(string(cmd_s));
+	string first_word =cmd_s.substr(0, cmd_s.find_first_of(" \n"));
+
+	if ( _isBackgroundComamnd(first_word.c_str()) && (BuiltinTable.find(first_word) != BuiltinTable.end() ) ){
+	    _removeBackgroundSign(cmd_line);
+        cmd_s = cmd_line;
+        cmd_s = _trim(string(cmd_s));
+	}
 	int i = 0;
 	for (vector<string>::iterator index = args.begin(); index != args.end(); index++)
 	{
@@ -144,6 +151,13 @@ void exeuteFgCommand(const std::vector<string> & args) {
 
 Command *SmallShell::createBuiltInCommand(vector<string> &args)
 {
+    if (args[0] == "quit"){
+        if(args[1] == "kill"){
+            jobs.killAllJobs();
+            exit(0);
+        }
+        exit(0);
+    }
 	if (args[0] == "pwd")
 	{
 		//        if(!args[1].empty()) return nullptr;
