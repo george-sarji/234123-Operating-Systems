@@ -182,22 +182,23 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
 			string path = paths.back();
 			return new ChangeDirCommand(args[0].c_str(), args[1]);
 		}
-		        if (args[0].compare("kill")==0){
-		            cout <<"I AM HERE" << endl;
-		            if(! args[3].empty() || args[2]!= "-9"){
-		                cout <<"smash error: kill: invalid arguments"<<endl;
-                        return nullptr;
-		            }
-		            string job_id = args[1].substr(args[1].find_first_of("-"));
-		            if(jobs.getJobById(stoi(job_id))){
-                        return new KillCommand(args[0].c_str(),&jobs,stoi(job_id));
-		            }
-		            else{
-                        cout <<"smash error: kill: job-id" << stoi((job_id))<<" does not exist" <<endl;
-		            }
 
-		        }
 	}
+	if (args[0].compare("kill")==0){
+        cout <<"I AM HERE" << endl;
+        if(! args[3].empty() || args[2]!= "-9"){
+            cout <<"smash error: kill: invalid arguments"<<endl;
+            return nullptr;
+        }
+        string job_id = args[1].substr(args[1].find_first_of("-"));
+        if(jobs.getJobById(stoi(job_id))){
+            return new KillCommand(args[0].c_str(),&jobs,stoi(job_id));
+        }
+        else{
+            cout <<"smash error: kill: job-id" << stoi((job_id))<<" does not exist" <<endl;
+        }
+
+    }
 	return nullptr;
 }
 Command *SmallShell::CreateCommand(const char *cmd_line)
