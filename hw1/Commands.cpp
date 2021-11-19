@@ -185,8 +185,7 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
 
 	}
 	if (args[0].compare("kill")==0){
-        cout <<"I AM HERE" << endl;
-        if(! args[3].empty() || args[2]!= "-9"){
+        if(! args[3].empty() || args[1]!= "-9"){
             cout <<"smash error: kill: invalid arguments"<<endl;
             return nullptr;
         }
