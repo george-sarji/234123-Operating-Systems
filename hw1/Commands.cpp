@@ -314,7 +314,7 @@ Command *SmallShell::CreateCommand(char *cmd_line)
 //  return nullptr;
 //}
 
-void SmallShell::executeCommand(const char *cmd_line)
+void SmallShell::executeCommand(char *cmd_line)
 {
 	// TODO: Add your implementation here
 

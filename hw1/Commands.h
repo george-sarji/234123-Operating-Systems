@@ -241,7 +241,7 @@ public:
 		return instance;
 	}
 	~SmallShell();
-	void executeCommand(const char *cmd_line);
+	void executeCommand(char *cmd_line);
 	// TODO: add extra methods as needed
 };
 
