@@ -68,7 +68,7 @@
       <workItem from="1636791107836" duration="599000" />
       <workItem from="1636887706352" duration="4518000" />
       <workItem from="1636906716614" duration="39445000" />
-      <workItem from="1637311542399" duration="10662000" />
+      <workItem from="1637311542399" duration="10728000" />
     </task>
     <task id="LOCAL‎00001" summary="kill command">
       <created>1637313149033</created>
@@ -190,7 +190,13 @@
       <option name="presentableId" value="LOCAL‎00020" />
       <updated>1637326395500</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL‎00021" summary="fg command updated and built in command dose not support background sign">
+      <created>1637326761305</created>
+      <option name="number" value="LOCAL‎00021" />
+      <option name="presentableId" value="LOCAL‎00021" />
+      <updated>1637326761305</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -204,18 +210,18 @@
     <option name="LAST_COMMIT_MESSAGE" value="fg command updated and built in command dose not support background sign" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="265" y="0" key="CommitChangelistDialog2" timestamp="1637326394809">
+    <state x="265" y="0" key="CommitChangelistDialog2" timestamp="1637326760660">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="265" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1637326394809" />
+    <state x="265" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1637326760660" />
     <state x="421" y="96" key="FileChooserDialogImpl" timestamp="1637166735354">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1637166735354" />
-    <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1637326399098">
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1637326764129">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="233" y="74" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1637326399098" />
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1637326764129" />
     <state x="337" y="165" key="com.intellij.ide.util.TipDialog" timestamp="1637311544234">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
