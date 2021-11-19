@@ -221,17 +221,21 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
 //	            exeuteFgCommand(cmd->command->arguments);
                 return nullptr;
 	        }
-	    } else{
+	    } else if (args[2].empty()){
 	        if(JobsList::JobEntry * cmd = jobs.getJobById(stoi(args[1]))){
 	            exeuteFgCommand(cmd->command->arguments);
                 return nullptr;
 	        }
 	        else {
 	            if (isNumber(args[1])){
-	                cout <<"smash error: fg: job-id "<< args[1] <<"does not exist" <<endl;
+	                cout <<"smash error: fg: job-id "<< args[1] <<" does not exist" <<endl;
 	            }
+	            else
 	            cout << "smash error: fg: invalid arguments"<< endl;
 	        }
+	    }
+	    else {
+            cout << "smash error: fg: invalid arguments"<< endl;
 	    }
 	}
 	return nullptr;
