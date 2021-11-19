@@ -126,7 +126,7 @@ vector<string> analyseTheLine(const char *cmd_line)
 
 	if ( _isBackgroundComamnd(first_word.c_str()) ){
         string cmd_s1 = cmd_s;
-        cmd_s1.erase(remove(cmd_s1.begin(),cmd_s1.end(),"&"),cmd_s1.end());
+        cmd_s1.erase(cmd_s1.find_first_of("&"),1);
         cmd_s1 = _trim(string(cmd_s1));
         first_word =cmd_s1.substr(0, cmd_s1.find_first_of(" \n"));
         if ( BuiltinTable.find(first_word) == BuiltinTable.end()){
