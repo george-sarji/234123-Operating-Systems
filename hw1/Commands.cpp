@@ -213,23 +213,25 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
 		}
 
 	}
-	if (args[0].compare("kill")==0){
-        if(! args[3].empty() || args[1]!= "-9" || args[2].empty()){
-            cout <<"smash error: kill: invalid arguments"<<endl;
+	if (args[0].compare("kill")==0) {
+        if (!args[3].empty() || args[1] != "-9" || args[2].empty()) {
+            cout << "smash error: kill: invalid arguments" << endl;
             return nullptr;
         }
         string job_id = args[2];
-        if(jobs.getJobById(stoi(job_id))){
-            return new KillCommand(args[0].c_str(),&jobs,stoi(job_id));
-        }
-        else{
-            if (isNumber(args[2])){
-                cout <<"smash error: kill: job-id "<< args[2] <<" does not exist" <<endl;
+        if (isNumber(args[2])) {
+            if (jobs.getJobById(stoi(job_id))) {
+                return new KillCommand(args[0].c_str(), &jobs, stoi(job_id));
+            } else {
+                if (isNumber(args[2])) {
+                    cout << "smash error: kill: job-id " << args[2] << " does not exist" << endl;
+                } else
+                    cout << "smash error: kill: invalid arguments" << endl;
             }
-            else
-                cout << "smash error: kill: invalid arguments"<< endl;
-        }
 
+        } else{
+            cout << "smash error: kill: invalid arguments" << endl;
+        }
     }
 	if (args[0].compare("fg") == 0){
 	    if(args[1].empty()){
@@ -241,7 +243,7 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
 //	            exeuteFgCommand(cmd->command->arguments);
                 return nullptr;
 	        }
-	    } else if (args[2].empty()){
+	    } else if (args[2].empty()  && isNumber(args[1])){
 	        if(JobsList::JobEntry * cmd = jobs.getJobById(stoi(args[1]))){
 	            exeuteFgCommand(cmd->command->arguments);
                 return nullptr;
