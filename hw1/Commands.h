@@ -234,6 +234,7 @@ public:
 
 	Command *CreateCommand(const char *cmd_line);
 	Command *createBuiltInCommand(vector<string> &args);
+    Command *createExternalCommand(vector<string> &args);
 	SmallShell(SmallShell const &) = delete;	 // disable copy ctor
 	void operator=(SmallShell const &) = delete; // disable = operator
 	static SmallShell &getInstance()			 // make SmallShell singleton

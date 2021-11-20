@@ -186,6 +186,9 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
 	return nullptr;
 }
 
+Command *SmallShell::createExternalCommand(vector<string> &args){
+
+}
 Command *SmallShell::CreateCommand(const char *cmd_line)
 {
 	vector<string> args = analyseTheLine(cmd_line);
