@@ -175,94 +175,17 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
 	if (args[0] == "cd")
 	{
         return new ChangeDirCommand(args[1].c_str(), args[1]);
-//		if (args[1].empty())
-//			return nullptr;
-//		else if (args[1].compare("-") == 0)
-//		{
-//			if (paths.empty())
-//			{
-//				cout << "smash error: cd: OLDPWD not set " << endl;
-//				return nullptr;
-//			}
-//			if (!args[2].empty())
-//			{
-//				cout << "smash error: cd: too many arguments" << endl;
-//				return nullptr;
-//			}
-//			string path = paths.back();
-//			paths.pop_back();
-//			cout << args[1].c_str() << endl;
-//			return new ChangeDirCommand(args[1].c_str(), args[1]);
-//		}
-//		else if (args[1].compare("..") == 0)
-//		{
-//			if (paths.empty())
-//			{
-//				return nullptr;
-//			}
-//			string str = paths.back();
-//		}
-//
-//		if (!args[2].empty())
-//		{
-//			cout << "smash error: cd: too many arguments" << endl;
-//		}
-//		else
-//		{
-//			string path = paths.back();
-//			return new ChangeDirCommand(args[0].c_str(), args[1]);
-//		}
-
 	}
-	if (args[0].compare("kill")==0) {
-        if (!args[3].empty() || args[1] != "-9" || args[2].empty()) {
-            cout << "smash error: kill: invalid arguments" << endl;
-            return nullptr;
-        }
-        string job_id = args[2];
-        if (isNumber(args[2])) {
-            if (jobs.getJobById(stoi(job_id))) {
-                return new KillCommand(args[0].c_str(), &jobs, stoi(job_id));
-            } else {
-                if (isNumber(args[2])) {
-                    cout << "smash error: kill: job-id " << args[2] << " does not exist" << endl;
-                } else
-                    cout << "smash error: kill: invalid arguments" << endl;
-            }
-
-        } else{
-            cout << "smash error: kill: invalid arguments" << endl;
-        }
+	if (args[0]=="kill") {
+        return new KillCommand(args[0].c_str(),&jobs);
     }
-	if (args[0].compare("fg") == 0){
-	    if(args[1].empty()){
-	        if (jobs.empty()){
-	            cout << "smash error: fg: jobs list is empty"<<endl;
-	        }
-	        else{
-//                JobsList::JobEntry * cmd = jobs.getJobById(stoi(args[1]));
-//	            exeuteFgCommand(cmd->command->arguments);
-                return nullptr;
-	        }
-	    } else if (args[2].empty()  && isNumber(args[1])){
-	        if(JobsList::JobEntry * cmd = jobs.getJobById(stoi(args[1]))){
-	            exeuteFgCommand(cmd->command->arguments);
-                return nullptr;
-	        }
-	        else {
-	            if (isNumber(args[1])){
-	                cout <<"smash error: fg: job-id "<< args[1] <<" does not exist" <<endl;
-	            }
-	            else
-	            cout << "smash error: fg: invalid arguments"<< endl;
-	        }
-	    }
-	    else {
-            cout << "smash error: fg: invalid arguments"<< endl;
-	    }
+	if (args[0] == "fg"){
+        return new ForegroundCommand(args[0].c_str(),&jobs);
 	}
+	cout <<"This command does not exist" << endl;
 	return nullptr;
 }
+
 Command *SmallShell::CreateCommand(const char *cmd_line)
 {
 	vector<string> args = analyseTheLine(cmd_line);
@@ -312,7 +235,6 @@ void ChangeDirCommand::execute()
 {
     SmallShell& smash = SmallShell::getInstance();
     vector<string> args =smash.curr_arguments;
-    cout <<" the arg is " << args[1];
     		if (args[1].empty())
 			return;
 		else if (args[1].compare("-") == 0)
@@ -327,9 +249,13 @@ void ChangeDirCommand::execute()
 				cout << "smash error: cd: too many arguments" << endl;
 				return;
 			}
-			string path = smash.paths.back();
+			string path1 = smash.paths.back();
             smash.paths.pop_back();
-			cout << args[1].c_str() << endl;
+            int res = chdir(path1.c_str());
+            if (res < 0)
+            {
+                cout << strerror(errno) << endl;
+            }
 			return;
 		}
 		else if (args[1].compare("..") == 0)
@@ -347,14 +273,14 @@ void ChangeDirCommand::execute()
 		}
 		else
 		{
-			string path = smash.paths.back();
+			string path1 = smash.paths.back();
+            int res = chdir(path1.c_str());
+            if (res < 0)
+            {
+                cout << strerror(errno) << endl;
+            }
             return;
 		}
-	int res = chdir(path.c_str());
-	if (res < 0)
-	{
-		cout << strerror(errno) << endl;
-	}
 }
 
 void JobsList::removeFinishedJobs() {
@@ -461,7 +387,61 @@ void JobsList::killAllJobs() {
 
 
 void KillCommand::execute() {
+    SmallShell& smash = SmallShell::getInstance();
+    vector<string> args =smash.curr_arguments;
 
-     kill(jobsList->getJobById(job_id)->p_id,9);
-     jobsList->removeJobById(job_id);
+    if (!args[3].empty() || args[1] != "-9" || args[2].empty()) {
+        cout << "smash error: kill: invalid arguments" << endl;
+        return;
+    }
+    string job_id = args[2];
+    if (isNumber(args[2])) {
+        if (smash.jobs.getJobById(stoi(job_id))) {
+            kill(jobsList->getJobById(stoi(job_id))->p_id,9);
+            jobsList->removeJobById(stoi(job_id));
+            return;
+        } else {
+            if (isNumber(args[2])) {
+                cout << "smash error: kill: job-id " << args[2] << " does not exist" << endl;
+            } else
+                cout << "smash error: kill: invalid arguments" << endl;
+        }
+
+    } else{
+        cout << "smash error: kill: invalid arguments" << endl;
+    }
+
+
+}
+
+void ForegroundCommand::execute() {
+    SmallShell& smash = SmallShell::getInstance();
+    vector<string> args =smash.curr_arguments;
+
+    if(args[1].empty()){
+        if (smash.jobs.empty()){
+            cout << "smash error: fg: jobs list is empty"<<endl;
+            return;
+        }
+        else{
+//          JobsList::JobEntry * cmd = jobs.getJobById(stoi(args[1]));
+//	          exeuteFgCommand(cmd->command->arguments);
+            return;
+        }
+    } else if (args[2].empty()  && isNumber(args[1])){
+        if(JobsList::JobEntry * cmd = smash.jobs.getJobById(stoi(args[1]))){
+            exeuteFgCommand(cmd->command->arguments);
+            return;
+        }
+        else {
+            if (isNumber(args[1])){
+                cout <<"smash error: fg: job-id "<< args[1] <<" does not exist" <<endl;
+                return;
+            }
+            else
+                cout << "smash error: fg: invalid arguments"<< endl;
+            return;
+	        }
+	    }
+    cout << "smash error: fg: invalid arguments"<< endl;
 }
