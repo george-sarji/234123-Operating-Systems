@@ -224,7 +224,7 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
         }
         else{
             if (isNumber(args[2])){
-                cout <<"smash error: kill: job-id "<< args[1] <<" does not exist" <<endl;
+                cout <<"smash error: kill: job-id "<< args[2] <<" does not exist" <<endl;
             }
             else
                 cout << "smash error: kill: invalid arguments"<< endl;
