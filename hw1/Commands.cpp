@@ -182,7 +182,7 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
 	if (args[0] == "fg"){
         return new ForegroundCommand(args[0].c_str(),&jobs);
 	}
-	cout <<"This command does not exist" << endl;
+
 	return nullptr;
 }
 
@@ -195,8 +195,7 @@ Command *SmallShell::CreateCommand(const char *cmd_line)
 		Command *comm = createBuiltInCommand(args);
 		return comm;
 	}
-	vector<string> tmp(20, "");
-	args = tmp;
+    cout <<"This command does not exist" << endl;
 	return nullptr;
 }
 

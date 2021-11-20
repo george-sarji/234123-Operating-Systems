@@ -14,7 +14,6 @@
     <list default="true" id="f86fd9f6-feb9-480a-84bc-f12a7b75d7ec" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Commands.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Commands.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Commands.h" beforeDir="false" afterPath="$PROJECT_DIR$/Commands.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +68,7 @@
       <workItem from="1636791107836" duration="599000" />
       <workItem from="1636887706352" duration="4518000" />
       <workItem from="1636906716614" duration="39445000" />
-      <workItem from="1637311542399" duration="21387000" />
+      <workItem from="1637311542399" duration="21652000" />
     </task>
     <task id="LOCAL‎00001" summary="kill command">
       <created>1637313149033</created>
@@ -245,7 +244,13 @@
       <option name="presentableId" value="LOCAL‎00029" />
       <updated>1637413977000</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL‎00030" summary="updated built in command">
+      <created>1637415789787</created>
+      <option name="number" value="LOCAL‎00030" />
+      <option name="presentableId" value="LOCAL‎00030" />
+      <updated>1637415789787</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -258,21 +263,22 @@
     <MESSAGE value="fg command updated and built in command dose not support background sign" />
     <MESSAGE value="updated" />
     <MESSAGE value="updated cd command" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated cd command" />
+    <MESSAGE value="updated built in command" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated built in command" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="265" y="0" key="CommitChangelistDialog2" timestamp="1637413976343">
+    <state x="265" y="0" key="CommitChangelistDialog2" timestamp="1637415789132">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="265" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1637413976343" />
+    <state x="265" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1637415789132" />
     <state x="421" y="96" key="FileChooserDialogImpl" timestamp="1637166735354">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1637166735354" />
-    <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1637413979528">
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1637415792286">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="233" y="74" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1637413979528" />
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1637415792286" />
     <state x="337" y="165" key="com.intellij.ide.util.TipDialog" timestamp="1637311544234">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
