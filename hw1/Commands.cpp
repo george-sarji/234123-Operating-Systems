@@ -174,43 +174,44 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
 	}
 	if (args[0] == "cd")
 	{
-		if (args[1].empty())
-			return nullptr;
-		else if (args[1].compare("-") == 0)
-		{
-			if (paths.empty())
-			{
-				cout << "smash error: cd: OLDPWD not set " << endl;
-				return nullptr;
-			}
-			if (!args[2].empty())
-			{
-				cout << "smash error: cd: too many arguments" << endl;
-				return nullptr;
-			}
-			string path = paths.back();
-			paths.pop_back();
-			cout << args[1].c_str() << endl;
-			return new ChangeDirCommand(args[1].c_str(), args[1]);
-		}
-		else if (args[1].compare("..") == 0)
-		{
-			if (paths.empty())
-			{
-				return nullptr;
-			}
-			string str = paths.back();
-		}
-
-		if (!args[2].empty())
-		{
-			cout << "smash error: cd: too many arguments" << endl;
-		}
-		else
-		{
-			string path = paths.back();
-			return new ChangeDirCommand(args[0].c_str(), args[1]);
-		}
+        return new ChangeDirCommand(args[1].c_str(), args[1]);
+//		if (args[1].empty())
+//			return nullptr;
+//		else if (args[1].compare("-") == 0)
+//		{
+//			if (paths.empty())
+//			{
+//				cout << "smash error: cd: OLDPWD not set " << endl;
+//				return nullptr;
+//			}
+//			if (!args[2].empty())
+//			{
+//				cout << "smash error: cd: too many arguments" << endl;
+//				return nullptr;
+//			}
+//			string path = paths.back();
+//			paths.pop_back();
+//			cout << args[1].c_str() << endl;
+//			return new ChangeDirCommand(args[1].c_str(), args[1]);
+//		}
+//		else if (args[1].compare("..") == 0)
+//		{
+//			if (paths.empty())
+//			{
+//				return nullptr;
+//			}
+//			string str = paths.back();
+//		}
+//
+//		if (!args[2].empty())
+//		{
+//			cout << "smash error: cd: too many arguments" << endl;
+//		}
+//		else
+//		{
+//			string path = paths.back();
+//			return new ChangeDirCommand(args[0].c_str(), args[1]);
+//		}
 
 	}
 	if (args[0].compare("kill")==0) {
@@ -300,6 +301,7 @@ ShowPidCommand::ShowPidCommand(const char *cmd_line) : BuiltInCommand(cmd_line)
 
 void GetCurrDirCommand::execute()
 {
+
 	char path[100];
 	getcwd(path, 100);
 	string str(path);
@@ -308,7 +310,45 @@ void GetCurrDirCommand::execute()
 
 void ChangeDirCommand::execute()
 {
+    SmallShell& smash = SmallShell::getInstance();
+    vector<string> args =smash.curr_arguments;
+    		if (args[1].empty())
+			return;
+		else if (args[1].compare("-") == 0)
+		{
+			if (smash.paths.empty())
+			{
+				cout << "smash error: cd: OLDPWD not set " << endl;
+				return;
+			}
+			if (!args[2].empty())
+			{
+				cout << "smash error: cd: too many arguments" << endl;
+				return;
+			}
+			string path = smash.paths.back();
+            smash.paths.pop_back();
+			cout << args[1].c_str() << endl;
+			return;
+		}
+		else if (args[1].compare("..") == 0)
+		{
+			if (smash.paths.empty())
+			{
+				return;
+			}
+			string str = smash.paths.back();
+		}
 
+		if (!args[2].empty())
+		{
+			cout << "smash error: cd: too many arguments" << endl;
+		}
+		else
+		{
+			string path = smash.paths.back();
+            return;
+		}
 	int res = chdir(path.c_str());
 	if (res < 0)
 	{

@@ -222,7 +222,8 @@ class SmallShell
 {
 
 private:
-	// TODO: Add your data members
+public:
+    // TODO: Add your data members
 	SmallShell() = default;
 	std::vector<Command *> bk_jobs;
 	std::vector<Command *> stopped_jobs;
@@ -230,7 +231,7 @@ private:
 	std::list<string> paths;
 	std::string Prompt = "smash";
 
-public:
+
 	Command *CreateCommand(const char *cmd_line);
 	Command *createBuiltInCommand(vector<string> &args);
 	SmallShell(SmallShell const &) = delete;	 // disable copy ctor
@@ -249,6 +250,7 @@ public:
 	void changPrompt( const std::string& prompt){
 	    Prompt = prompt;
 	}
+	vector<string> curr_arguments;
 	// TODO: add extra methods as needed
 };
 

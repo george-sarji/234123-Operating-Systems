@@ -23,6 +23,7 @@ int main(int argc, char* argv[]) {
         std::string cmd_line;
         std::getline(std::cin, cmd_line);
         std::vector<std::string> args = analyseTheLine(cmd_line.c_str());
+        smash.curr_arguments = args;
         if(args[0] == "chprompt"){
             if (args[1].empty()) {
                 smash.changPrompt("smash");
