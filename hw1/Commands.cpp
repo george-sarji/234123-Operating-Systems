@@ -135,7 +135,7 @@ vector<string> analyseTheLine(const char *cmd_line)
 
 	}
 	int i = 0;
-	for (vector<string>::iterator index = args.begin(); index != args.end(); index++)
+	for (auto index = args.begin(); index != args.end(); index++)
 	{
 		string arg = cmd_s.substr(0, cmd_s.find_first_of(WHITESPACE));
 		if (arg.empty())
@@ -166,14 +166,10 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
     }
 	if (args[0] == "pwd")
 	{
-		//        if(!args[1].empty()) return nullptr;
 		return new GetCurrDirCommand(args[0].c_str());
 	}
 	if (args[0] == "showpid")
 	{
-		//        if(!args[1].empty()) {
-		//            return nullptr;
-		//        }
 		return new ShowPidCommand(args[0].c_str());
 	}
 	if (args[0] == "cd")
@@ -227,7 +223,11 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
             return new KillCommand(args[0].c_str(),&jobs,stoi(job_id));
         }
         else{
-            cout <<"smash error: kill: job-id " << stoi((job_id))<<" does not exist" <<endl;
+            if (isNumber(args[1])){
+                cout <<"smash error: kill: job-id "<< args[1] <<" does not exist" <<endl;
+            }
+            else
+                cout << "smash error: kill: invalid arguments"<< endl;
         }
 
     }
@@ -267,53 +267,12 @@ Command *SmallShell::CreateCommand(const char *cmd_line)
 	if (is_in)
 	{
 		Command *comm = createBuiltInCommand(args);
-		//         vector<string> tmp(20,"");
-		//         args = tmp;
 		return comm;
 	}
 	vector<string> tmp(20, "");
 	args = tmp;
 	return nullptr;
 }
-//Command * SmallShell::CreateCommand(const char* cmd_line) {
-//	// For example:
-//
-//  string cmd_s = _trim(string(cmd_line));
-//  string firstWord = cmd_s.substr(0, cmd_s.find_first_of(" \n"));
-//  if (firstWord.compare("pwd") == 0) {
-//      string sec_word = cmd_s.substr(firstWord.size(), cmd_s.size());
-//      if (sec_word.empty()) return new GetCurrDirCommand(cmd_line);
-//      return nullptr;
-//  }
-//   if (firstWord.compare("showpid") == 0) {
-//
-//       string sec_word = cmd_s.substr(firstWord.size(), cmd_s.size());
-//       if (sec_word.empty()) return new ShowPidCommand(cmd_line);
-//    return nullptr;
-//  }
-//   if (firstWord.compare("cd") == 0) {
-//       string sec_word = cmd_s.substr(firstWord.size(), cmd_s.size());
-//       sec_word = _trim(sec_word);
-//       string first_arg = sec_word.substr(0,sec_word.find_first_of(WHITESPACE));
-//       string third_word = sec_word.substr(first_arg.size(), sec_word.size());
-//       if ( first_arg.compare("-")==0){
-//            if (paths.empty()) {
-//                cout << "smash error: cd: OLDPWD not set "<<endl;
-//                return nullptr;
-//            }
-//            else{
-//
-//            }
-//       }
-//       if ( ! third_word.empty()){
-//           cout<<"smash error: cd: too many arguments"<<endl;
-//           return nullptr;
-//       }
-////       paths[curr_path++]=sec_word;
-//       return new ChangeDirCommand(cmd_line,first_arg);
-//   }
-//  return nullptr;
-//}
 
 void SmallShell::executeCommand(const char *cmd_line)
 {
