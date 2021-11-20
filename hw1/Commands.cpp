@@ -223,7 +223,7 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
             return new KillCommand(args[0].c_str(),&jobs,stoi(job_id));
         }
         else{
-            if (isNumber(args[1])){
+            if (isNumber(args[2])){
                 cout <<"smash error: kill: job-id "<< args[1] <<" does not exist" <<endl;
             }
             else
