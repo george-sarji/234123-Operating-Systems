@@ -21,6 +21,7 @@ enum COMMAND_STATUS {
 	FINISH
 };
 
+vector<string> analyseTheLine(const char *cmd_line);
 
 class Command
 {
@@ -227,7 +228,7 @@ private:
 	std::vector<Command *> stopped_jobs;
 	JobsList jobs;
 	std::list<string> paths;
-	std::string prompt = "smash";
+	std::string Prompt = "smash";
 
 public:
 	Command *CreateCommand(const char *cmd_line);
@@ -242,6 +243,12 @@ public:
 	}
 	~SmallShell();
 	void executeCommand(const char *cmd_line);
+	std::string getPrompt(){
+        return Prompt;
+	}
+	void changPrompt( const std::string& prompt){
+	    Prompt = prompt;
+	}
 	// TODO: add extra methods as needed
 };
 
