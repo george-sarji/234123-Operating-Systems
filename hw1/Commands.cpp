@@ -312,6 +312,7 @@ void ChangeDirCommand::execute()
 {
     SmallShell& smash = SmallShell::getInstance();
     vector<string> args =smash.curr_arguments;
+    cout <<" the arg is " << args[1];
     		if (args[1].empty())
 			return;
 		else if (args[1].compare("-") == 0)
