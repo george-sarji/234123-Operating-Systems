@@ -1,0 +1,3 @@
+C:/Users/agml_/234123-operating-systems/hw1/cmake-build-debug/CMakeFiles/smash.dir
+C:/Users/agml_/234123-operating-systems/hw1/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/agml_/234123-operating-systems/hw1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
