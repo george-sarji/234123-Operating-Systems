@@ -26,12 +26,13 @@ vector<string> analyseTheLine(const char *cmd_line);
 class Command
 {
 public:
+    const char *cmd_line;
 	COMMAND_STATUS status;
 	int job_id;
 	std::vector<string> arguments;
 	// TODO: Add your data members
 
-	Command(const char *cmd_line) {}
+	Command(const char *cmd_line):cmd_line(cmd_line) {}
 	virtual ~Command() {}
 	virtual void execute() = 0;
 	//virtual void prepare();
@@ -45,13 +46,13 @@ public:
 	explicit BuiltInCommand(const char *cmd_line) : Command(cmd_line) {}
 	virtual ~BuiltInCommand() = default;
 };
-//
-//class ExternalCommand : public Command {
-//public:
-//ExternalCommand(const char* cmd_line);
-//virtual ~ExternalCommand() {}
-//void execute() override;
-//};
+
+class ExternalCommand : public Command {
+public:
+ExternalCommand(const char* cmd_line):Command(cmd_line){}
+virtual ~ExternalCommand() {}
+void execute() override;
+};
 //
 //class PipeCommand : public Command {
 //    // TODO: Add your data members
@@ -125,7 +126,7 @@ public:
 			inserted 	Time (in seconds) when the job was first inserted
 		*/
     public:
-	    JobEntry(int Jop_id,int p_id,Command* command1,JOB_TYPE jobType):job_id(Jop_id),p_id(p_id),to_delete(false),
+	    JobEntry(int Jop_id,int p_id,string command1,JOB_TYPE jobType):job_id(Jop_id),p_id(p_id),to_delete(false),
 	    timestamp(),type(jobType),command(command1){
 	        time(&timestamp);
 	    }
@@ -133,7 +134,7 @@ public:
 		bool to_delete;
 		time_t timestamp;
 		JOB_TYPE type;
-		Command* command;
+		string command;
 		bool operator==(const JobEntry& jobEntry) const{
             return job_id== jobEntry.job_id && p_id==jobEntry.p_id;
 		}
@@ -163,7 +164,7 @@ private:
 public:
 	JobsList(): next_id(1), jobs(), vacant_ids() ,size(){}
 	~JobsList() = default;
-	void addJob(Command *cmd, bool isStopped = false);
+	void addJob(string command,pid_t pid,bool isStopped = false);
 	void printJobsList();
 	void killAllJobs();
 	void removeFinishedJobs();
@@ -253,6 +254,7 @@ public:
 	}
 	vector<string> curr_arguments;
 	// TODO: add extra methods as needed
+    Command *createPipeCommand(vector<string> vector);
 };
 
 #endif //SMASH_COMMAND_H_

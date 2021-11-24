@@ -198,7 +198,11 @@ Command *SmallShell::CreateCommand(const char *cmd_line)
 		Command *comm = createBuiltInCommand(args);
 		return comm;
 	}
-    cout <<"This command does not exist" << endl;
+    if ( args[1]=="|" || args[1]=="|&"){
+        Command* command = createPipeCommand(args);
+    }
+
+    return new ExternalCommand(cmd_line);
 	return nullptr;
 }
 
@@ -212,6 +216,10 @@ void SmallShell::executeCommand(const char *cmd_line)
 	cmd->execute();
 	delete cmd;
 	// Please note that you must fork smash process for some commands (e.g., external commands....)
+}
+
+Command *SmallShell::createPipeCommand(vector<string> vector) {
+    return nullptr;
 }
 
 void ShowPidCommand::execute()
@@ -286,29 +294,38 @@ void ChangeDirCommand::execute()
 }
 
 void JobsList::removeFinishedJobs() {
-    for (auto iterator=jobs.begin(); iterator != jobs.end(); iterator++ ){
-        if(iterator->to_delete){
+    if (jobs.empty())
+        return;
+    pid_t pid;
+    int w_status = 0;
+    int w_res;
+    for (auto iterator=jobs.begin(); iterator != jobs.end();){
+        pid = iterator->p_id;
+        w_res = waitpid(pid,&w_status,WNOHANG);
+        if (w_res){
             jobs.erase(iterator);
+            iterator = jobs.begin();
+            continue;
         }
+        iterator++;
     }
     std::sort(jobs.begin(),jobs.end());
 }
 
 void JobsList::printJobsList() {
     removeFinishedJobs();
+    if (jobs.empty())return;
     for (auto iterator=jobs.begin(); iterator != jobs.end(); iterator++ ){
         string stop;
         time_t t1;
         time(&t1);
-        Command* cmd =iterator->command;
+        string cmd =iterator->command;
         double time_elapsed = difftime(t1,iterator->timestamp);
-        if (cmd->status == STOPPED) {
+        if (iterator->type == STOP) {
              stop = "(stopped)";
         }
         cout <<"["<<iterator->job_id<<"]";
-        for (auto iterator1 = cmd->arguments.begin(); iterator1 != cmd->arguments.end();iterator1++){
-            cout << *iterator1<<" ";
-        }
+        cout << iterator->command;
         cout<<":"<<iterator->p_id <<" " << time_elapsed << " sec" <<stop << endl;
     }
 
@@ -318,7 +335,7 @@ JobsList::JobEntry *JobsList::getLastStoppedJob(int *jobId) {
     int i=0;
     int reIndex = -1;
     for (auto & job : jobs){
-        if (job.command->status == STOPPED) {
+        if (job.type == STOP) {
             reIndex = i;
         }
         i++;
@@ -352,7 +369,7 @@ void JobsList::removeJobById(int jobId) {
 
 }
 
-void JobsList::addJob(Command *cmd, bool isStopped) {
+void JobsList::addJob(string cmd,pid_t p_id, bool isStopped) {
     JOB_TYPE type;
     if ( isStopped){
         type = STOP;
@@ -361,24 +378,20 @@ void JobsList::addJob(Command *cmd, bool isStopped) {
         type = BACKGROUND;
     }
     if (vacant_ids.empty()){
-        JobEntry jop(vacant_ids[0],getpid(),cmd,type);
-        vacant_ids.erase(vacant_ids.begin());
+        JobEntry jop(next_id++,p_id,cmd,type);
         jobs.push_back(jop);
         return;
     }
-    JobEntry jop(next_id,getpid(),cmd,type);
+    JobEntry jop(vacant_ids.front(),getpid(),cmd,type);
     vacant_ids.erase(vacant_ids.begin());
     jobs.push_back(jop);
-    next_id++;
 }
 
 void JobsList::killAllJobs() {
     cout <<"smash: sending SIGKILL signal to "<<jobs.size()<< "jobs:"<<endl;
     for (auto & job : jobs){
       cout<<job.p_id<<":";
-      for (auto & arg :job.command->arguments){
-          cout <<arg;
-      }
+      cout << job.command;
       cout << endl;
       kill(job.p_id,9);
     }
@@ -432,7 +445,7 @@ void ForegroundCommand::execute() {
         }
     } else if (args[2].empty()  && isNumber(args[1])){
         if(JobsList::JobEntry * cmd = smash.jobs.getJobById(stoi(args[1]))){
-            exeuteFgCommand(cmd->command->arguments);
+//            exeuteFgCommand(cmd->command->arguments);
             return;
         }
         else {
@@ -446,4 +459,45 @@ void ForegroundCommand::execute() {
 	        }
 	    }
     cout << "smash error: fg: invalid arguments"<< endl;
+}
+
+string getCommand(vector<string> args){
+    string cmd;
+    for (auto &arg: args){
+        cmd +=arg;
+        cmd +=" ";
+    }
+    cmd = _trim(cmd);
+    return cmd;
+}
+void ExternalCommand::execute() {
+    SmallShell& smash = SmallShell::getInstance();
+    vector<string> args =smash.curr_arguments;
+    string cmd_line1 = getCommand(args);
+
+         int p_id = fork();
+         if ( !p_id){
+
+             setpgrp();
+
+             int len;
+
+             len = strlen(cmd_line)+1;
+
+             char* cmd_line_t_t=new char[len];
+
+             strcpy(cmd_line_t_t,cmd_line_t_t);
+
+             char s1[10] ="/bin/bash";
+
+             char s2[3] ="-c";
+
+             char* const exe_args[] = {s1,s2,cmd_line_t_t,nullptr};
+             execv("/bin/bash",exe_args);
+             printf("didn't work\n");
+     }
+         if ( _isBackgroundComamnd(cmd_line)) smash.jobs.addJob(cmd_line1,p_id);
+         else{
+             waitpid(p_id,NULL,WUNTRACED);
+         }
 }
