@@ -159,7 +159,7 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
 {
     if (args[0] == "quit"){
         if(args[1] == "kill"){
-            jobs.killAllJobs();
+            jobs->killAllJobs();
             exit(0);
         }
         exit(0);
@@ -177,17 +177,20 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
         return new ChangeDirCommand(args[1].c_str(), args[1]);
 	}
 	if (args[0]=="kill") {
-        return new KillCommand(args[0].c_str(),&jobs);
+        return new KillCommand(args[0].c_str(),jobs);
     }
 	if (args[0] == "fg"){
-        return new ForegroundCommand(args[0].c_str(),&jobs);
+        return new ForegroundCommand(args[0].c_str(),jobs);
 	}
-
+    if (args[0] == "jobs"){
+        cout <<"I am here" << endl;
+        return new JobsCommand(args[0].c_str(),jobs);
+    }
 	return nullptr;
 }
 
 Command *SmallShell::createExternalCommand(vector<string> &args){
-
+    return nullptr;
 }
 Command *SmallShell::CreateCommand(const char *cmd_line)
 {
@@ -200,10 +203,9 @@ Command *SmallShell::CreateCommand(const char *cmd_line)
 	}
     if ( args[1]=="|" || args[1]=="|&"){
         Command* command = createPipeCommand(args);
+        return command;
     }
-
     return new ExternalCommand(cmd_line);
-	return nullptr;
 }
 
 void SmallShell::executeCommand(const char *cmd_line)
@@ -313,7 +315,9 @@ void JobsList::removeFinishedJobs() {
 }
 
 void JobsList::printJobsList() {
+    cout << " i am here in print " <<endl;
     removeFinishedJobs();
+    cout << "The jobs is empty " << jobs.empty() << endl;
     if (jobs.empty())return;
     for (auto iterator=jobs.begin(); iterator != jobs.end(); iterator++ ){
         string stop;
@@ -370,6 +374,7 @@ void JobsList::removeJobById(int jobId) {
 }
 
 void JobsList::addJob(string cmd,pid_t p_id, bool isStopped) {
+
     JOB_TYPE type;
     if ( isStopped){
         type = STOP;
@@ -378,6 +383,7 @@ void JobsList::addJob(string cmd,pid_t p_id, bool isStopped) {
         type = BACKGROUND;
     }
     if (vacant_ids.empty()){
+        cout << "I AM ADDING "<<endl;
         JobEntry jop(next_id++,p_id,cmd,type);
         jobs.push_back(jop);
         return;
@@ -411,7 +417,7 @@ void KillCommand::execute() {
     }
     string job_id = args[2];
     if (isNumber(args[2])) {
-        if (smash.jobs.getJobById(stoi(job_id))) {
+        if (smash.jobs->getJobById(stoi(job_id))) {
             kill(jobsList->getJobById(stoi(job_id))->p_id,9);
             jobsList->removeJobById(stoi(job_id));
             return;
@@ -434,7 +440,7 @@ void ForegroundCommand::execute() {
     vector<string> args =smash.curr_arguments;
 
     if(args[1].empty()){
-        if (smash.jobs.empty()){
+        if (smash.jobs->empty()){
             cout << "smash error: fg: jobs list is empty"<<endl;
             return;
         }
@@ -444,8 +450,8 @@ void ForegroundCommand::execute() {
             return;
         }
     } else if (args[2].empty()  && isNumber(args[1])){
-        if(JobsList::JobEntry * cmd = smash.jobs.getJobById(stoi(args[1]))){
-//            exeuteFgCommand(cmd->command->arguments);
+        if(smash.jobs->getJobById(stoi(args[1]))){
+            exeuteFgCommand(arguments);
             return;
         }
         else {
@@ -486,7 +492,7 @@ void ExternalCommand::execute() {
 
              char* cmd_line_t_t=new char[len];
 
-             strcpy(cmd_line_t_t,cmd_line_t_t);
+             strcpy(cmd_line_t_t,cmd_line);
 
              char s1[10] ="/bin/bash";
 
@@ -496,8 +502,14 @@ void ExternalCommand::execute() {
              execv("/bin/bash",exe_args);
              printf("didn't work\n");
      }
-         if ( _isBackgroundComamnd(cmd_line)) smash.jobs.addJob(cmd_line1,p_id);
+         if ( _isBackgroundComamnd(cmd_line)) smash.jobs->addJob(cmd_line1,p_id);
          else{
              waitpid(p_id,NULL,WUNTRACED);
          }
+}
+
+void JobsCommand::execute() {
+    SmallShell &smash = SmallShell::getInstance();
+    smash.jobs->printJobsList();
+
 }

@@ -177,15 +177,16 @@ public:
 	}
 	// TODO: Add extra methods or modify exisitng ones as needed
 };
-//
-//class JobsCommand : public BuiltInCommand {
-// // TODO: Add your data members
-// public:
-//  JobsCommand(const char* cmd_line, JobsList* jobs);
-//  virtual ~JobsCommand() {}
-//  void execute() override;
-//};
-//
+
+class JobsCommand : public BuiltInCommand {
+
+ // TODO: Add your data members
+ public:
+  JobsCommand(const char* cmd_line, JobsList* jobs):BuiltInCommand(cmd_line){}
+  virtual ~JobsCommand() {}
+  void execute() override;
+};
+
 class KillCommand : public BuiltInCommand {
     JobsList* jobsList;
  // TODO: Add your data members
@@ -225,10 +226,12 @@ class SmallShell
 private:
 public:
     // TODO: Add your data members
-	SmallShell() = default;
+	SmallShell():bk_jobs(),stopped_jobs(),paths(){
+        this->jobs=new JobsList();
+}
 	std::vector<Command *> bk_jobs;
 	std::vector<Command *> stopped_jobs;
-	JobsList jobs;
+	JobsList* jobs;
 	std::list<string> paths;
 	std::string Prompt = "smash";
 
