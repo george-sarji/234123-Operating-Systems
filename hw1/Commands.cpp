@@ -183,7 +183,6 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
         return new ForegroundCommand(args[0].c_str(),jobs);
 	}
     if (args[0] == "jobs"){
-        cout <<"I am here" << endl;
         return new JobsCommand(args[0].c_str(),jobs);
     }
 	return nullptr;
@@ -300,13 +299,13 @@ void JobsList::removeFinishedJobs() {
         return;
     pid_t pid;
     int w_status = 0;
-    int w_res;
     for (auto iterator=jobs.begin(); iterator != jobs.end();){
         pid = iterator->p_id;
-        w_res = waitpid(pid,&w_status,WNOHANG);
-        if (w_res){
+       waitpid(pid,&w_status,WNOHANG);
+        if (w_status > 0){
             jobs.erase(iterator);
             iterator = jobs.begin();
+            vacant_ids.push_back(pid);
             continue;
         }
         iterator++;
@@ -315,9 +314,7 @@ void JobsList::removeFinishedJobs() {
 }
 
 void JobsList::printJobsList() {
-    cout << " i am here in print " <<endl;
     removeFinishedJobs();
-    cout << "The jobs is empty " << jobs.empty() << endl;
     if (jobs.empty())return;
     for (auto iterator=jobs.begin(); iterator != jobs.end(); iterator++ ){
         string stop;
@@ -330,7 +327,7 @@ void JobsList::printJobsList() {
         }
         cout <<"["<<iterator->job_id<<"]";
         cout << iterator->command;
-        cout<<":"<<iterator->p_id <<" " << time_elapsed << " sec" <<stop << endl;
+        cout<<" :"<<iterator->p_id <<" " << time_elapsed << " sec" <<stop << endl;
     }
 
 }
@@ -383,7 +380,6 @@ void JobsList::addJob(string cmd,pid_t p_id, bool isStopped) {
         type = BACKGROUND;
     }
     if (vacant_ids.empty()){
-        cout << "I AM ADDING "<<endl;
         JobEntry jop(next_id++,p_id,cmd,type);
         jobs.push_back(jop);
         return;
@@ -394,7 +390,7 @@ void JobsList::addJob(string cmd,pid_t p_id, bool isStopped) {
 }
 
 void JobsList::killAllJobs() {
-    cout <<"smash: sending SIGKILL signal to "<<jobs.size()<< "jobs:"<<endl;
+    cout <<"smash: sending SIGKILL signal to "<<jobs.size()<< " jobs:"<<endl;
     for (auto & job : jobs){
       cout<<job.p_id<<":";
       cout << job.command;
@@ -502,9 +498,13 @@ void ExternalCommand::execute() {
              execv("/bin/bash",exe_args);
              printf("didn't work\n");
      }
-         if ( _isBackgroundComamnd(cmd_line)) smash.jobs->addJob(cmd_line1,p_id);
+         else if ( _isBackgroundComamnd(cmd_line)) smash.jobs->addJob(cmd_line1,p_id);
          else{
+             smash.curr_pid = p_id;
+             smash.curr_command =cmd_line1;
              waitpid(p_id,NULL,WUNTRACED);
+             smash.curr_pid = 0;
+             smash.curr_command="";
          }
 }
 

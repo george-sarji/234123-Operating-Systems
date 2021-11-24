@@ -226,7 +226,7 @@ class SmallShell
 private:
 public:
     // TODO: Add your data members
-	SmallShell():bk_jobs(),stopped_jobs(),paths(){
+	SmallShell():bk_jobs(),stopped_jobs(),paths(),curr_pid(0),curr_command(){
         this->jobs=new JobsList();
 }
 	std::vector<Command *> bk_jobs;
@@ -234,7 +234,8 @@ public:
 	JobsList* jobs;
 	std::list<string> paths;
 	std::string Prompt = "smash";
-
+    int curr_pid;
+    std::string curr_command;
 
 	Command *CreateCommand(const char *cmd_line);
 	Command *createBuiltInCommand(vector<string> &args);
