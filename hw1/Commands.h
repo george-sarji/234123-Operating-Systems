@@ -170,7 +170,7 @@ public:
 	void removeFinishedJobs();
     JobEntry * getJobById(int jobId);
 	void removeJobById(int jobId);
-	JobEntry *getLastJob(int *lastJobId);
+	JobEntry *getLastJob();
 	JobEntry *getLastStoppedJob(int *jobId);
 	bool empty(){
         return size == 0;

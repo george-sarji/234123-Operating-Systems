@@ -346,7 +346,7 @@ JobsList::JobEntry *JobsList::getLastStoppedJob(int *jobId) {
     return &jobs[i];
 }
 
-JobsList::JobEntry *JobsList::getLastJob(int *lastJobId) {
+JobsList::JobEntry *JobsList::getLastJob() {
     return &jobs.back();
 }
 
@@ -441,13 +441,15 @@ void ForegroundCommand::execute() {
             return;
         }
         else{
-//          JobsList::JobEntry * cmd = jobs.getJobById(stoi(args[1]));
-//	          exeuteFgCommand(cmd->command->arguments);
+            JobsList::JobEntry* jobEntry = smash.jobs->getLastJob();
+            int pid = jobEntry->p_id;
+            int status;
+                waitpid(pid,&status);
             return;
         }
     } else if (args[2].empty()  && isNumber(args[1])){
         if(smash.jobs->getJobById(stoi(args[1]))){
-            exeuteFgCommand(arguments);
+            waitpid(stoi(args[1]),&status);
             return;
         }
         else {

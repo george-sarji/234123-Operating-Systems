@@ -15,7 +15,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Commands.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Commands.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Commands.h" beforeDir="false" afterPath="$PROJECT_DIR$/Commands.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/signals.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/signals.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +70,7 @@
       <workItem from="1636887706352" duration="4518000" />
       <workItem from="1636906716614" duration="39445000" />
       <workItem from="1637311542399" duration="23173000" />
-      <workItem from="1637673635008" duration="20414000" />
+      <workItem from="1637673635008" duration="21416000" />
     </task>
     <task id="LOCAL‎00001" summary="kill command">
       <created>1637313149033</created>
@@ -277,7 +276,13 @@
       <option name="presentableId" value="LOCAL‎00034" />
       <updated>1637773586294</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL‎00035" summary="external command , signal ctr z ctr c and jobs command are updated">
+      <created>1637781484433</created>
+      <option name="number" value="LOCAL‎00035" />
+      <option name="presentableId" value="LOCAL‎00035" />
+      <updated>1637781484433</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -292,21 +297,22 @@
     <MESSAGE value="updated cd command" />
     <MESSAGE value="updated built in command" />
     <MESSAGE value="external command" />
-    <option name="LAST_COMMIT_MESSAGE" value="external command" />
+    <MESSAGE value="external command , signal ctr z ctr c and jobs command are updated" />
+    <option name="LAST_COMMIT_MESSAGE" value="external command , signal ctr z ctr c and jobs command are updated" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="265" y="0" key="CommitChangelistDialog2" timestamp="1637773585672">
+    <state x="265" y="0" key="CommitChangelistDialog2" timestamp="1637781483499">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="265" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1637773585672" />
+    <state x="265" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1637781483499" />
     <state x="421" y="96" key="FileChooserDialogImpl" timestamp="1637674374302">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1637674374302" />
-    <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1637773590909">
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1637781487026">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="233" y="74" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1637773590909" />
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1637781487026" />
     <state x="337" y="165" key="com.intellij.ide.util.TipDialog" timestamp="1637311544234">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
