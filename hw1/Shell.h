@@ -11,17 +11,14 @@ using namespace std;
 #include "Command.h"
 #include "JobsList.h"
 
-
 class SmallShell
 {
 public:
     // TODO: Add your data members
-    SmallShell() : bk_jobs(), stopped_jobs(), paths(), curr_pid(0), curr_command()
+    SmallShell() : paths(), curr_pid(0), curr_command()
     {
         this->jobs = new JobsList();
     }
-    std::vector<Command *> bk_jobs;
-    std::vector<Command *> stopped_jobs;
     JobsList *jobs;
     std::list<string> paths;
     std::string Prompt = "smash";
