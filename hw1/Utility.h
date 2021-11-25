@@ -31,4 +31,6 @@ vector<string> analyseTheLine(const char *cmd_line);
 
 string getCommand(vector<string> args);
 
+Command* getAndRemoveLastStoppedCommand();
+
 #endif

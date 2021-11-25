@@ -1,4 +1,7 @@
 #include "Utility.h"
+#include "Shell.h"
+#include "Command.h"
+#include <vector>
 
 std::string WHITESPACE(" \t\f\v\n\r");
 
@@ -106,4 +109,27 @@ string getCommand(vector<string> args)
     }
     cmd = _trim(cmd);
     return cmd;
+}
+
+Command* getAndRemoveLastStoppedCommand() {
+    // Get the shell instance.
+    SmallShell& shell = SmallShell::getInstance();
+    vector<Command*> stopped = shell.stopped_jobs;
+    if(stopped.size() == 0) return nullptr;
+    // Iterate and find the one with the maximal job ID.
+    vector<Command*>::iterator max_it = stopped.begin();
+    Command* max = stopped.front();
+    for(auto it = stopped.begin(); it != stopped.end(); ++it) 
+    {
+        // Check if we have a higher job ID.
+        if((*it)->job_id > max->job_id) 
+        {
+            // New iterator assignment.
+            max_it = it;
+            max = *it;
+        }
+    }
+    // Erase the item.
+    stopped.erase(max_it);
+    return max;
 }
