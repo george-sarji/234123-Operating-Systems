@@ -226,3 +226,26 @@ void BackgroundCommand::execute()
         }
     }
 }
+
+void QuitCommand::execute()
+{
+    SmallShell &shell = SmallShell::getInstance();
+    vector<string> arguments = shell.curr_arguments;
+    // Check if we have kill provided.
+    if (!arguments[1].empty() && arguments[1].compare("kill") == 0)
+    {
+        // We have received a kill flag. Go over the jobs and send SIGKILL.
+        vector<JobsList::JobEntry> jobs = shell.jobs->jobs;
+        // Get the count.
+        cout << "smash: sending SIGKILL signal to " << shell.jobs->size << " jobs:" << endl;
+        sort(jobs.begin(), jobs.end());
+        for (auto it = jobs.begin(); it != jobs.end(); ++it)
+        {
+            // Send the sigkills and print the command itself.
+            cout << it->p_id << ": " << it->command << endl;
+            kill(it->p_id, SIGKILL);
+        }
+    }
+    // We can exit the shell completely.
+    exit(0);
+}

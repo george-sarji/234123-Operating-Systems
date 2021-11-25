@@ -82,12 +82,13 @@ public:
 private:
     // TODO: Add your data members
     int next_id;
-    std::vector<JobEntry> jobs;
     std::vector<int> vacant_ids;
-    int size = jobs.size();
 
 public:
-    JobsList() : next_id(1), jobs(), vacant_ids(), size() {}
+    std::vector<JobEntry> jobs;
+    int size = jobs.size();
+
+    JobsList() : next_id(1), vacant_ids(), jobs(), size() {}
     ~JobsList() = default;
     void addJob(string command, pid_t pid, bool isStopped = false);
     void printJobsList();
