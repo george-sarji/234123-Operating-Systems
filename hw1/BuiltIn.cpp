@@ -3,10 +3,12 @@
 #include <string>
 #include <stdio.h>
 #include <cstring>
+#include <iostream>
 
 #include "BuiltIn.h"
 #include "Shell.h"
 #include "Utility.h"
+#include "JobsList.h"
 
 set<string> BuiltinTable{"cd", "chprompt", "showpid", "pwd", "jobs", "kill", "fg", "bg", "quit"};
 
@@ -177,4 +179,49 @@ void JobsCommand::execute()
 {
     SmallShell &smash = SmallShell::getInstance();
     smash.jobs->printJobsList();
+}
+
+void BackgroundCommand::execute()
+{
+    // Get the shell instance
+    SmallShell &shell = SmallShell::getInstance();
+    // Get the arguments.
+    vector<string> arguments = shell.curr_arguments;
+    // Check if we have arguments in the command itself.
+    if (arguments.size() == 1 || arguments[1].empty())
+    {
+        // We have no arguments, get the last stopped job.
+        JobsList::JobEntry *job = resumeLastStoppedJob();
+        // Did we receive a job?
+        if (job == nullptr)
+        {
+            // No stopped jobs. Give an error.
+            cout << "smash error: bg: there is no stopped jobs to resume" << endl;
+        }
+        return;
+    }
+    else
+    {
+        // We have an argument. Get the ID.
+        int job_id = stoi(arguments[1]);
+        // Get the job with the given ID.
+        JobsList::JobEntry *job = shell.jobs->getJobById(job_id);
+        // Check if we have a job with the given ID.
+        if (job == nullptr)
+        {
+            // No job with the ID. Print an error.
+            cout << "smash error: bg: job-id " << job_id << " does not exist" << endl;
+        }
+        // Check if the job is stopped.
+        else if (!job->stopped)
+        {
+            // Give out an error, job is still running.
+            cout << "smash error: bg: job-id " << job_id << " is already running in the background" << endl;
+        }
+        else
+        {
+            // Job is valid and paused. Resume it.
+            job->_continue_();
+        }
+    }
 }
