@@ -33,49 +33,38 @@ void ChangeDirCommand::execute()
     vector<string> args = smash.curr_arguments;
     if (args[1].empty())
         return;
-    else if (args[1].compare("-") == 0)
+    if (!args[2].empty())
+    {
+        // Too much arguments.
+        cout << "smash error: cd: too many arguments" << endl;
+        return;
+    }
+    string future_path, current_path = get_current_dir_name();
+    if (args[1].compare("-") == 0)
     {
         if (smash.paths.empty())
         {
             cout << "smash error: cd: OLDPWD not set " << endl;
             return;
         }
-        if (!args[2].empty())
-        {
-            cout << "smash error: cd: too many arguments" << endl;
-            return;
-        }
-        string path1 = smash.paths.back();
+        future_path= smash.paths.back();
         smash.paths.pop_back();
-        int res = chdir(path1.c_str());
-        if (res < 0)
-        {
-            cout << strerror(errno) << endl;
-        }
-        return;
-    }
-    else if (args[1].compare("..") == 0)
-    {
-        if (smash.paths.empty())
-        {
-            return;
-        }
-        string str = smash.paths.back();
-    }
-
-    if (!args[2].empty())
-    {
-        cout << "smash error: cd: too many arguments" << endl;
     }
     else
     {
-        string path1 = smash.paths.back();
-        int res = chdir(path1.c_str());
-        if (res < 0)
-        {
-            cout << strerror(errno) << endl;
-        }
-        return;
+        future_path = args[1];
+    }
+    // Now we have to change the directory.
+    int result = chdir(future_path.c_str());
+    if(result != 0) 
+    {
+        // Send out an error.
+        cout << strerror(errno) << endl;
+    }
+    else 
+    {
+        // We have to push the old path into the path vector.
+        smash.paths.push_back(current_path);
     }
 }
 
