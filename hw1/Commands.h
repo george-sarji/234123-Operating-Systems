@@ -1,5 +1,5 @@
-#ifndef SMASH_COMMAND_H_
-#define SMASH_COMMAND_H_
+#ifndef SMASH_COMMANDS_H_
+#define SMASH_COMMANDS_H_
 
 #include <vector>
 #include <string>
@@ -9,6 +9,7 @@
 #include <csignal>
 
 #include "JobsList.h"
+#include "Command.h"
 
 using namespace std;
 #define COMMAND_ARGS_MAX_LENGTH (200)
@@ -16,31 +17,7 @@ using namespace std;
 
 extern set<string> BuiltinTable;
 
-enum COMMAND_STATUS
-{
-	ACTIVE,
-	STOPPED,
-	FINISH
-};
-
 vector<string> analyseTheLine(const char *cmd_line);
-
-class Command
-{
-public:
-	const char *cmd_line;
-	COMMAND_STATUS status;
-	int job_id;
-	std::vector<string> arguments;
-	// TODO: Add your data members
-
-	Command(const char *cmd_line) : cmd_line(cmd_line) {}
-	virtual ~Command() {}
-	virtual void execute() = 0;
-	//virtual void prepare();
-	//virtual void cleanup();
-	// TODO: Add your extra methods if needed
-};
 
 class BuiltInCommand : public Command
 {
