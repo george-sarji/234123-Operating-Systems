@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated>
+      <config projectName="smash" targetName="smash" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f86fd9f6-feb9-480a-84bc-f12a7b75d7ec" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Commands.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Commands.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Commands.h" beforeDir="false" afterPath="$PROJECT_DIR$/Commands.h" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="20oJ2DVTXHX7ErLUr3aYg4hzBjf" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+  </component>
+  <component name="RunManager">
+    <configuration name="smash" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="smash" TARGET_NAME="smash" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="smash" RUN_TARGET_NAME="smash">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f86fd9f6-feb9-480a-84bc-f12a7b75d7ec" name="Default Changelist" comment="" />
+      <created>1636704797345</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1636704797345</updated>
+      <workItem from="1636704799445" duration="2160000" />
+      <workItem from="1636731420967" duration="1744000" />
+      <workItem from="1636791107836" duration="599000" />
+      <workItem from="1636887706352" duration="4518000" />
+      <workItem from="1636906716614" duration="39445000" />
+      <workItem from="1637311542399" duration="23173000" />
+      <workItem from="1637673635008" duration="28795000" />
+      <workItem from="1637859462657" duration="3666000" />
+    </task>
+    <task id="LOCAL‎00001" summary="kill command">
+      <created>1637313149033</created>
+      <option name="number" value="LOCAL‎00001" />
+      <option name="presentableId" value="LOCAL‎00001" />
+      <updated>1637313149034</updated>
+    </task>
+    <task id="LOCAL‎00002" summary="kill command">
+      <created>1637313458193</created>
+      <option name="number" value="LOCAL‎00002" />
+      <option name="presentableId" value="LOCAL‎00002" />
+      <updated>1637313458193</updated>
+    </task>
+    <task id="LOCAL‎00003" summary="kill command">
+      <created>1637313666567</created>
+      <option name="number" value="LOCAL‎00003" />
+      <option name="presentableId" value="LOCAL‎00003" />
+      <updated>1637313666567</updated>
+    </task>
+    <task id="LOCAL‎00004" summary="kill command">
+      <created>1637313744206</created>
+      <option name="number" value="LOCAL‎00004" />
+      <option name="presentableId" value="LOCAL‎00004" />
+      <updated>1637313744206</updated>
+    </task>
+    <task id="LOCAL‎00005" summary="kill command">
+      <created>1637314447227</created>
+      <option name="number" value="LOCAL‎00005" />
+      <option name="presentableId" value="LOCAL‎00005" />
+      <updated>1637314447227</updated>
+    </task>
+    <task id="LOCAL‎00006" summary="kill command">
+      <created>1637314544677</created>
+      <option name="number" value="LOCAL‎00006" />
+      <option name="presentableId" value="LOCAL‎00006" />
+      <updated>1637314544677</updated>
+    </task>
+    <task id="LOCAL‎00007" summary="kill command">
+      <created>1637314664519</created>
+      <option name="number" value="LOCAL‎00007" />
+      <option name="presentableId" value="LOCAL‎00007" />
+      <updated>1637314664519</updated>
+    </task>
+    <task id="LOCAL‎00008" summary="kill command">
+      <created>1637314783258</created>
+      <option name="number" value="LOCAL‎00008" />
+      <option name="presentableId" value="LOCAL‎00008" />
+      <updated>1637314783258</updated>
+    </task>
+    <task id="LOCAL‎00009" summary="kill command">
+      <created>1637315122518</created>
+      <option name="number" value="LOCAL‎00009" />
+      <option name="presentableId" value="LOCAL‎00009" />
+      <updated>1637315122518</updated>
+    </task>
+    <task id="LOCAL‎00010" summary="kill command">
+      <created>1637318821045</created>
+      <option name="number" value="LOCAL‎00010" />
+      <option name="presentableId" value="LOCAL‎00010" />
+      <updated>1637318821045</updated>
+    </task>
+    <task id="LOCAL‎00011" summary="fg command">
+      <created>1637318865727</created>
+      <option name="number" value="LOCAL‎00011" />
+      <option name="presentableId" value="LOCAL‎00011" />
+      <updated>1637318865727</updated>
+    </task>
+    <task id="LOCAL‎00012" summary="fg command updated">
+      <created>1637319509548</created>
+      <option name="number" value="LOCAL‎00012" />
+      <option name="presentableId" value="LOCAL‎00012" />
+      <updated>1637319509548</updated>
+    </task>
+    <task id="LOCAL‎00013" summary="fg command updated">
+      <created>1637319682136</created>
+      <option name="number" value="LOCAL‎00013" />
+      <option name="presentableId" value="LOCAL‎00013" />
+      <updated>1637319682136</updated>
+    </task>
+    <task id="LOCAL‎00014" summary="fg command updated and built in command dose not support background sign">
+      <created>1637320736221</created>
+      <option name="number" value="LOCAL‎00014" />
+      <option name="presentableId" value="LOCAL‎00014" />
+      <updated>1637320736221</updated>
+    </task>
+    <task id="LOCAL‎00015" summary="fg command updated and built in command dose not support background sign">
+      <created>1637321069448</created>
+      <option name="number" value="LOCAL‎00015" />
+      <option name="presentableId" value="LOCAL‎00015" />
+      <updated>1637321069448</updated>
+    </task>
+    <task id="LOCAL‎00016" summary="fg command updated and built in command dose not support background sign">
+      <created>1637321206987</created>
+      <option name="number" value="LOCAL‎00016" />
+      <option name="presentableId" value="LOCAL‎00016" />
+      <updated>1637321206987</updated>
+    </task>
+    <task id="LOCAL‎00017" summary="fg command updated and built in command dose not support background sign">
+      <created>1637321352565</created>
+      <option name="number" value="LOCAL‎00017" />
+      <option name="presentableId" value="LOCAL‎00017" />
+      <updated>1637321352565</updated>
+    </task>
+    <task id="LOCAL‎00018" summary="fg command updated and built in command dose not support background sign">
+      <created>1637325940594</created>
+      <option name="number" value="LOCAL‎00018" />
+      <option name="presentableId" value="LOCAL‎00018" />
+      <updated>1637325940594</updated>
+    </task>
+    <task id="LOCAL‎00019" summary="fg command updated and built in command dose not support background sign">
+      <created>1637326131110</created>
+      <option name="number" value="LOCAL‎00019" />
+      <option name="presentableId" value="LOCAL‎00019" />
+      <updated>1637326131110</updated>
+    </task>
+    <task id="LOCAL‎00020" summary="fg command updated and built in command dose not support background sign">
+      <created>1637326395500</created>
+      <option name="number" value="LOCAL‎00020" />
+      <option name="presentableId" value="LOCAL‎00020" />
+      <updated>1637326395500</updated>
+    </task>
+    <task id="LOCAL‎00021" summary="fg command updated and built in command dose not support background sign">
+      <created>1637326761305</created>
+      <option name="number" value="LOCAL‎00021" />
+      <option name="presentableId" value="LOCAL‎00021" />
+      <updated>1637326761305</updated>
+    </task>
+    <task id="LOCAL‎00022" summary="fg command updated and built in command dose not support background sign">
+      <created>1637326828061</created>
+      <option name="number" value="LOCAL‎00022" />
+      <option name="presentableId" value="LOCAL‎00022" />
+      <updated>1637326828061</updated>
+    </task>
+    <task id="LOCAL‎00023" summary="updated">
+      <created>1637402504018</created>
+      <option name="number" value="LOCAL‎00023" />
+      <option name="presentableId" value="LOCAL‎00023" />
+      <updated>1637402504018</updated>
+    </task>
+    <task id="LOCAL‎00024" summary="updated">
+      <created>1637402731671</created>
+      <option name="number" value="LOCAL‎00024" />
+      <option name="presentableId" value="LOCAL‎00024" />
+      <updated>1637402731671</updated>
+    </task>
+    <task id="LOCAL‎00025" summary="updated">
+      <created>1637402954106</created>
+      <option name="number" value="LOCAL‎00025" />
+      <option name="presentableId" value="LOCAL‎00025" />
+      <updated>1637402954106</updated>
+    </task>
+    <task id="LOCAL‎00026" summary="updated">
+      <created>1637403319767</created>
+      <option name="number" value="LOCAL‎00026" />
+      <option name="presentableId" value="LOCAL‎00026" />
+      <updated>1637403319767</updated>
+    </task>
+    <task id="LOCAL‎00027" summary="updated">
+      <created>1637404865333</created>
+      <option name="number" value="LOCAL‎00027" />
+      <option name="presentableId" value="LOCAL‎00027" />
+      <updated>1637404865333</updated>
+    </task>
+    <task id="LOCAL‎00028" summary="updated cd command">
+      <created>1637413727436</created>
+      <option name="number" value="LOCAL‎00028" />
+      <option name="presentableId" value="LOCAL‎00028" />
+      <updated>1637413727436</updated>
+    </task>
+    <task id="LOCAL‎00029" summary="updated cd command">
+      <created>1637413977000</created>
+      <option name="number" value="LOCAL‎00029" />
+      <option name="presentableId" value="LOCAL‎00029" />
+      <updated>1637413977000</updated>
+    </task>
+    <task id="LOCAL‎00030" summary="updated built in command">
+      <created>1637415789787</created>
+      <option name="number" value="LOCAL‎00030" />
+      <option name="presentableId" value="LOCAL‎00030" />
+      <updated>1637415789787</updated>
+    </task>
+    <task id="LOCAL‎00031" summary="updated built in command">
+      <created>1637415997241</created>
+      <option name="number" value="LOCAL‎00031" />
+      <option name="presentableId" value="LOCAL‎00031" />
+      <updated>1637415997241</updated>
+    </task>
+    <task id="LOCAL‎00032" summary="updated built in command">
+      <created>1637416132039</created>
+      <option name="number" value="LOCAL‎00032" />
+      <option name="presentableId" value="LOCAL‎00032" />
+      <updated>1637416132039</updated>
+    </task>
+    <task id="LOCAL‎00033" summary="updated built in command">
+      <created>1637765703428</created>
+      <option name="number" value="LOCAL‎00033" />
+      <option name="presentableId" value="LOCAL‎00033" />
+      <updated>1637765703428</updated>
+    </task>
+    <task id="LOCAL‎00034" summary="external command">
+      <created>1637773586294</created>
+      <option name="number" value="LOCAL‎00034" />
+      <option name="presentableId" value="LOCAL‎00034" />
+      <updated>1637773586294</updated>
+    </task>
+    <task id="LOCAL‎00035" summary="external command , signal ctr z ctr c and jobs command are updated">
+      <created>1637781484433</created>
+      <option name="number" value="LOCAL‎00035" />
+      <option name="presentableId" value="LOCAL‎00035" />
+      <updated>1637781484433</updated>
+    </task>
+    <task id="LOCAL‎00036" summary="external command , signal ctr z ctr c and jobs command are updated">
+      <created>1637784106994</created>
+      <option name="number" value="LOCAL‎00036" />
+      <option name="presentableId" value="LOCAL‎00036" />
+      <updated>1637784106994</updated>
+    </task>
+    <task id="LOCAL‎00037" summary="external command , signal ctr z ctr c and jobs command are updated">
+      <created>1637851068692</created>
+      <option name="number" value="LOCAL‎00037" />
+      <option name="presentableId" value="LOCAL‎00037" />
+      <updated>1637851068692</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="kill command" />
+    <MESSAGE value="fg command" />
+    <MESSAGE value="fg command updated" />
+    <MESSAGE value="fg command updated and built in command dose not support background sign" />
+    <MESSAGE value="updated" />
+    <MESSAGE value="updated cd command" />
+    <MESSAGE value="updated built in command" />
+    <MESSAGE value="external command" />
+    <MESSAGE value="external command , signal ctr z ctr c and jobs command are updated" />
+    <option name="LAST_COMMIT_MESSAGE" value="external command , signal ctr z ctr c and jobs command are updated" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="265" y="0" key="CommitChangelistDialog2" timestamp="1637851067935">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="265" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1637851067935" />
+    <state x="421" y="96" key="FileChooserDialogImpl" timestamp="1637674374302">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1637674374302" />
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1637851075995">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1637851075995" />
+    <state x="337" y="165" key="com.intellij.ide.util.TipDialog" timestamp="1637859465763">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="337" y="165" key="com.intellij.ide.util.TipDialog/0.0.1280.680@0.0.1280.680" timestamp="1637859465763" />
+    <state x="383" y="0" key="refactoring.ChangeSignatureDialog" timestamp="1637675038566">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="383" y="0" key="refactoring.ChangeSignatureDialog/0.0.1280.680@0.0.1280.680" timestamp="1637675038566" />
+    <state x="303" y="1" width="672" height="678" key="search.everywhere.popup" timestamp="1636909010149">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="303" y="1" width="672" height="678" key="search.everywhere.popup/0.0.1280.680@0.0.1280.680" timestamp="1636909010149" />
+  </component>
+</project>
