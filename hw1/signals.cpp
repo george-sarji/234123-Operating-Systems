@@ -12,9 +12,11 @@ void ctrlZHandler(int sig_num) {
     if(pid == 0)
         return;
     SmallShell::getInstance().curr_pid = 0;
-//    JobsList::JobEntry* job = shell.getJobs()->getJobByPid(pid);
-//    if(job != nullptr)
-//        job->stopIT();
+    JobsList::JobEntry* job = shell.jobs->getJobById(pid);
+    if(job != nullptr) {
+        job->stop();
+
+    }
     int res;
 
         res=kill(pid, SIGSTOP);
@@ -23,6 +25,9 @@ void ctrlZHandler(int sig_num) {
 
         shell.jobs->addJob(shell.curr_command,pid,true);
         cout << "smash: process " << pid << " was stopped" << endl;
+    }
+    else {
+        cout << " ERROR " <<endl;
     }
 //    Command* cmd = shell.CreateCommand(shell.cmd_line,&flag,&(shell.pwd_current));
     // cout << "got here" <<  endl;

@@ -15,6 +15,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Commands.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Commands.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Commands.h" beforeDir="false" afterPath="$PROJECT_DIR$/Commands.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/signals.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/signals.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +72,9 @@
       <workItem from="1636906716614" duration="39445000" />
       <workItem from="1637311542399" duration="23173000" />
       <workItem from="1637673635008" duration="28795000" />
-      <workItem from="1637859462657" duration="3666000" />
+      <workItem from="1637859462657" duration="4016000" />
+      <workItem from="1637865014709" duration="221000" />
+      <workItem from="1637865780247" duration="3711000" />
     </task>
     <task id="LOCAL‎00001" summary="kill command">
       <created>1637313149033</created>
@@ -295,7 +298,13 @@
       <option name="presentableId" value="LOCAL‎00037" />
       <updated>1637851068692</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL‎00038" summary="external command , signal ctr z ctr c and jobs command are updated">
+      <created>1637863565605</created>
+      <option name="number" value="LOCAL‎00038" />
+      <option name="presentableId" value="LOCAL‎00038" />
+      <updated>1637863565605</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -314,22 +323,22 @@
     <option name="LAST_COMMIT_MESSAGE" value="external command , signal ctr z ctr c and jobs command are updated" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="265" y="0" key="CommitChangelistDialog2" timestamp="1637851067935">
+    <state x="265" y="0" key="CommitChangelistDialog2" timestamp="1637863564701">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="265" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1637851067935" />
-    <state x="421" y="96" key="FileChooserDialogImpl" timestamp="1637674374302">
+    <state x="265" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1637863564701" />
+    <state x="421" y="96" key="FileChooserDialogImpl" timestamp="1637865233618">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1637674374302" />
-    <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1637851075995">
+    <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1637865233618" />
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1637863567901">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="233" y="74" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1637851075995" />
-    <state x="337" y="165" key="com.intellij.ide.util.TipDialog" timestamp="1637859465763">
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1637863567901" />
+    <state x="337" y="165" key="com.intellij.ide.util.TipDialog" timestamp="1637865781437">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="337" y="165" key="com.intellij.ide.util.TipDialog/0.0.1280.680@0.0.1280.680" timestamp="1637859465763" />
+    <state x="337" y="165" key="com.intellij.ide.util.TipDialog/0.0.1280.680@0.0.1280.680" timestamp="1637865781437" />
     <state x="383" y="0" key="refactoring.ChangeSignatureDialog" timestamp="1637675038566">
       <screen x="0" y="0" width="1280" height="680" />
     </state>

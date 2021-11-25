@@ -139,6 +139,7 @@ public:
 
         void stop(){
             this->stopped = true;
+            type = STOP ;
             time(&timestamp);
         }
 
