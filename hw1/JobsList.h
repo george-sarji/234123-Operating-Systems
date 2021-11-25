@@ -7,6 +7,8 @@ using namespace std;
 #include <vector>
 #include <csignal>
 #include <algorithm>
+#include <sys/wait.h>
+#include <iostream>
 #include "time.h"
 
 enum JOB_TYPE

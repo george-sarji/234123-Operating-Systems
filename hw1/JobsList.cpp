@@ -1,11 +1,5 @@
 #include "JobsList.h"
 
-#include <sys/wait.h>
-#include <iostream>
-
-using namespace std;
-
-
 void JobsList::removeFinishedJobs()
 {
     if (this->jobs.empty())
