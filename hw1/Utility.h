@@ -5,6 +5,9 @@
 #include <vector>
 #include "BuiltIn.h"
 
+#define COMMAND_ARGS_MAX_LENGTH (200)
+#define COMMAND_MAX_ARGS (20)
+
 using namespace std;
 
 extern std::string WHITESPACE;
