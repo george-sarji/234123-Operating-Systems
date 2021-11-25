@@ -2,6 +2,7 @@
 #include <signal.h>
 #include "signals.h"
 #include "Commands.h"
+#include "Shell.h"
 
 using namespace std;
 
