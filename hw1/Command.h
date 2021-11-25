@@ -1,6 +1,21 @@
 #ifndef SMASH_COMMAND_H_
 #define SMASH_COMMAND_H_
 
+#if 0
+#define FUNC_ENTRY() \
+    cout << __PRETTY_FUNCTION__ << " --> " << endl;
+
+#define FUNC_EXIT() \
+    cout << __PRETTY_FUNCTION__ << " <-- " << endl;
+#else
+#define FUNC_ENTRY()
+#define FUNC_EXIT()
+#endif
+
+#include <vector>
+#include <string>
+using namespace std;
+
 enum COMMAND_STATUS
 {
     ACTIVE,

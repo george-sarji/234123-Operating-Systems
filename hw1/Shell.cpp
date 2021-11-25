@@ -1,5 +1,7 @@
 #include "Shell.h"
-#include "Commands.h"
+#include "BuiltIn.h"
+#include "Utility.h"
+#include "External.h"
 
 
 SmallShell::~SmallShell()

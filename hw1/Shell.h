@@ -4,10 +4,11 @@
 #include <vector>
 #include <string>
 #include <set>
+#include <list>
 
 using namespace std;
 
-#include "Commands.h"
+#include "Command.h"
 #include "JobsList.h"
 
 

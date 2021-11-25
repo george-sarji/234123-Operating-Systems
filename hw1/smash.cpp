@@ -2,9 +2,9 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <signal.h>
-#include "Commands.h"
 #include "signals.h"
 #include "Shell.h"
+#include "Utility.h"
 #include <vector>
 
 int main(int argc, char *argv[])
