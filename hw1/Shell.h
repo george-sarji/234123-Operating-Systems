@@ -14,8 +14,6 @@ using namespace std;
 
 class SmallShell
 {
-
-private:
 public:
     // TODO: Add your data members
     SmallShell() : bk_jobs(), stopped_jobs(), paths(), curr_pid(0), curr_command()
