@@ -6,6 +6,7 @@
 #include <list>
 #include "time.h"
 #include <set>
+#include <csignal>
 
 using namespace std;
 #define COMMAND_ARGS_MAX_LENGTH (200)
@@ -126,15 +127,26 @@ public:
 			inserted 	Time (in seconds) when the job was first inserted
 		*/
     public:
-	    JobEntry(int Jop_id,int p_id,string command1,JOB_TYPE jobType):job_id(Jop_id),p_id(p_id),to_delete(false),
+	    JobEntry(int Jop_id,int p_id,string command1,JOB_TYPE jobType):job_id(Jop_id),p_id(p_id),stopped(false),
 	    timestamp(),type(jobType),command(command1){
 	        time(&timestamp);
 	    }
 		int job_id, p_id;
-		bool to_delete;
+		bool stopped;
 		time_t timestamp;
 		JOB_TYPE type;
 		string command;
+
+        void stop(){
+            this->stopped = true;
+            time(&timestamp);
+        }
+
+        void _continue_(){
+            this->stopped = false;
+                kill(this->p_id,SIGCONT);
+        }
+
 		bool operator==(const JobEntry& jobEntry) const{
             return job_id== jobEntry.job_id && p_id==jobEntry.p_id;
 		}
@@ -156,7 +168,7 @@ public:
 
 private:
 	// TODO: Add your data members
-	int next_id = 1;
+	int next_id;
 	std::vector<JobEntry> jobs;
 	std::vector<int> vacant_ids;
 	int size = jobs.size();
@@ -170,7 +182,7 @@ public:
 	void removeFinishedJobs();
     JobEntry * getJobById(int jobId);
 	void removeJobById(int jobId);
-	JobEntry *getLastJob(int *lastJobId);
+	JobEntry *getLastJob();
 	JobEntry *getLastStoppedJob(int *jobId);
 	bool empty(){
         return size == 0;
@@ -226,7 +238,7 @@ class SmallShell
 private:
 public:
     // TODO: Add your data members
-	SmallShell():bk_jobs(),stopped_jobs(),paths(){
+	SmallShell():bk_jobs(),stopped_jobs(),paths(),curr_pid(0),curr_command(){
         this->jobs=new JobsList();
 }
 	std::vector<Command *> bk_jobs;
@@ -234,7 +246,8 @@ public:
 	JobsList* jobs;
 	std::list<string> paths;
 	std::string Prompt = "smash";
-
+    int curr_pid;
+    std::string curr_command;
 
 	Command *CreateCommand(const char *cmd_line);
 	Command *createBuiltInCommand(vector<string> &args);

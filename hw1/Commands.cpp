@@ -2,6 +2,7 @@
 #include <string.h>
 #include <string>
 #include <iostream>
+#include <utility>
 #include <vector>
 #include <sstream>
 #include <sys/wait.h>
@@ -183,7 +184,6 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
         return new ForegroundCommand(args[0].c_str(),jobs);
 	}
     if (args[0] == "jobs"){
-        cout <<"I am here" << endl;
         return new JobsCommand(args[0].c_str(),jobs);
     }
 	return nullptr;
@@ -298,39 +298,43 @@ void ChangeDirCommand::execute()
 void JobsList::removeFinishedJobs() {
     if (jobs.empty())
         return;
-    pid_t pid;
-    int w_status = 0;
+    int p_id;
+//    int w_status = 0;
     int w_res;
     for (auto iterator=jobs.begin(); iterator != jobs.end();){
-        pid = iterator->p_id;
-        w_res = waitpid(pid,&w_status,WNOHANG);
-        if (w_res){
+        p_id = iterator->p_id;
+       w_res = waitpid(p_id,NULL,WNOHANG);
+        if (w_res != 0){
             jobs.erase(iterator);
             iterator = jobs.begin();
+            vacant_ids.push_back(p_id);
             continue;
         }
         iterator++;
     }
+    if (jobs.empty()){
+        next_id = 1;
+        return;
+    }
     std::sort(jobs.begin(),jobs.end());
+    next_id = jobs.back().job_id;
 }
 
 void JobsList::printJobsList() {
-    cout << " i am here in print " <<endl;
     removeFinishedJobs();
-    cout << "The jobs is empty " << jobs.empty() << endl;
     if (jobs.empty())return;
-    for (auto iterator=jobs.begin(); iterator != jobs.end(); iterator++ ){
+    for (auto & job : jobs){
         string stop;
         time_t t1;
         time(&t1);
-        string cmd =iterator->command;
-        double time_elapsed = difftime(t1,iterator->timestamp);
-        if (iterator->type == STOP) {
+        string cmd =job.command;
+        double time_elapsed = difftime(t1,job.timestamp);
+        if (job.type == STOP) {
              stop = "(stopped)";
         }
-        cout <<"["<<iterator->job_id<<"]";
-        cout << iterator->command;
-        cout<<":"<<iterator->p_id <<" " << time_elapsed << " sec" <<stop << endl;
+        cout <<"["<<job.job_id<<"]";
+        cout << job.command;
+        cout<<" :"<<job.p_id <<" " << time_elapsed << " sec" <<stop << endl;
     }
 
 }
@@ -349,7 +353,7 @@ JobsList::JobEntry *JobsList::getLastStoppedJob(int *jobId) {
     return &jobs[i];
 }
 
-JobsList::JobEntry *JobsList::getLastJob(int *lastJobId) {
+JobsList::JobEntry *JobsList::getLastJob() {
     return &jobs.back();
 }
 
@@ -364,13 +368,10 @@ JobsList::JobEntry *JobsList::getJobById(int jobId) {
     }
     if (reIndex == -1)
         return nullptr;
-    return &jobs[i];
+    return &jobs[reIndex];
 }
 
 void JobsList::removeJobById(int jobId) {
-    JobEntry* jop = getJobById(jobId);
-    jop->to_delete= true;
-
 }
 
 void JobsList::addJob(string cmd,pid_t p_id, bool isStopped) {
@@ -382,19 +383,16 @@ void JobsList::addJob(string cmd,pid_t p_id, bool isStopped) {
     else{
         type = BACKGROUND;
     }
-    if (vacant_ids.empty()){
-        cout << "I AM ADDING "<<endl;
-        JobEntry jop(next_id++,p_id,cmd,type);
-        jobs.push_back(jop);
-        return;
-    }
-    JobEntry jop(vacant_ids.front(),getpid(),cmd,type);
-    vacant_ids.erase(vacant_ids.begin());
+    int id;
+    if ( jobs.empty() ) id =1;
+    else id = jobs.back().job_id + 1;
+    JobEntry jop(id,p_id,std::move(cmd),type);
     jobs.push_back(jop);
+    sort(jobs.begin(),jobs.end());
 }
 
 void JobsList::killAllJobs() {
-    cout <<"smash: sending SIGKILL signal to "<<jobs.size()<< "jobs:"<<endl;
+    cout <<"smash: sending SIGKILL signal to "<<jobs.size()<< " jobs:"<<endl;
     for (auto & job : jobs){
       cout<<job.p_id<<":";
       cout << job.command;
@@ -418,6 +416,8 @@ void KillCommand::execute() {
     string job_id = args[2];
     if (isNumber(args[2])) {
         if (smash.jobs->getJobById(stoi(job_id))) {
+            cout <<"i am here  in kill " << endl;
+            cout << "the proc id is "<<jobsList->getJobById(stoi(job_id))->p_id<<endl;
             kill(jobsList->getJobById(stoi(job_id))->p_id,9);
             jobsList->removeJobById(stoi(job_id));
             return;
@@ -445,13 +445,28 @@ void ForegroundCommand::execute() {
             return;
         }
         else{
-//          JobsList::JobEntry * cmd = jobs.getJobById(stoi(args[1]));
-//	          exeuteFgCommand(cmd->command->arguments);
+            JobsList::JobEntry* jobEntry = smash.jobs->getLastJob();
+            if( jobEntry ){
+                if ( jobEntry->stopped){
+                    jobEntry->_continue_();
+                }
+
+            int pid = jobEntry->p_id;
+//            int status;
+            waitpid(pid,NULL,WUNTRACED);
+//            cout <<" the res is " << status<<endl;
             return;
+          }
         }
     } else if (args[2].empty()  && isNumber(args[1])){
-        if(smash.jobs->getJobById(stoi(args[1]))){
-            exeuteFgCommand(arguments);
+        JobsList::JobEntry * job= smash.jobs->getJobById(stoi(args[1]));
+        if( job ){
+            if ( job->stopped){
+                job->_continue_();
+            }
+            pid_t  pid = job->p_id;
+            waitpid(pid,NULL,WUNTRACED);
+//            cout <<" the res is " << st<<endl;
             return;
         }
         else {
@@ -482,7 +497,8 @@ void ExternalCommand::execute() {
     string cmd_line1 = getCommand(args);
 
          int p_id = fork();
-         if ( !p_id){
+         if ( p_id == 0){
+
 
              setpgrp();
 
@@ -494,6 +510,10 @@ void ExternalCommand::execute() {
 
              strcpy(cmd_line_t_t,cmd_line);
 
+             if(_isBackgroundComamnd(cmd_line)){
+                 _removeBackgroundSign(cmd_line_t_t);
+             }
+
              char s1[10] ="/bin/bash";
 
              char s2[3] ="-c";
@@ -502,9 +522,13 @@ void ExternalCommand::execute() {
              execv("/bin/bash",exe_args);
              printf("didn't work\n");
      }
-         if ( _isBackgroundComamnd(cmd_line)) smash.jobs->addJob(cmd_line1,p_id);
+         else if ( _isBackgroundComamnd(cmd_line)) smash.jobs->addJob(cmd_line1,p_id);
          else{
+             smash.curr_pid = p_id;
+             smash.curr_command =cmd_line1;
              waitpid(p_id,NULL,WUNTRACED);
+             smash.curr_pid = 0;
+             smash.curr_command="";
          }
 }
 

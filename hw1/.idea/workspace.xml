@@ -15,7 +15,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Commands.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Commands.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Commands.h" beforeDir="false" afterPath="$PROJECT_DIR$/Commands.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/smash.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/smash.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +70,8 @@
       <workItem from="1636887706352" duration="4518000" />
       <workItem from="1636906716614" duration="39445000" />
       <workItem from="1637311542399" duration="23173000" />
-      <workItem from="1637673635008" duration="12882000" />
+      <workItem from="1637673635008" duration="28795000" />
+      <workItem from="1637859462657" duration="3666000" />
     </task>
     <task id="LOCAL‎00001" summary="kill command">
       <created>1637313149033</created>
@@ -271,7 +271,31 @@
       <option name="presentableId" value="LOCAL‎00033" />
       <updated>1637765703428</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL‎00034" summary="external command">
+      <created>1637773586294</created>
+      <option name="number" value="LOCAL‎00034" />
+      <option name="presentableId" value="LOCAL‎00034" />
+      <updated>1637773586294</updated>
+    </task>
+    <task id="LOCAL‎00035" summary="external command , signal ctr z ctr c and jobs command are updated">
+      <created>1637781484433</created>
+      <option name="number" value="LOCAL‎00035" />
+      <option name="presentableId" value="LOCAL‎00035" />
+      <updated>1637781484433</updated>
+    </task>
+    <task id="LOCAL‎00036" summary="external command , signal ctr z ctr c and jobs command are updated">
+      <created>1637784106994</created>
+      <option name="number" value="LOCAL‎00036" />
+      <option name="presentableId" value="LOCAL‎00036" />
+      <updated>1637784106994</updated>
+    </task>
+    <task id="LOCAL‎00037" summary="external command , signal ctr z ctr c and jobs command are updated">
+      <created>1637851068692</created>
+      <option name="number" value="LOCAL‎00037" />
+      <option name="presentableId" value="LOCAL‎00037" />
+      <updated>1637851068692</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -285,25 +309,27 @@
     <MESSAGE value="updated" />
     <MESSAGE value="updated cd command" />
     <MESSAGE value="updated built in command" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated built in command" />
+    <MESSAGE value="external command" />
+    <MESSAGE value="external command , signal ctr z ctr c and jobs command are updated" />
+    <option name="LAST_COMMIT_MESSAGE" value="external command , signal ctr z ctr c and jobs command are updated" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="265" y="0" key="CommitChangelistDialog2" timestamp="1637765702454">
+    <state x="265" y="0" key="CommitChangelistDialog2" timestamp="1637851067935">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="265" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1637765702454" />
+    <state x="265" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1637851067935" />
     <state x="421" y="96" key="FileChooserDialogImpl" timestamp="1637674374302">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1637674374302" />
-    <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1637765706447">
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1637851075995">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="233" y="74" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1637765706447" />
-    <state x="337" y="165" key="com.intellij.ide.util.TipDialog" timestamp="1637311544234">
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1637851075995" />
+    <state x="337" y="165" key="com.intellij.ide.util.TipDialog" timestamp="1637859465763">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="337" y="165" key="com.intellij.ide.util.TipDialog/0.0.1280.680@0.0.1280.680" timestamp="1637311544234" />
+    <state x="337" y="165" key="com.intellij.ide.util.TipDialog/0.0.1280.680@0.0.1280.680" timestamp="1637859465763" />
     <state x="383" y="0" key="refactoring.ChangeSignatureDialog" timestamp="1637675038566">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
