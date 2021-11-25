@@ -12,11 +12,13 @@ using namespace std;
 #define COMMAND_ARGS_MAX_LENGTH (200)
 #define COMMAND_MAX_ARGS (20)
 
-enum JOB_TYPE {
+enum JOB_TYPE
+{
 	STOP,
 	BACKGROUND
 };
-enum COMMAND_STATUS {
+enum COMMAND_STATUS
+{
 	ACTIVE,
 	STOPPED,
 	FINISH
@@ -27,13 +29,13 @@ vector<string> analyseTheLine(const char *cmd_line);
 class Command
 {
 public:
-    const char *cmd_line;
+	const char *cmd_line;
 	COMMAND_STATUS status;
 	int job_id;
 	std::vector<string> arguments;
 	// TODO: Add your data members
 
-	Command(const char *cmd_line):cmd_line(cmd_line) {}
+	Command(const char *cmd_line) : cmd_line(cmd_line) {}
 	virtual ~Command() {}
 	virtual void execute() = 0;
 	//virtual void prepare();
@@ -48,11 +50,12 @@ public:
 	virtual ~BuiltInCommand() = default;
 };
 
-class ExternalCommand : public Command {
+class ExternalCommand : public Command
+{
 public:
-ExternalCommand(const char* cmd_line):Command(cmd_line){}
-virtual ~ExternalCommand() {}
-void execute() override;
+	ExternalCommand(const char *cmd_line) : Command(cmd_line) {}
+	virtual ~ExternalCommand() {}
+	void execute() override;
 };
 //
 //class PipeCommand : public Command {
@@ -126,41 +129,48 @@ public:
 			stopped		Activity status of process
 			inserted 	Time (in seconds) when the job was first inserted
 		*/
-    public:
-	    JobEntry(int Jop_id,int p_id,string command1,JOB_TYPE jobType):job_id(Jop_id),p_id(p_id),stopped(false),
-	    timestamp(),type(jobType),command(command1){
-	        time(&timestamp);
-	    }
+	public:
+		JobEntry(int Jop_id, int p_id, string command1, JOB_TYPE jobType) : job_id(Jop_id), p_id(p_id), stopped(false),
+																			timestamp(), type(jobType), command(command1)
+		{
+			time(&timestamp);
+		}
 		int job_id, p_id;
 		bool stopped;
 		time_t timestamp;
 		JOB_TYPE type;
 		string command;
 
-        void stop(){
-            this->stopped = true;
-            time(&timestamp);
-        }
-
-        void _continue_(){
-            this->stopped = false;
-                kill(this->p_id,SIGCONT);
-        }
-
-		bool operator==(const JobEntry& jobEntry) const{
-            return job_id== jobEntry.job_id && p_id==jobEntry.p_id;
+		void stop()
+		{
+			this->stopped = true;
+			time(&timestamp);
 		}
 
-		bool operator!=(const JobEntry& jobEntry) const{
-            return ! this->operator==(jobEntry);
+		void _continue_()
+		{
+			this->stopped = false;
+			kill(this->p_id, SIGCONT);
 		}
 
-		bool operator>(const JobEntry&  jobEntry) const{
-            return job_id > jobEntry.job_id;
+		bool operator==(const JobEntry &jobEntry) const
+		{
+			return job_id == jobEntry.job_id && p_id == jobEntry.p_id;
 		}
 
-		bool operator<(const JobEntry& jobEntry) const {
-            return ! this->operator>(jobEntry);
+		bool operator!=(const JobEntry &jobEntry) const
+		{
+			return !this->operator==(jobEntry);
+		}
+
+		bool operator>(const JobEntry &jobEntry) const
+		{
+			return job_id > jobEntry.job_id;
+		}
+
+		bool operator<(const JobEntry &jobEntry) const
+		{
+			return !this->operator>(jobEntry);
 		}
 
 		// TODO: Add your data members
@@ -174,47 +184,51 @@ private:
 	int size = jobs.size();
 
 public:
-	JobsList(): next_id(1), jobs(), vacant_ids() ,size(){}
+	JobsList() : next_id(1), jobs(), vacant_ids(), size() {}
 	~JobsList() = default;
-	void addJob(string command,pid_t pid,bool isStopped = false);
+	void addJob(string command, pid_t pid, bool isStopped = false);
 	void printJobsList();
 	void killAllJobs();
 	void removeFinishedJobs();
-    JobEntry * getJobById(int jobId);
+	JobEntry *getJobById(int jobId);
 	void removeJobById(int jobId);
 	JobEntry *getLastJob();
 	JobEntry *getLastStoppedJob(int *jobId);
-	bool empty(){
-        return size == 0;
+	bool empty()
+	{
+		return size == 0;
 	}
 	// TODO: Add extra methods or modify exisitng ones as needed
 };
 
-class JobsCommand : public BuiltInCommand {
+class JobsCommand : public BuiltInCommand
+{
 
- // TODO: Add your data members
- public:
-  JobsCommand(const char* cmd_line, JobsList* jobs):BuiltInCommand(cmd_line){}
-  virtual ~JobsCommand() {}
-  void execute() override;
+	// TODO: Add your data members
+public:
+	JobsCommand(const char *cmd_line, JobsList *jobs) : BuiltInCommand(cmd_line) {}
+	virtual ~JobsCommand() {}
+	void execute() override;
 };
 
-class KillCommand : public BuiltInCommand {
-    JobsList* jobsList;
- // TODO: Add your data members
- public:
-  KillCommand(const char* cmd_line,JobsList* jobs): BuiltInCommand(cmd_line),jobsList(jobs){}
-  virtual ~KillCommand() {}
-  void execute() override;
+class KillCommand : public BuiltInCommand
+{
+	JobsList *jobsList;
+	// TODO: Add your data members
+public:
+	KillCommand(const char *cmd_line, JobsList *jobs) : BuiltInCommand(cmd_line), jobsList(jobs) {}
+	virtual ~KillCommand() {}
+	void execute() override;
 };
 //
-class ForegroundCommand : public BuiltInCommand {
-    JobsList* Jobs;
- // TODO: Add your data members
- public:
-  ForegroundCommand(const char* cmd_line, JobsList* jobs):BuiltInCommand(cmd_line),Jobs(jobs){}
-  virtual ~ForegroundCommand()= default;
-  void execute() override;
+class ForegroundCommand : public BuiltInCommand
+{
+	JobsList *Jobs;
+	// TODO: Add your data members
+public:
+	ForegroundCommand(const char *cmd_line, JobsList *jobs) : BuiltInCommand(cmd_line), Jobs(jobs) {}
+	virtual ~ForegroundCommand() = default;
+	void execute() override;
 };
 //
 //class BackgroundCommand : public BuiltInCommand {
@@ -237,21 +251,22 @@ class SmallShell
 
 private:
 public:
-    // TODO: Add your data members
-	SmallShell():bk_jobs(),stopped_jobs(),paths(),curr_pid(0),curr_command(){
-        this->jobs=new JobsList();
-}
+	// TODO: Add your data members
+	SmallShell() : bk_jobs(), stopped_jobs(), paths(), curr_pid(0), curr_command()
+	{
+		this->jobs = new JobsList();
+	}
 	std::vector<Command *> bk_jobs;
 	std::vector<Command *> stopped_jobs;
-	JobsList* jobs;
+	JobsList *jobs;
 	std::list<string> paths;
 	std::string Prompt = "smash";
-    int curr_pid;
-    std::string curr_command;
+	int curr_pid;
+	std::string curr_command;
 
 	Command *CreateCommand(const char *cmd_line);
 	Command *createBuiltInCommand(vector<string> &args);
-    Command *createExternalCommand(vector<string> &args);
+	Command *createExternalCommand(vector<string> &args);
 	SmallShell(SmallShell const &) = delete;	 // disable copy ctor
 	void operator=(SmallShell const &) = delete; // disable = operator
 	static SmallShell &getInstance()			 // make SmallShell singleton
@@ -262,15 +277,17 @@ public:
 	}
 	~SmallShell();
 	void executeCommand(const char *cmd_line);
-	std::string getPrompt(){
-        return Prompt;
+	std::string getPrompt()
+	{
+		return Prompt;
 	}
-	void changPrompt( const std::string& prompt){
-	    Prompt = prompt;
+	void changPrompt(const std::string &prompt)
+	{
+		Prompt = prompt;
 	}
 	vector<string> curr_arguments;
 	// TODO: add extra methods as needed
-    Command *createPipeCommand(vector<string> vector);
+	Command *createPipeCommand(vector<string> vector);
 };
 
 #endif //SMASH_COMMAND_H_
