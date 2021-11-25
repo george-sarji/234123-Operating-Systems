@@ -2,6 +2,7 @@
 #include <string.h>
 #include <string>
 #include <iostream>
+#include <utility>
 #include <vector>
 #include <sstream>
 #include <sys/wait.h>
@@ -297,37 +298,43 @@ void ChangeDirCommand::execute()
 void JobsList::removeFinishedJobs() {
     if (jobs.empty())
         return;
-    pid_t pid;
-    int w_status = 0;
+    int p_id;
+//    int w_status = 0;
+    int w_res;
     for (auto iterator=jobs.begin(); iterator != jobs.end();){
-        pid = iterator->p_id;
-       waitpid(pid,&w_status,WNOHANG);
-        if (w_status > 0){
+        p_id = iterator->p_id;
+       w_res = waitpid(p_id,NULL,WNOHANG);
+        if (w_res > 0){
             jobs.erase(iterator);
             iterator = jobs.begin();
-            vacant_ids.push_back(pid);
+            vacant_ids.push_back(p_id);
             continue;
         }
         iterator++;
     }
+    if (jobs.empty()){
+        next_id = 1;
+        return;
+    }
     std::sort(jobs.begin(),jobs.end());
+    next_id = jobs.back().job_id;
 }
 
 void JobsList::printJobsList() {
     removeFinishedJobs();
     if (jobs.empty())return;
-    for (auto iterator=jobs.begin(); iterator != jobs.end(); iterator++ ){
+    for (auto & job : jobs){
         string stop;
         time_t t1;
         time(&t1);
-        string cmd =iterator->command;
-        double time_elapsed = difftime(t1,iterator->timestamp);
-        if (iterator->type == STOP) {
+        string cmd =job.command;
+        double time_elapsed = difftime(t1,job.timestamp);
+        if (job.type == STOP) {
              stop = "(stopped)";
         }
-        cout <<"["<<iterator->job_id<<"]";
-        cout << iterator->command;
-        cout<<" :"<<iterator->p_id <<" " << time_elapsed << " sec" <<stop << endl;
+        cout <<"["<<job.job_id<<"]";
+        cout << job.command;
+        cout<<" :"<<job.p_id <<" " << time_elapsed << " sec" <<stop << endl;
     }
 
 }
@@ -361,7 +368,8 @@ JobsList::JobEntry *JobsList::getJobById(int jobId) {
     }
     if (reIndex == -1)
         return nullptr;
-    return &jobs[i];
+    cout << " the re index is " << reIndex<<endl;
+    return &jobs[reIndex];
 }
 
 void JobsList::removeJobById(int jobId) {
@@ -379,14 +387,9 @@ void JobsList::addJob(string cmd,pid_t p_id, bool isStopped) {
     else{
         type = BACKGROUND;
     }
-    if (vacant_ids.empty()){
-        JobEntry jop(next_id++,p_id,cmd,type);
-        jobs.push_back(jop);
-        return;
-    }
-    JobEntry jop(vacant_ids.front(),getpid(),cmd,type);
-    vacant_ids.erase(vacant_ids.begin());
+    JobEntry jop(next_id++,p_id,std::move(cmd),type);
     jobs.push_back(jop);
+    sort(jobs.begin(),jobs.end());
 }
 
 void JobsList::killAllJobs() {
@@ -414,6 +417,8 @@ void KillCommand::execute() {
     string job_id = args[2];
     if (isNumber(args[2])) {
         if (smash.jobs->getJobById(stoi(job_id))) {
+            cout <<"i am here  in kill " << endl;
+            cout << "the proc id is "<<jobsList->getJobById(stoi(job_id))->p_id<<endl;
             kill(jobsList->getJobById(stoi(job_id))->p_id,9);
             jobsList->removeJobById(stoi(job_id));
             return;
@@ -443,13 +448,17 @@ void ForegroundCommand::execute() {
         else{
             JobsList::JobEntry* jobEntry = smash.jobs->getLastJob();
             int pid = jobEntry->p_id;
-            int status;
-                waitpid(pid,&status);
+//            int status;
+            waitpid(pid,NULL,WUNTRACED);
+//            cout <<" the res is " << status<<endl;
             return;
         }
     } else if (args[2].empty()  && isNumber(args[1])){
         if(smash.jobs->getJobById(stoi(args[1]))){
-            waitpid(stoi(args[1]),&status);
+            cout << "I am here " <<endl;
+//            int st;
+            waitpid(stoi(args[1]),NULL,WUNTRACED);
+//            cout <<" the res is " << st<<endl;
             return;
         }
         else {
@@ -480,7 +489,8 @@ void ExternalCommand::execute() {
     string cmd_line1 = getCommand(args);
 
          int p_id = fork();
-         if ( !p_id){
+         if ( p_id == 0){
+
 
              setpgrp();
 
@@ -491,6 +501,10 @@ void ExternalCommand::execute() {
              char* cmd_line_t_t=new char[len];
 
              strcpy(cmd_line_t_t,cmd_line);
+
+             if(_isBackgroundComamnd(cmd_line)){
+                 _removeBackgroundSign(cmd_line_t_t);
+             }
 
              char s1[10] ="/bin/bash";
 
