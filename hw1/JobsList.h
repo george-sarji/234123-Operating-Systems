@@ -96,7 +96,7 @@ public:
     JobEntry *getJobById(int jobId);
     void removeJobById(int jobId);
     JobEntry *getLastJob();
-    JobEntry *getLastStoppedJob(int *jobId);
+    JobEntry *getLastStoppedJob();
     bool empty()
     {
         return size == 0;

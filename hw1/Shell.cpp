@@ -44,6 +44,10 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
     {
         return new JobsCommand(args[0].c_str(), jobs);
     }
+    if (args[0] == "bg")
+    {
+        return new BackgroundCommand(args[0].c_str());
+    }
     return nullptr;
 }
 

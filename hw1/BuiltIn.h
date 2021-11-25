@@ -82,14 +82,14 @@ public:
     virtual ~ForegroundCommand() = default;
     void execute() override;
 };
-//
-//class BackgroundCommand : public BuiltInCommand {
-// // TODO: Add your data members
-// public:
-//  BackgroundCommand(const char* cmd_line, JobsList* jobs);
-//  virtual ~BackgroundCommand() {}
-//  void execute() override;
-//};
+
+class BackgroundCommand : public BuiltInCommand
+{
+public:
+    BackgroundCommand(const char *cmd_line) : BuiltInCommand(cmd_line) {}
+    virtual ~BackgroundCommand() {}
+    void execute() override;
+};
 //
 //class HeadCommand : public BuiltInCommand {
 // public:

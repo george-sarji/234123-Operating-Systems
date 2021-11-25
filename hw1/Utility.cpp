@@ -1,4 +1,7 @@
 #include "Utility.h"
+#include "Shell.h"
+#include "JobsList.h"
+#include <vector>
 
 std::string WHITESPACE(" \t\f\v\n\r");
 
@@ -106,4 +109,22 @@ string getCommand(vector<string> args)
     }
     cmd = _trim(cmd);
     return cmd;
+}
+
+JobsList::JobEntry *resumeLastStoppedJob()
+{
+    // Get the shell instance.
+    SmallShell &shell = SmallShell::getInstance();
+    JobsList *stopped = shell.jobs;
+    // Get the last stopped process.
+    JobsList::JobEntry *job = stopped->getLastStoppedJob();
+    if (job != nullptr)
+    {
+        // Resume the given job.
+        cout << job->command << " : " << job->job_id << endl;
+        job->_continue_();
+        // Return the job.
+        return job;
+    }
+    return job;
 }

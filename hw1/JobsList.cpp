@@ -51,7 +51,7 @@ void JobsList::printJobsList()
     }
 }
 
-JobsList::JobEntry *JobsList::getLastStoppedJob(int *jobId)
+JobsList::JobEntry *JobsList::getLastStoppedJob()
 {
     int i = 0;
     int reIndex = -1;

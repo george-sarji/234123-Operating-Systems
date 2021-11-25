@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include "BuiltIn.h"
+#include "JobsList.h"
 
 #define COMMAND_ARGS_MAX_LENGTH (200)
 #define COMMAND_MAX_ARGS (20)
@@ -30,5 +31,7 @@ void _removeBackgroundSign(char *cmd_line);
 vector<string> analyseTheLine(const char *cmd_line);
 
 string getCommand(vector<string> args);
+
+JobsList::JobEntry* resumeLastStoppedJob();
 
 #endif
