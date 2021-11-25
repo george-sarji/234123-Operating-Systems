@@ -304,7 +304,7 @@ void JobsList::removeFinishedJobs() {
     for (auto iterator=jobs.begin(); iterator != jobs.end();){
         p_id = iterator->p_id;
        w_res = waitpid(p_id,NULL,WNOHANG);
-        if (w_res > 0){
+        if (w_res != 0){
             jobs.erase(iterator);
             iterator = jobs.begin();
             vacant_ids.push_back(p_id);
@@ -368,14 +368,10 @@ JobsList::JobEntry *JobsList::getJobById(int jobId) {
     }
     if (reIndex == -1)
         return nullptr;
-    cout << " the re index is " << reIndex<<endl;
     return &jobs[reIndex];
 }
 
 void JobsList::removeJobById(int jobId) {
-    JobEntry* jop = getJobById(jobId);
-    jop->to_delete= true;
-
 }
 
 void JobsList::addJob(string cmd,pid_t p_id, bool isStopped) {
@@ -387,7 +383,10 @@ void JobsList::addJob(string cmd,pid_t p_id, bool isStopped) {
     else{
         type = BACKGROUND;
     }
-    JobEntry jop(next_id++,p_id,std::move(cmd),type);
+    int id;
+    if ( jobs.empty() ) id =1;
+    else id = jobs.back().job_id + 1;
+    JobEntry jop(id,p_id,std::move(cmd),type);
     jobs.push_back(jop);
     sort(jobs.begin(),jobs.end());
 }
@@ -447,17 +446,26 @@ void ForegroundCommand::execute() {
         }
         else{
             JobsList::JobEntry* jobEntry = smash.jobs->getLastJob();
+            if( jobEntry ){
+                if ( jobEntry->stopped){
+                    jobEntry->_continue_();
+                }
+
             int pid = jobEntry->p_id;
 //            int status;
             waitpid(pid,NULL,WUNTRACED);
 //            cout <<" the res is " << status<<endl;
             return;
+          }
         }
     } else if (args[2].empty()  && isNumber(args[1])){
-        if(smash.jobs->getJobById(stoi(args[1]))){
-            cout << "I am here " <<endl;
-//            int st;
-            waitpid(stoi(args[1]),NULL,WUNTRACED);
+        JobsList::JobEntry * job= smash.jobs->getJobById(stoi(args[1]));
+        if( job ){
+            if ( job->stopped){
+                job->_continue_();
+            }
+            pid_t  pid = job->p_id;
+            waitpid(pid,NULL,WUNTRACED);
 //            cout <<" the res is " << st<<endl;
             return;
         }
