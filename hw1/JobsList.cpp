@@ -41,7 +41,7 @@ void JobsList::printJobsList()
         time(&t1);
         string cmd = job.command;
         double time_elapsed = difftime(t1, job.timestamp);
-        if (job.type == STOP)
+        if (job.stopped)
         {
             stop = "(stopped)";
         }
@@ -119,7 +119,7 @@ void JobsList::addJob(string cmd, pid_t p_id, bool isStopped)
         id = 1;
     else
         id = jobs.back().job_id + 1;
-    JobEntry jop(id, p_id, std::move(cmd), type);
+    JobEntry jop(id, p_id, std::move(cmd), type,isStopped);
     jobs.push_back(jop);
     sort(jobs.begin(), jobs.end());
 }
