@@ -33,8 +33,8 @@ public:
 			inserted 	Time (in seconds) when the job was first inserted
 		*/
     public:
-        JobEntry(int Jop_id, int p_id, string command1, JOB_TYPE jobType) : job_id(Jop_id), p_id(p_id), stopped(false),
-                                                                            timestamp(), type(jobType), command(command1)
+        JobEntry(int Jop_id, int p_id, string command1, JOB_TYPE jobType , bool stopped = false) : job_id(Jop_id), p_id(p_id),
+                  stopped(stopped),timestamp(), type(jobType), command(command1)
         {
             time(&timestamp);
         }

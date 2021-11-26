@@ -122,6 +122,33 @@ smash/fast:
 	$(MAKE) -f CMakeFiles\smash.dir\build.make CMakeFiles/smash.dir/build
 .PHONY : smash/fast
 
+BuiltIn.obj: BuiltIn.cpp.obj
+
+.PHONY : BuiltIn.obj
+
+# target to build an object file
+BuiltIn.cpp.obj:
+	$(MAKE) -f CMakeFiles\smash.dir\build.make CMakeFiles/smash.dir/BuiltIn.cpp.obj
+.PHONY : BuiltIn.cpp.obj
+
+BuiltIn.i: BuiltIn.cpp.i
+
+.PHONY : BuiltIn.i
+
+# target to preprocess a source file
+BuiltIn.cpp.i:
+	$(MAKE) -f CMakeFiles\smash.dir\build.make CMakeFiles/smash.dir/BuiltIn.cpp.i
+.PHONY : BuiltIn.cpp.i
+
+BuiltIn.s: BuiltIn.cpp.s
+
+.PHONY : BuiltIn.s
+
+# target to generate assembly for a file
+BuiltIn.cpp.s:
+	$(MAKE) -f CMakeFiles\smash.dir\build.make CMakeFiles/smash.dir/BuiltIn.cpp.s
+.PHONY : BuiltIn.cpp.s
+
 Commands.obj: Commands.cpp.obj
 
 .PHONY : Commands.obj
@@ -148,6 +175,141 @@ Commands.s: Commands.cpp.s
 Commands.cpp.s:
 	$(MAKE) -f CMakeFiles\smash.dir\build.make CMakeFiles/smash.dir/Commands.cpp.s
 .PHONY : Commands.cpp.s
+
+External.obj: External.cpp.obj
+
+.PHONY : External.obj
+
+# target to build an object file
+External.cpp.obj:
+	$(MAKE) -f CMakeFiles\smash.dir\build.make CMakeFiles/smash.dir/External.cpp.obj
+.PHONY : External.cpp.obj
+
+External.i: External.cpp.i
+
+.PHONY : External.i
+
+# target to preprocess a source file
+External.cpp.i:
+	$(MAKE) -f CMakeFiles\smash.dir\build.make CMakeFiles/smash.dir/External.cpp.i
+.PHONY : External.cpp.i
+
+External.s: External.cpp.s
+
+.PHONY : External.s
+
+# target to generate assembly for a file
+External.cpp.s:
+	$(MAKE) -f CMakeFiles\smash.dir\build.make CMakeFiles/smash.dir/External.cpp.s
+.PHONY : External.cpp.s
+
+JobsList.obj: JobsList.cpp.obj
+
+.PHONY : JobsList.obj
+
+# target to build an object file
+JobsList.cpp.obj:
+	$(MAKE) -f CMakeFiles\smash.dir\build.make CMakeFiles/smash.dir/JobsList.cpp.obj
+.PHONY : JobsList.cpp.obj
+
+JobsList.i: JobsList.cpp.i
+
+.PHONY : JobsList.i
+
+# target to preprocess a source file
+JobsList.cpp.i:
+	$(MAKE) -f CMakeFiles\smash.dir\build.make CMakeFiles/smash.dir/JobsList.cpp.i
+.PHONY : JobsList.cpp.i
+
+JobsList.s: JobsList.cpp.s
+
+.PHONY : JobsList.s
+
+# target to generate assembly for a file
+JobsList.cpp.s:
+	$(MAKE) -f CMakeFiles\smash.dir\build.make CMakeFiles/smash.dir/JobsList.cpp.s
+.PHONY : JobsList.cpp.s
+
+Shell.obj: Shell.cpp.obj
+
+.PHONY : Shell.obj
+
+# target to build an object file
+Shell.cpp.obj:
+	$(MAKE) -f CMakeFiles\smash.dir\build.make CMakeFiles/smash.dir/Shell.cpp.obj
+.PHONY : Shell.cpp.obj
+
+Shell.i: Shell.cpp.i
+
+.PHONY : Shell.i
+
+# target to preprocess a source file
+Shell.cpp.i:
+	$(MAKE) -f CMakeFiles\smash.dir\build.make CMakeFiles/smash.dir/Shell.cpp.i
+.PHONY : Shell.cpp.i
+
+Shell.s: Shell.cpp.s
+
+.PHONY : Shell.s
+
+# target to generate assembly for a file
+Shell.cpp.s:
+	$(MAKE) -f CMakeFiles\smash.dir\build.make CMakeFiles/smash.dir/Shell.cpp.s
+.PHONY : Shell.cpp.s
+
+Special.obj: Special.cpp.obj
+
+.PHONY : Special.obj
+
+# target to build an object file
+Special.cpp.obj:
+	$(MAKE) -f CMakeFiles\smash.dir\build.make CMakeFiles/smash.dir/Special.cpp.obj
+.PHONY : Special.cpp.obj
+
+Special.i: Special.cpp.i
+
+.PHONY : Special.i
+
+# target to preprocess a source file
+Special.cpp.i:
+	$(MAKE) -f CMakeFiles\smash.dir\build.make CMakeFiles/smash.dir/Special.cpp.i
+.PHONY : Special.cpp.i
+
+Special.s: Special.cpp.s
+
+.PHONY : Special.s
+
+# target to generate assembly for a file
+Special.cpp.s:
+	$(MAKE) -f CMakeFiles\smash.dir\build.make CMakeFiles/smash.dir/Special.cpp.s
+.PHONY : Special.cpp.s
+
+Utility.obj: Utility.cpp.obj
+
+.PHONY : Utility.obj
+
+# target to build an object file
+Utility.cpp.obj:
+	$(MAKE) -f CMakeFiles\smash.dir\build.make CMakeFiles/smash.dir/Utility.cpp.obj
+.PHONY : Utility.cpp.obj
+
+Utility.i: Utility.cpp.i
+
+.PHONY : Utility.i
+
+# target to preprocess a source file
+Utility.cpp.i:
+	$(MAKE) -f CMakeFiles\smash.dir\build.make CMakeFiles/smash.dir/Utility.cpp.i
+.PHONY : Utility.cpp.i
+
+Utility.s: Utility.cpp.s
+
+.PHONY : Utility.s
+
+# target to generate assembly for a file
+Utility.cpp.s:
+	$(MAKE) -f CMakeFiles\smash.dir\build.make CMakeFiles/smash.dir/Utility.cpp.s
+.PHONY : Utility.cpp.s
 
 signals.obj: signals.cpp.obj
 
@@ -212,9 +374,27 @@ help:
 	@echo ... smash
 	@echo ... edit_cache
 	@echo ... rebuild_cache
+	@echo ... BuiltIn.obj
+	@echo ... BuiltIn.i
+	@echo ... BuiltIn.s
 	@echo ... Commands.obj
 	@echo ... Commands.i
 	@echo ... Commands.s
+	@echo ... External.obj
+	@echo ... External.i
+	@echo ... External.s
+	@echo ... JobsList.obj
+	@echo ... JobsList.i
+	@echo ... JobsList.s
+	@echo ... Shell.obj
+	@echo ... Shell.i
+	@echo ... Shell.s
+	@echo ... Special.obj
+	@echo ... Special.i
+	@echo ... Special.s
+	@echo ... Utility.obj
+	@echo ... Utility.i
+	@echo ... Utility.s
 	@echo ... signals.obj
 	@echo ... signals.i
 	@echo ... signals.s
