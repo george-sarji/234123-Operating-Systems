@@ -383,12 +383,6 @@ void JobsList::addJob(string cmd,pid_t p_id, bool isStopped) {
     else{
         type = BACKGROUND;
     }
-    for (auto & job : jobs){
-        if (job.p_id == p_id) {
-            job.stop();
-            return;
-        }
-    }
     int id;
     if ( jobs.empty() ) id =1;
     else id = jobs.back().job_id + 1;
@@ -458,11 +452,8 @@ void ForegroundCommand::execute() {
                 }
 
             int pid = jobEntry->p_id;
-                smash.curr_pid = pid;
-                smash.curr_command= jobEntry->command;
 //            int status;
             waitpid(pid,NULL,WUNTRACED);
-                smash.curr_pid = 0;
 //            cout <<" the res is " << status<<endl;
             return;
           }
@@ -474,10 +465,7 @@ void ForegroundCommand::execute() {
                 job->_continue_();
             }
             pid_t  pid = job->p_id;
-            smash.curr_pid = pid;
-            smash.curr_command= job->command;
             waitpid(pid,NULL,WUNTRACED);
-            smash.curr_pid = 0;
 //            cout <<" the res is " << st<<endl;
             return;
         }
