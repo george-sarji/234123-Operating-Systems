@@ -106,6 +106,14 @@ void JobsList::addJob(string cmd, pid_t p_id, bool isStopped)
     {
         type = BACKGROUND;
     }
+    for (auto &job : jobs)
+    {
+        if (job.p_id == p_id)
+        {
+            job.stop();
+            return;
+        }
+    }
     int id;
     if (jobs.empty())
         id = 1;
