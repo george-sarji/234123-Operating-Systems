@@ -14,9 +14,9 @@ void ctrlZHandler(int sig_num)
     if (pid == 0)
         return;
     SmallShell::getInstance().curr_pid = 0;
-    //    JobsList::JobEntry* job = shell.getJobs()->getJobByPid(pid);
-    //    if(job != nullptr)
-    //        job->stopIT();
+        JobsList::JobEntry* job = shell.jobs->getJobById(pid);
+        if(job != nullptr)
+            job->stop();
     int res;
 
     res = kill(pid, SIGSTOP);

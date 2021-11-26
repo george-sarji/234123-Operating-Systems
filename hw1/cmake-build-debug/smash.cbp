@@ -80,10 +80,49 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="C:/Users/agml_/234123-operating-systems/hw1/BuiltIn.cpp">
+			<Option target="smash"/>
+		</Unit>
+		<Unit filename="C:/Users/agml_/234123-operating-systems/hw1/BuiltIn.h">
+			<Option target="smash"/>
+		</Unit>
+		<Unit filename="C:/Users/agml_/234123-operating-systems/hw1/Command.h">
+			<Option target="smash"/>
+		</Unit>
 		<Unit filename="C:/Users/agml_/234123-operating-systems/hw1/Commands.cpp">
 			<Option target="smash"/>
 		</Unit>
 		<Unit filename="C:/Users/agml_/234123-operating-systems/hw1/Commands.h">
+			<Option target="smash"/>
+		</Unit>
+		<Unit filename="C:/Users/agml_/234123-operating-systems/hw1/External.cpp">
+			<Option target="smash"/>
+		</Unit>
+		<Unit filename="C:/Users/agml_/234123-operating-systems/hw1/External.h">
+			<Option target="smash"/>
+		</Unit>
+		<Unit filename="C:/Users/agml_/234123-operating-systems/hw1/JobsList.cpp">
+			<Option target="smash"/>
+		</Unit>
+		<Unit filename="C:/Users/agml_/234123-operating-systems/hw1/JobsList.h">
+			<Option target="smash"/>
+		</Unit>
+		<Unit filename="C:/Users/agml_/234123-operating-systems/hw1/Pipe.h">
+			<Option target="smash"/>
+		</Unit>
+		<Unit filename="C:/Users/agml_/234123-operating-systems/hw1/Shell.cpp">
+			<Option target="smash"/>
+		</Unit>
+		<Unit filename="C:/Users/agml_/234123-operating-systems/hw1/Shell.h">
+			<Option target="smash"/>
+		</Unit>
+		<Unit filename="C:/Users/agml_/234123-operating-systems/hw1/Special.cpp">
+			<Option target="smash"/>
+		</Unit>
+		<Unit filename="C:/Users/agml_/234123-operating-systems/hw1/Utility.cpp">
+			<Option target="smash"/>
+		</Unit>
+		<Unit filename="C:/Users/agml_/234123-operating-systems/hw1/Utility.h">
 			<Option target="smash"/>
 		</Unit>
 		<Unit filename="C:/Users/agml_/234123-operating-systems/hw1/signals.cpp">

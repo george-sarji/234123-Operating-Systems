@@ -140,8 +140,11 @@ void ForegroundCommand::execute()
                 }
 
                 int pid = jobEntry->p_id;
+                smash.curr_pid =pid;
+                smash.curr_command = jobEntry->command;
                 //            int status;
                 waitpid(pid, NULL, WUNTRACED);
+                smash.curr_pid = 0;
                 //            cout <<" the res is " << status<<endl;
                 return;
             }
@@ -156,8 +159,11 @@ void ForegroundCommand::execute()
             {
                 job->_continue_();
             }
-            pid_t pid = job->p_id;
+            int pid = job->p_id;
+            smash.curr_pid =pid;
+            smash.curr_command = job->command;
             waitpid(pid, NULL, WUNTRACED);
+            smash.curr_pid = 0;
             //            cout <<" the res is " << st<<endl;
             return;
         }
