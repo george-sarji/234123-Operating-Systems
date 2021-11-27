@@ -50,6 +50,9 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
     {
         return new BackgroundCommand(args[0].c_str());
     }
+    if (args[0] == "head"){
+        return new HeadCommand(args[0].c_str());
+    }
     return nullptr;
 }
 

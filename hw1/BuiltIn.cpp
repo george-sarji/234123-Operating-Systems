@@ -4,16 +4,20 @@
 #include <stdio.h>
 #include <cstring>
 #include <iostream>
+#include <fcntl.h>
 
 #include "BuiltIn.h"
 #include "Shell.h"
 #include "Utility.h"
 #include "JobsList.h"
 
-set<string> BuiltinTable{"cd", "chprompt", "showpid", "pwd", "jobs", "kill", "fg", "bg", "quit"};
+#define MAX_SIZE_TEXT 4096
+
+set<string> BuiltinTable{"cd", "chprompt", "showpid", "pwd", "jobs", "kill", "fg", "bg", "quit","head"};
 
 void ShowPidCommand::execute()
 {
+    std::cerr << "I am her in showpid"<<endl;
     int pid = getpid();
     cout << "smash pid is " << pid << endl;
 }
@@ -256,3 +260,64 @@ void QuitCommand::execute()
     // We can exit the shell completely.
     exit(0);
 }
+
+void HeadCommand::execute() {
+
+    SmallShell &smash = SmallShell::getInstance();
+    vector<string> args = smash.curr_arguments;
+    int num_of_lines = 10;
+
+    if (args[1].empty()){
+        cout << "smash error: head: not enough arguments"<<endl;
+    }
+
+    if (isNumber(args[1])) num_of_lines = stoi(args[1]);
+
+    int inFile = open(args[2].c_str(),O_RDONLY);
+    if ( inFile == -1){
+        perror("“smash error: open failed");
+    }
+
+    char c , buffer[MAX_SIZE_TEXT];
+    size_t index = 0, num_of_written_lines = 1;
+    ssize_t r_result, w_result;
+
+    while ((r_result = read(inFile, &c, 1)) != 0) {
+        if (r_result < 0) {
+            perror("smash error: read failed");
+        }
+
+        // Check if the current character is a new line (the line ends here)
+        if (c == '\n') {
+            buffer[index] = c;
+            buffer[index + 1] = '\0';
+            c = 0;
+            index = 0;
+
+            // Print the line
+            w_result = 0;
+            ssize_t buffer_length = strlen(buffer);
+            while (w_result != buffer_length) {
+                ssize_t res = write(STDOUT_FILENO, buffer + w_result, buffer_length - w_result);
+
+                if (w_result < 0) {
+                    perror("smash error: write failed");
+
+                }
+
+                w_result += res;
+            }
+
+            // Stop if we read 10 lines already
+            if (num_of_written_lines == num_of_lines) {
+                break;
+            }
+
+            num_of_written_lines++;
+        } else {
+            buffer[index++] = c;
+        }
+    }
+        close(inFile);
+    }
+

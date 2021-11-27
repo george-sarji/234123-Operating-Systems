@@ -85,12 +85,12 @@ public:
     virtual ~BackgroundCommand() {}
     void execute() override;
 };
-//
-//class HeadCommand : public BuiltInCommand {
-// public:
-//  HeadCommand(const char* cmd_line);
-//  virtual ~HeadCommand() {}
-//  void execute() override;
-//};
+
+class HeadCommand : public BuiltInCommand {
+ public:
+  HeadCommand(const char* cmd_line):BuiltInCommand(cmd_line){}
+  virtual ~HeadCommand() {}
+  void execute() override;
+};
 
 #endif

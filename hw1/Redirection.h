@@ -16,15 +16,20 @@ public:
 
         SmallShell &shell = SmallShell::getInstance();
     string cmd_s = cmd_line;
-    size_t re_sign_index ;
-        if(((re_sign_index=cmd_s.find(">"))!=string::npos)&&(cmd_s.find(">>") == string::npos)){
-            string left_command = cmd_s.substr(0,re_sign_index);
+    size_t re_sign1_index =cmd_s.find(">") ;
+    size_t re_sign2_index = cmd_s.find(">>");
+
+        if( re_sign1_index < re_sign2_index   && re_sign1_index != string::npos ){
+            cout << " i am here " << endl;
+            string left_command = cmd_s.substr(0,re_sign1_index);
+            cout<< " the left command is " <<left_command<< endl;
             left_command = _trim(left_command);
             if (_isBackgroundComamnd(cmd_line)){
                 left_command.push_back('&');
             }
-            string file = cmd_s.substr(re_sign_index+ 1);
+            string file = cmd_s.substr(re_sign1_index+ 1);
             file = _trim(file);
+            cout <<"the file name is " << file<<endl;
             char* filename=new char[strlen(file.c_str())+1];
             strcpy(filename,file.c_str());
             if(_isBackgroundComamnd(filename)){
@@ -41,20 +46,23 @@ public:
             close(Fd1);
             Command* command = shell.CreateCommand(left_command.c_str());
             if(! command )
+            {
+                cerr << " ERROR " <<endl;
                 return;
+            }
             command->execute();
             shell.jobs->removeFinishedJobs();
             fflush(stdout);
             dup2(back_fd, 1);
             close(back_fd);
             return;
-        } else if ((re_sign_index = cmd_s.find(">>"))!=string::npos){
-            string left_command = cmd_s.substr(0,re_sign_index);
+        } else if (((cmd_s.find(">>"))!=string::npos) && (re_sign1_index > re_sign2_index)){
+            string left_command = cmd_s.substr(0,re_sign2_index);
             left_command = _trim(left_command);
             if (_isBackgroundComamnd(cmd_line)){
                 left_command.push_back('&');
             }
-            string file = cmd_s.substr( re_sign_index+ 2);
+            string file = cmd_s.substr( re_sign2_index+ 2);
             file = _trim(file);
             char* filename=new char[strlen(file.c_str())+1];
             strcpy(filename,file.c_str());
