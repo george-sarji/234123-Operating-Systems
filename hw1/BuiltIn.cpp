@@ -265,7 +265,7 @@ void HeadCommand::execute() {
 
     SmallShell &smash = SmallShell::getInstance();
     vector<string> args = smash.curr_arguments;
-    int num_of_lines = 10;
+    size_t num_of_lines = 10;
 
     if (args[1].empty()){
         cout << "smash error: head: not enough arguments"<<endl;
