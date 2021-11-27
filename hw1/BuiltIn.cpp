@@ -77,6 +77,7 @@ void KillCommand::execute()
     if (args[1].empty() || args[2].empty() || !args[3].empty())
     {
         cout << "smash error: kill: invalid arguments" << endl;
+        return;
     }
     // We have to check the format of the first argument (the actual signal number)
     string signal_str = args[1];

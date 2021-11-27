@@ -2,6 +2,8 @@
 #include "BuiltIn.h"
 #include "Utility.h"
 #include "External.h"
+#include "Redirection.h"
+#include "Pipe.h"
 
 
 SmallShell::~SmallShell()
@@ -51,24 +53,28 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
     return nullptr;
 }
 
-Command *SmallShell::createExternalCommand(vector<string> &args)
-{
-    return nullptr;
-}
+
 Command *SmallShell::CreateCommand(const char *cmd_line)
 {
     vector<string> args = analyseTheLine(cmd_line);
+    string cmd_s = cmd_line;
     const bool is_in = BuiltinTable.find(args[0]) != BuiltinTable.end();
-    if (is_in)
+    bool is_re_command = is_redirection_command(cmd_s);
+    if (is_in && !is_re_command)
     {
         Command *comm = createBuiltInCommand(args);
         return comm;
     }
-    if (args[1] == "|" || args[1] == "|&")
+
+    if (((cmd_s.find(">"))!=string::npos))
     {
-        Command *command = createPipeCommand(args);
-        return command;
+         return new RedirectionCommand(cmd_line);
     }
+
+    if ((cmd_s.find("|") != string::npos) || (cmd_s.find("|&") != string::npos)) {
+        return new PipeCommand(cmd_line);
+    }
+
     return new ExternalCommand(cmd_line);
 }
 
@@ -87,4 +93,8 @@ void SmallShell::executeCommand(const char *cmd_line)
 Command *SmallShell::createPipeCommand(vector<string> vector)
 {
     return nullptr;
+}
+
+bool SmallShell::is_redirection_command(const string& cmd_s ) {
+    return (cmd_s.find(">"))!=string::npos;
 }

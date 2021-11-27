@@ -24,6 +24,7 @@ public:
     std::string Prompt = "smash";
     int curr_pid;
     std::string curr_command;
+    int fd;
 
     Command *CreateCommand(const char *cmd_line);
     Command *createBuiltInCommand(vector<string> &args);
@@ -49,6 +50,8 @@ public:
     vector<string> curr_arguments;
     // TODO: add extra methods as needed
     Command *createPipeCommand(vector<string> vector);
+
+    bool is_redirection_command(const string& cmd);
 };
 
 #endif
