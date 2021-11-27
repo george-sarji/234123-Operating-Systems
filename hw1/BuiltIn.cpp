@@ -269,6 +269,7 @@ void HeadCommand::execute() {
 
     if (args[1].empty()){
         cout << "smash error: head: not enough arguments"<<endl;
+        return;
     }
 
     if (isNumber(args[1])) num_of_lines = stoi(args[1]);
@@ -276,6 +277,7 @@ void HeadCommand::execute() {
     int inFile = open(args[2].c_str(),O_RDONLY);
     if ( inFile == -1){
         perror("“smash error: open failed");
+        return;
     }
 
     char c , buffer[MAX_SIZE_TEXT];
@@ -283,8 +285,12 @@ void HeadCommand::execute() {
     ssize_t r_result, w_result;
 
     while ((r_result = read(inFile, &c, 1)) != 0) {
-        if (r_result < 0) {
+        if (r_result <= 0) {
+            if ( r_result == 0) {
+                break;
+            }
             perror("smash error: read failed");
+            break;
         }
 
         // Check if the current character is a new line (the line ends here)
@@ -298,10 +304,11 @@ void HeadCommand::execute() {
             w_result = 0;
             ssize_t buffer_length = strlen(buffer);
             while (w_result != buffer_length) {
-                ssize_t res = write(STDOUT_FILENO, buffer + w_result, buffer_length - w_result);
+                ssize_t res = write(0, buffer + w_result, buffer_length - w_result);
 
                 if (w_result < 0) {
                     perror("smash error: write failed");
+                    break;
 
                 }
 
