@@ -18,16 +18,13 @@ public:
     string cmd_s = cmd_line;
     size_t re_sign_index ;
         if(((re_sign_index=cmd_s.find(">"))!=string::npos)&&(cmd_s.find(">>") == string::npos)){
-            cout << " i am here in redirection " << endl;
             string left_command = cmd_s.substr(0,re_sign_index);
-            _trim(left_command);
-            cout << " the left command is " << left_command << endl;
+            left_command = _trim(left_command);
             if (_isBackgroundComamnd(cmd_line)){
                 left_command.push_back('&');
             }
             string file = cmd_s.substr(re_sign_index+ 1);
-            _trim(file);
-            cout << " the file is " << file << endl;
+            file = _trim(file);
             char* filename=new char[strlen(file.c_str())+1];
             strcpy(filename,file.c_str());
             if(_isBackgroundComamnd(filename)){
@@ -38,7 +35,6 @@ public:
                 perror("smash error: open failed");
                 return ;
             }
-            cout << " I am doing redirection " << endl;
             int back_fd = dup(1);
             SmallShell::getInstance().fd = dup(1);
             dup2(Fd1, 1);
@@ -54,12 +50,12 @@ public:
             return;
         } else if ((re_sign_index = cmd_s.find(">>"))!=string::npos){
             string left_command = cmd_s.substr(0,re_sign_index);
-            _trim(left_command);
+            left_command = _trim(left_command);
             if (_isBackgroundComamnd(cmd_line)){
                 left_command.push_back('&');
             }
             string file = cmd_s.substr( re_sign_index+ 2);
-            _trim(file);
+            file = _trim(file);
             char* filename=new char[strlen(file.c_str())+1];
             strcpy(filename,file.c_str());
             if(_isBackgroundComamnd(filename)){
