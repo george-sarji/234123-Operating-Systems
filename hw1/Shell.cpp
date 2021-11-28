@@ -2,6 +2,8 @@
 #include "BuiltIn.h"
 #include "Utility.h"
 #include "External.h"
+#include "Redirection.h"
+#include "Pipe.h"
 
 
 SmallShell::~SmallShell()
@@ -48,27 +50,37 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
     {
         return new BackgroundCommand(args[0].c_str());
     }
+    if (args[0] == "head"){
+        return new HeadCommand(args[0].c_str());
+    }
     return nullptr;
 }
 
-Command *SmallShell::createExternalCommand(vector<string> &args)
-{
-    return nullptr;
-}
+
 Command *SmallShell::CreateCommand(const char *cmd_line)
 {
     vector<string> args = analyseTheLine(cmd_line);
+    string cmd_s = cmd_line;
+    cerr << "the command line is " << cmd_s << endl;
     const bool is_in = BuiltinTable.find(args[0]) != BuiltinTable.end();
-    if (is_in)
+    bool is_re_command = is_redirection_command(cmd_s);
+    if (is_in && !is_re_command)
     {
         Command *comm = createBuiltInCommand(args);
         return comm;
     }
-    if (args[1] == "|" || args[1] == "|&")
+
+    if ( std::count(args.begin(),args.end(),">") ||  std::count(args.begin(),args.end(),">>"))
     {
-        Command *command = createPipeCommand(args);
-        return command;
+        cout << " i am in re " << endl;
+         return new RedirectionCommand(cmd_line);
     }
+
+    if ((cmd_s.find("|") != string::npos) || (cmd_s.find("|&") != string::npos)) {
+        return new PipeCommand(cmd_line);
+    }
+
+    cout <<" i am here in external "<<endl;
     return new ExternalCommand(cmd_line);
 }
 
@@ -87,4 +99,8 @@ void SmallShell::executeCommand(const char *cmd_line)
 Command *SmallShell::createPipeCommand(vector<string> vector)
 {
     return nullptr;
+}
+
+bool SmallShell::is_redirection_command(const string& cmd_s ) {
+    return (cmd_s.find(">"))!=string::npos;
 }

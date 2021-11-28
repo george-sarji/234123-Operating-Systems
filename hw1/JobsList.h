@@ -50,10 +50,10 @@ public:
             time(&timestamp);
         }
 
-        void _continue_()
+        int _continue_()
         {
             this->stopped = false;
-            kill(this->p_id, SIGCONT);
+            return kill(this->p_id, SIGCONT);
         }
 
         bool operator==(const JobEntry &jobEntry) const

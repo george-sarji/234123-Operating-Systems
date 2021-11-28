@@ -12,47 +12,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f86fd9f6-feb9-480a-84bc-f12a7b75d7ec" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/smash.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/smash.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BuiltIn.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/BuiltIn.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BuiltIn.h" beforeDir="false" afterPath="$PROJECT_DIR$/BuiltIn.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Command.h" beforeDir="false" afterPath="$PROJECT_DIR$/Command.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Commands.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Commands.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Commands.h" beforeDir="false" afterPath="$PROJECT_DIR$/Commands.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/External.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/External.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/External.h" beforeDir="false" afterPath="$PROJECT_DIR$/External.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JobsList.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/JobsList.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JobsList.h" beforeDir="false" afterPath="$PROJECT_DIR$/JobsList.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pipe.h" beforeDir="false" afterPath="$PROJECT_DIR$/Pipe.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Redirection.h" beforeDir="false" afterPath="$PROJECT_DIR$/Redirection.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Shell.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Shell.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Shell.h" beforeDir="false" afterPath="$PROJECT_DIR$/Shell.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Utility.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Utility.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Utility.h" beforeDir="false" afterPath="$PROJECT_DIR$/Utility.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.15.3/CMakeCCompiler.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.15.3/CMakeCCompiler.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.15.3/CMakeCXXCompiler.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.15.3/CMakeCXXCompiler.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.15.3/CMakeRCCompiler.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.15.3/CMakeRCCompiler.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.15.3/CMakeSystem.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.15.3/CMakeSystem.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.15.3/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.15.3/CompilerIdC/CMakeCCompilerId.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.15.3/CompilerIdCXX/CMakeCXXCompilerId.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.15.3/CompilerIdCXX/CMakeCXXCompilerId.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/progress.marks" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/progress.marks" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/smash.dir/DependInfo.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/smash.dir/DependInfo.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/smash.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/smash.dir/build.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/smash.dir/cmake_clean.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/smash.dir/cmake_clean.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/smash.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/smash.dir/depend.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/smash.dir/objects1.rsp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/smash.dir/objects1.rsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/smash.dir/progress.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/smash.dir/progress.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/smash.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/smash.cbp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/signals.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/signals.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/smash.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/smash.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,6 +75,9 @@
       <workItem from="1637311542399" duration="23173000" />
       <workItem from="1637673635008" duration="28795000" />
       <workItem from="1637859462657" duration="3666000" />
+      <workItem from="1637941511452" duration="1884000" />
+      <workItem from="1638004270357" duration="7169000" />
+      <workItem from="1638015632217" duration="15561000" />
     </task>
     <task id="LOCAL‎00001" summary="kill command">
       <created>1637313149033</created>
@@ -333,7 +301,43 @@
       <option name="presentableId" value="LOCAL‎00037" />
       <updated>1637851068692</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL‎00038" summary="external command , signal ctr z ctr c and jobs command are updated">
+      <created>1637916151132</created>
+      <option name="number" value="LOCAL‎00038" />
+      <option name="presentableId" value="LOCAL‎00038" />
+      <updated>1637916151132</updated>
+    </task>
+    <task id="LOCAL‎00039" summary="redirection command updated">
+      <created>1638010446663</created>
+      <option name="number" value="LOCAL‎00039" />
+      <option name="presentableId" value="LOCAL‎00039" />
+      <updated>1638010446663</updated>
+    </task>
+    <task id="LOCAL‎00040" summary="redirection command updated">
+      <created>1638017177325</created>
+      <option name="number" value="LOCAL‎00040" />
+      <option name="presentableId" value="LOCAL‎00040" />
+      <updated>1638017177325</updated>
+    </task>
+    <task id="LOCAL‎00041" summary="implement head command">
+      <created>1638023832742</created>
+      <option name="number" value="LOCAL‎00041" />
+      <option name="presentableId" value="LOCAL‎00041" />
+      <updated>1638023832742</updated>
+    </task>
+    <task id="LOCAL‎00042" summary="implement head command">
+      <created>1638024296635</created>
+      <option name="number" value="LOCAL‎00042" />
+      <option name="presentableId" value="LOCAL‎00042" />
+      <updated>1638024296635</updated>
+    </task>
+    <task id="LOCAL‎00043" summary="implement head command">
+      <created>1638024457152</created>
+      <option name="number" value="LOCAL‎00043" />
+      <option name="presentableId" value="LOCAL‎00043" />
+      <updated>1638024457152</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -349,29 +353,31 @@
     <MESSAGE value="updated built in command" />
     <MESSAGE value="external command" />
     <MESSAGE value="external command , signal ctr z ctr c and jobs command are updated" />
-    <option name="LAST_COMMIT_MESSAGE" value="external command , signal ctr z ctr c and jobs command are updated" />
+    <MESSAGE value="redirection command updated" />
+    <MESSAGE value="implement head command" />
+    <option name="LAST_COMMIT_MESSAGE" value="implement head command" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="265" y="0" key="CommitChangelistDialog2" timestamp="1637851067935">
+    <state x="265" y="0" key="CommitChangelistDialog2" timestamp="1638024456436">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="265" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1637851067935" />
+    <state x="265" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1638024456436" />
     <state x="421" y="96" key="FileChooserDialogImpl" timestamp="1637674374302">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1637674374302" />
-    <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1637851075995">
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2" timestamp="1638087035148">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="233" y="74" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1637851075995" />
-    <state x="337" y="165" key="com.intellij.ide.util.TipDialog" timestamp="1637859465763">
+    <state x="233" y="74" key="Vcs.Push.Dialog.v2/0.0.1280.680@0.0.1280.680" timestamp="1638087035148" />
+    <state x="337" y="165" key="com.intellij.ide.util.TipDialog" timestamp="1638015633009">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="337" y="165" key="com.intellij.ide.util.TipDialog/0.0.1280.680@0.0.1280.680" timestamp="1637859465763" />
-    <state x="383" y="0" key="refactoring.ChangeSignatureDialog" timestamp="1637675038566">
+    <state x="337" y="165" key="com.intellij.ide.util.TipDialog/0.0.1280.680@0.0.1280.680" timestamp="1638015633009" />
+    <state x="383" y="0" key="refactoring.ChangeSignatureDialog" timestamp="1638010002056">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="383" y="0" key="refactoring.ChangeSignatureDialog/0.0.1280.680@0.0.1280.680" timestamp="1637675038566" />
+    <state x="383" y="0" key="refactoring.ChangeSignatureDialog/0.0.1280.680@0.0.1280.680" timestamp="1638010002056" />
     <state x="303" y="1" width="672" height="678" key="search.everywhere.popup" timestamp="1636909010149">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
