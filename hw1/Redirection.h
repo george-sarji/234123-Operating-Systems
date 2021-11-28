@@ -29,13 +29,14 @@ public:
             }
             string file = cmd_s.substr(re_sign1_index+ 1);
             file = _trim(file);
-            cout <<"the file name is " << file<<endl;
+//            cout <<"the file name is " << file<<endl;
             char* filename=new char[strlen(file.c_str())+1];
             strcpy(filename,file.c_str());
             if(_isBackgroundComamnd(filename)){
                 _removeBackgroundSign(filename);
             }
             int Fd1 = open(filename, O_TRUNC | O_RDWR | O_CREAT, 0644);
+            cout <<"the file name is " << filename<<endl;
             if (Fd1 == -1) {
                 perror("smash error: open failed");
                 return ;

@@ -13,6 +13,8 @@ void ExternalCommand::execute()
     vector<string> args = smash.curr_arguments;
     string cmd_line1 = getCommand(args);
 
+    cout << cmd_line1<<endl;
+
     int p_id = fork();
     if (p_id == 0)
     {

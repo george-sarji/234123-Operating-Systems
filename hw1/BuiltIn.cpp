@@ -17,7 +17,6 @@ set<string> BuiltinTable{"cd", "chprompt", "showpid", "pwd", "jobs", "kill", "fg
 
 void ShowPidCommand::execute()
 {
-    std::cerr << "I am her in showpid"<<endl;
     int pid = getpid();
     cout << "smash pid is " << pid << endl;
 }
@@ -104,7 +103,13 @@ void KillCommand::execute()
         return;
     }
     // We can now send the signal to the process.
-    int result = kill(job->p_id, stoi(signal_num));
+    int result;
+    if ( signal == SIGCONT) {
+        result = job->_continue_();
+    }
+    else{
+        result = kill(job->p_id, stoi(signal_num));
+    }
     if (result != 0)
     {
         // We have an error.

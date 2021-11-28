@@ -61,6 +61,7 @@ Command *SmallShell::CreateCommand(const char *cmd_line)
 {
     vector<string> args = analyseTheLine(cmd_line);
     string cmd_s = cmd_line;
+    cerr << "the command line is " << cmd_s << endl;
     const bool is_in = BuiltinTable.find(args[0]) != BuiltinTable.end();
     bool is_re_command = is_redirection_command(cmd_s);
     if (is_in && !is_re_command)
@@ -69,8 +70,9 @@ Command *SmallShell::CreateCommand(const char *cmd_line)
         return comm;
     }
 
-    if (((cmd_s.find(">"))!=string::npos))
+    if ( std::count(args.begin(),args.end(),">") ||  std::count(args.begin(),args.end(),">>"))
     {
+        cout << " i am in re " << endl;
          return new RedirectionCommand(cmd_line);
     }
 
@@ -78,6 +80,7 @@ Command *SmallShell::CreateCommand(const char *cmd_line)
         return new PipeCommand(cmd_line);
     }
 
+    cout <<" i am here in external "<<endl;
     return new ExternalCommand(cmd_line);
 }
 
