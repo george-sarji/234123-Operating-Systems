@@ -96,7 +96,7 @@ void JobsList::removeJobById(int jobId)
 
 void JobsList::addJob(string cmd, pid_t p_id, bool isStopped)
 {
-
+    removeFinishedJobs();
     JOB_TYPE type;
     if (isStopped)
     {

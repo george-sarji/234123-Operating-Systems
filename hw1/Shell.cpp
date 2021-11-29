@@ -61,26 +61,22 @@ Command *SmallShell::CreateCommand(const char *cmd_line)
 {
     vector<string> args = analyseTheLine(cmd_line);
     string cmd_s = cmd_line;
-    cerr << "the command line is " << cmd_s << endl;
     const bool is_in = BuiltinTable.find(args[0]) != BuiltinTable.end();
-    bool is_re_command = is_redirection_command(cmd_s);
+    bool is_re_command = is_redirection_command(cmd_s , args);
     if (is_in && !is_re_command)
     {
         Command *comm = createBuiltInCommand(args);
         return comm;
     }
 
-    if ( std::count(args.begin(),args.end(),">") ||  std::count(args.begin(),args.end(),">>"))
-    {
-        cout << " i am in re " << endl;
-         return new RedirectionCommand(cmd_line);
-    }
-
     if ((cmd_s.find("|") != string::npos) || (cmd_s.find("|&") != string::npos)) {
         return new PipeCommand(cmd_line);
     }
+    if ( is_re_command)
+    {
+         return new RedirectionCommand(cmd_line);
+    }
 
-    cout <<" i am here in external "<<endl;
     return new ExternalCommand(cmd_line);
 }
 
@@ -101,6 +97,9 @@ Command *SmallShell::createPipeCommand(vector<string> vector)
     return nullptr;
 }
 
-bool SmallShell::is_redirection_command(const string& cmd_s ) {
-    return (cmd_s.find(">"))!=string::npos;
+bool SmallShell::is_redirection_command(const string& cmd_s , vector<string> args) {
+    if (std::count(args.begin(),args.end(),">") ||  std::count(args.begin(),args.end(),">>")){
+        return  (cmd_s.find("|") == string::npos) ;
+    }
+    return false;
 }

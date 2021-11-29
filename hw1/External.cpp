@@ -12,9 +12,6 @@ void ExternalCommand::execute()
     SmallShell &smash = SmallShell::getInstance();
     vector<string> args = smash.curr_arguments;
     string cmd_line1 = getCommand(args);
-
-    cout << cmd_line1<<endl;
-
     int p_id = fork();
     if (p_id == 0)
     {
@@ -39,8 +36,12 @@ void ExternalCommand::execute()
         char s2[3] = "-c";
 
         char *const exe_args[] = {s1, s2, cmd_line_t_t, nullptr};
-        execv("/bin/bash", exe_args);
-        printf("didn't work\n");
+         int res = execv("/bin/bash", exe_args);
+         if ( res == -1 ){
+             printf("didn't work\n");
+             smash.jobs->removeFinishedJobs();
+         }
+
     }
     else if (_isBackgroundComamnd(cmd_line))
         smash.jobs->addJob(cmd_line1, p_id);

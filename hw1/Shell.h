@@ -51,7 +51,7 @@ public:
     // TODO: add extra methods as needed
     Command *createPipeCommand(vector<string> vector);
 
-    bool is_redirection_command(const string& cmd);
+    bool is_redirection_command(const string& cmd_s , vector<string> args);
 };
 
 #endif
