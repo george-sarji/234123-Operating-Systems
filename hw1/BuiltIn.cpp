@@ -62,7 +62,7 @@ void ChangeDirCommand::execute()
     if (result != 0)
     {
         // Send out an error.
-        cout << strerror(errno) << endl;
+        perror("smash: chdir failed");
     }
     else
     {
