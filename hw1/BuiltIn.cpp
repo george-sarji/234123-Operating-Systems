@@ -281,7 +281,7 @@ void HeadCommand::execute() {
 
     int inFile = open(args[2].c_str(),O_RDONLY);
     if ( inFile == -1){
-        perror("“smash error: open failed");
+        perror("smash error: open failed");
         return;
     }
 
