@@ -64,6 +64,7 @@ public:
             }
             pipe(Pipes);
             if(fork()==0){
+                setpgrp();
 //                pid_t tester=getppid();
 //                pid_t pidSonOne=getpid();
                 firstChild = getpid();
@@ -81,6 +82,7 @@ public:
             dup2(output2, 1);
             if(fork()==0)
             {
+                setpgrp();
                 secondChild = getpid();
 //                pid_t tester2=getppid();
                 dup2(Pipes[READ], 0);
@@ -119,6 +121,7 @@ public:
             }
             pipe(Pipes);
             if(fork()==0) {
+                setpgrp();
                 firstChild = getpid();
                 dup2(Pipes[WRITE], 2);
                 close(Pipes[WRITE]);
@@ -133,6 +136,7 @@ public:
             }
             if(fork()==0)
             {
+                setpgrp();
                 secondChild = getpid();
                 dup2(Pipes[READ], 0);
                 close(Pipes[WRITE]);
