@@ -121,8 +121,6 @@ void KillCommand::execute()
     // Update the job if it's a stopping signal.
     if (signal == SIGTSTP || signal == SIGINT || signal == SIGSTOP)
     {
-        cout << "Stopped with " << signal_num << endl;
-        // Change the job to stopped.
         job->stop();
     }
 }

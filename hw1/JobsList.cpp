@@ -45,9 +45,9 @@ void JobsList::printJobsList()
         {
             stop = "(stopped)";
         }
-        cout << "[" << job.job_id << "]";
+        cout << "[" << job.job_id << "] ";
         cout << job.command;
-        cout << " :" << job.p_id << " " << time_elapsed << " sec" << stop << endl;
+        cout << " : " << job.p_id << " " << time_elapsed << " secs" << stop << endl;
     }
 }
 
