@@ -15,12 +15,7 @@ Command *SmallShell::createBuiltInCommand(vector<string> &args)
 {
     if (args[0] == "quit")
     {
-        if (args[1] == "kill")
-        {
-            jobs->killAllJobs();
-            exit(0);
-        }
-        exit(0);
+        return new QuitCommand(args[0].c_str());
     }
     if (args[0] == "pwd")
     {
@@ -87,6 +82,7 @@ void SmallShell::executeCommand(const char *cmd_line)
     Command *cmd = CreateCommand(cmd_line);
     if (!cmd)
         return;
+    jobs->removeFinishedJobs();
     cmd->execute();
     delete cmd;
     // Please note that you must fork smash process for some commands (e.g., external commands....)
