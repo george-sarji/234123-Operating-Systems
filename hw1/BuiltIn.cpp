@@ -132,7 +132,7 @@ void ForegroundCommand::execute()
 
     if (args[1].empty())
     {
-        if (smash.jobs->jobs.empty())
+        if (smash.jobs->empty())
         {
             cerr << "smash error: fg: jobs list is empty" << endl;
             return;
@@ -251,7 +251,7 @@ void QuitCommand::execute()
         // We have received a kill flag. Go over the jobs and send SIGKILL.
         vector<JobsList::JobEntry> jobs = shell.jobs->jobs;
         // Get the count.
-        cout << "smash: sending SIGKILL signal to " << shell.jobs->size << " jobs:" << endl;
+        cout << "smash: sending SIGKILL signal to " << shell.jobs->jobs.size() << " jobs:" << endl;
         sort(jobs.begin(), jobs.end());
         for (auto it = jobs.begin(); it != jobs.end(); ++it)
         {
