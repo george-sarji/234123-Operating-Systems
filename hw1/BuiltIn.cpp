@@ -62,7 +62,7 @@ void ChangeDirCommand::execute()
     if (result != 0)
     {
         // Send out an error.
-        perror("smash: chdir failed");
+        perror("smash error: chdir failed");
     }
     else
     {
