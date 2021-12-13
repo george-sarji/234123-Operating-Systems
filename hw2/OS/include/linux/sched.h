@@ -565,6 +565,7 @@ struct task_struct {
 	 */
 	struct thread_info		thread_info;
 #endif
+	int 					weight; // Process weight as requested
 	/* -1 unrunnable, 0 runnable, >0 stopped: */
 	volatile long			state;
 
