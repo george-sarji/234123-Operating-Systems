@@ -13,27 +13,25 @@ asmlinkage int sys_get_weight(void)
 
 void getHeaviestWeight(struct task_struct *current, int *max, pid_t *heaviest)
 {
-    // Check if current weight is bigger than max.
-    if (current->weight > *max)
-    {
-        // Set the max.
-        *max = current->weight;
-        *heaviest = current->pid;
-    }
-
-    // Check if we have a parent.
-    if (current->parent->pid != 0)
-    {
-        // Get the next parent.
-        getHeaviestWeight(current->parent, max, heaviest);
-    }
+    
 }
 
 asmlinkage pid_t sys_get_heaviest_ancestor(void)
 {
     // We have to iterate through the parents and return a maximum.
-    int max = 0;
+    int max = current->weight;
     pid_t heaviest = current->pid;
-    getHeaviestWeight(current, &max, &heaviest);
+    struct task_struct* current_task = current->parent;
+    while (current_task->pid != 0)
+    {
+        if (max < current_task->weight)
+        {
+            // New max. Set.
+            max = current_task->weight;
+            heaviest = current_task->pid;
+        }
+        current_task = current_task->parent;
+    }
+
     return heaviest;
 }
