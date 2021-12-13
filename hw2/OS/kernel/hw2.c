@@ -33,3 +33,16 @@ asmlinkage pid_t sys_get_heaviest_ancestor(void)
 
     return heaviest;
 }
+
+asmlinkage int sys_set_weight(int weight){
+
+    if (weight < 0 ){
+        return -EINVAL;
+    }
+    current->weight = weight;
+    return 0;
+}
+
+asmlinkage int sys_get_leaf_children_sum(void){
+
+}
