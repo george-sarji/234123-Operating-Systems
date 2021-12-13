@@ -20,9 +20,7 @@ public:
     size_t re_sign2_index = cmd_s.find(">>");
 
         if( re_sign1_index < re_sign2_index   && re_sign1_index != string::npos ){
-            cout << " i am here " << endl;
             string left_command = cmd_s.substr(0,re_sign1_index);
-            cout<< " the left command is " <<left_command<< endl;
             left_command = _trim(left_command);
             if (_isBackgroundComamnd(cmd_line)){
                 left_command.push_back('&');
@@ -36,7 +34,6 @@ public:
                 _removeBackgroundSign(filename);
             }
             int Fd1 = open(filename, O_TRUNC | O_RDWR | O_CREAT, 0644);
-            cout <<"the file name is " << filename<<endl;
             if (Fd1 == -1) {
                 perror("smash error: open failed");
                 return ;
@@ -57,7 +54,9 @@ public:
             dup2(back_fd, 1);
             close(back_fd);
             return;
-        } else if (((cmd_s.find(">>"))!=string::npos) && (re_sign1_index > re_sign2_index)){
+        }
+
+        else if (((cmd_s.find(">>"))!=string::npos) ){
             string left_command = cmd_s.substr(0,re_sign2_index);
             left_command = _trim(left_command);
             if (_isBackgroundComamnd(cmd_line)){

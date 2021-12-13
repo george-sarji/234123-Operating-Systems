@@ -45,6 +45,7 @@ public:
 
 class QuitCommand : public BuiltInCommand
 {
+public:
     QuitCommand(const char *cmd_line) : BuiltInCommand(cmd_line) {}
     virtual ~QuitCommand() {}
     void execute() override;

@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     int flag = 4;
     while (true)
     {
-        std::cout << smash.getPrompt() << ">";
+        std::cout << smash.getPrompt() << "> ";
         std::string cmd_line;
         std::getline(std::cin, cmd_line);
         std::vector<std::string> args = analyseTheLine(cmd_line.c_str());
