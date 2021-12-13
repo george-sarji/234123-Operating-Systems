@@ -11,6 +11,8 @@ asmlinkage long sys_hello(void)
 
 asmlinkage int sys_get_weight(void)
 {
+    printk("Entered get weight syscall");
+    printk("Weight is: %d", current->weight);
     return current->weight;
 }
 
