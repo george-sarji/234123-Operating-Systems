@@ -58,7 +58,8 @@ Command *SmallShell::CreateCommand(const char *cmd_line)
     string cmd_s = cmd_line;
     const bool is_in = BuiltinTable.find(args[0]) != BuiltinTable.end();
     bool is_re_command = is_redirection_command(cmd_s , args);
-    if (is_in && !is_re_command)
+    bool isBackground = _isBackgroundComamnd(cmd_line);
+    if (is_in && !is_re_command && !isBackground)
     {
         Command *comm = createBuiltInCommand(args);
         return comm;
