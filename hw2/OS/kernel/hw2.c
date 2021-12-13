@@ -1,4 +1,7 @@
 #include <linux/kernel.h>
+#include <linux/list.h>
+#include <linux/module.h>
+#include <linux/sched.h>
 
 asmlinkage long sys_hello(void)
 {
@@ -9,11 +12,6 @@ asmlinkage long sys_hello(void)
 asmlinkage int sys_get_weight(void)
 {
     return current->weight;
-}
-
-void getHeaviestWeight(struct task_struct *current, int *max, pid_t *heaviest)
-{
-
 }
 
 asmlinkage pid_t sys_get_heaviest_ancestor(void)
