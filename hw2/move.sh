@@ -1,1 +1,1 @@
-cp -r ./ ~/linux-4.15.18-custom/
+cp -r OS/* ~/linux-4.15.18-custom/
