@@ -43,6 +43,21 @@ asmlinkage int sys_set_weight(int weight){
     return 0;
 }
 
+int get_children_weights(struct task_struct *root){
+
+    struct task_struct *task;
+    struct list_head *list;
+    int sum = root->weight;
+
+    list_for_each(list, &root->children){
+        task = list_entry(list, struct task_struct, sibling);
+        sum += get_children_weights(task);
+    }
+    return sum;
+}
+
 asmlinkage int sys_get_leaf_children_sum(void){
+
+    return get_children_weights(current);
 
 }
