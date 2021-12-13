@@ -86,9 +86,8 @@ private:
 
 public:
     std::vector<JobEntry> jobs;
-    int size = jobs.size();
 
-    JobsList() : next_id(1), vacant_ids(), jobs(), size() {}
+    JobsList() : next_id(1), vacant_ids(), jobs() {}
     ~JobsList() = default;
     void addJob(string command, pid_t pid, bool isStopped = false);
     void printJobsList();
@@ -100,7 +99,7 @@ public:
     JobEntry *getLastStoppedJob();
     bool empty()
     {
-        return size == 0;
+        return jobs.empty();
     }
     // TODO: Add extra methods or modify exisitng ones as needed
 };

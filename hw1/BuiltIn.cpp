@@ -39,7 +39,7 @@ void ChangeDirCommand::execute()
     if (!args[2].empty())
     {
         // Too much arguments.
-        cout << "smash error: cd: too many arguments" << endl;
+        cerr << "smash error: cd: too many arguments" << endl;
         return;
     }
     string future_path, current_path = get_current_dir_name();
@@ -47,7 +47,7 @@ void ChangeDirCommand::execute()
     {
         if (smash.paths.empty())
         {
-            cout << "smash error: cd: OLDPWD not set " << endl;
+            cerr << "smash error: cd: OLDPWD not set " << endl;
             return;
         }
         future_path = smash.paths.back();
@@ -62,7 +62,7 @@ void ChangeDirCommand::execute()
     if (result != 0)
     {
         // Send out an error.
-        cout << strerror(errno) << endl;
+        perror("smash error: chdir failed");
     }
     else
     {
@@ -79,7 +79,7 @@ void KillCommand::execute()
     // Check if we have a second and a third argument.
     if (args[1].empty() || args[2].empty() || !args[3].empty())
     {
-        cout << "smash error: kill: invalid arguments" << endl;
+        cerr << "smash error: kill: invalid arguments" << endl;
         return;
     }
     // We have to check the format of the first argument (the actual signal number)
@@ -90,7 +90,7 @@ void KillCommand::execute()
     if (signal_str[0] != '-' || !isNumber(signal_num) || !isNumber(job_str))
     {
         // Invalid format for argument. Exit.
-        cout << "smash error: kill: invalid arguments" << endl;
+        cerr << "smash error: kill: invalid arguments" << endl;
         return;
     }
     // Check for the job ID in the jobs list.
@@ -99,7 +99,7 @@ void KillCommand::execute()
     if (job == nullptr)
     {
         // Invalid job id. Exit.
-        cout << "smash error: kill: job-id " << job_str << " does not exist" << endl;
+        cerr << "smash error: kill: job-id " << job_str << " does not exist" << endl;
         return;
     }
     // We can now send the signal to the process.
@@ -113,7 +113,7 @@ void KillCommand::execute()
     if (result != 0)
     {
         // We have an error.
-        cout << strerror(errno) << endl;
+        perror("smash error: kill failed");
         return;
     }
     // Worked. Send a message.
@@ -121,8 +121,6 @@ void KillCommand::execute()
     // Update the job if it's a stopping signal.
     if (signal == SIGTSTP || signal == SIGINT || signal == SIGSTOP)
     {
-        cout << "Stopped with " << signal_num << endl;
-        // Change the job to stopped.
         job->stop();
     }
 }
@@ -136,7 +134,7 @@ void ForegroundCommand::execute()
     {
         if (smash.jobs->empty())
         {
-            cout << "smash error: fg: jobs list is empty" << endl;
+            cerr << "smash error: fg: jobs list is empty" << endl;
             return;
         }
         else
@@ -181,15 +179,15 @@ void ForegroundCommand::execute()
         {
             if (isNumber(args[1]))
             {
-                cout << "smash error: fg: job-id " << args[1] << " does not exist" << endl;
+                cerr << "smash error: fg: job-id " << args[1] << " does not exist" << endl;
                 return;
             }
             else
-                cout << "smash error: fg: invalid arguments" << endl;
+                cerr << "smash error: fg: invalid arguments" << endl;
             return;
         }
     }
-    cout << "smash error: fg: invalid arguments" << endl;
+    cerr << "smash error: fg: invalid arguments" << endl;
 }
 
 void JobsCommand::execute()
@@ -213,7 +211,7 @@ void BackgroundCommand::execute()
         if (job == nullptr)
         {
             // No stopped jobs. Give an error.
-            cout << "smash error: bg: there is no stopped jobs to resume" << endl;
+            cerr << "smash error: bg: there is no stopped jobs to resume" << endl;
         }
         return;
     }
@@ -227,13 +225,13 @@ void BackgroundCommand::execute()
         if (job == nullptr)
         {
             // No job with the ID. Print an error.
-            cout << "smash error: bg: job-id " << job_id << " does not exist" << endl;
+            cerr << "smash error: bg: job-id " << job_id << " does not exist" << endl;
         }
         // Check if the job is stopped.
         else if (!job->stopped)
         {
             // Give out an error, job is still running.
-            cout << "smash error: bg: job-id " << job_id << " is already running in the background" << endl;
+            cerr << "smash error: bg: job-id " << job_id << " is already running in the background" << endl;
         }
         else
         {
@@ -253,7 +251,7 @@ void QuitCommand::execute()
         // We have received a kill flag. Go over the jobs and send SIGKILL.
         vector<JobsList::JobEntry> jobs = shell.jobs->jobs;
         // Get the count.
-        cout << "smash: sending SIGKILL signal to " << shell.jobs->size << " jobs:" << endl;
+        cout << "smash: sending SIGKILL signal to " << shell.jobs->jobs.size() << " jobs:" << endl;
         sort(jobs.begin(), jobs.end());
         for (auto it = jobs.begin(); it != jobs.end(); ++it)
         {
@@ -273,7 +271,7 @@ void HeadCommand::execute() {
     size_t num_of_lines = 10;
 
     if (args[1].empty()){
-        cout << "smash error: head: not enough arguments"<<endl;
+        cerr << "smash error: head: not enough arguments"<<endl;
         return;
     }
 
@@ -281,7 +279,7 @@ void HeadCommand::execute() {
 
     int inFile = open(args[2].c_str(),O_RDONLY);
     if ( inFile == -1){
-        perror("“smash error: open failed");
+        perror("smash error: open failed");
         return;
     }
 
