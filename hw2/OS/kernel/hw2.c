@@ -48,17 +48,28 @@ int get_children_weights(struct task_struct *root)
 {
     struct task_struct *task;
     struct list_head *list;
-    int sum = root->weight;
-
-    list_for_each(list, &root->children)
+    int sum = 0;
+    if (list_empty(&root->children))
     {
-        task = list_entry(list, struct task_struct, sibling);
-        sum += get_children_weights(task);
+        // Leaf case
+        sum = root->weight;
+    }
+    else
+    {
+        list_for_each(list, &root->children)
+        {
+            task = list_entry(list, struct task_struct, sibling);
+            sum += get_children_weights(task);
+        }
     }
     return sum;
 }
 
 asmlinkage long sys_get_leaf_children_sum(void)
 {
+    if(list_empty(&current->children))
+    {
+        return -ECHILD;
+    }
     return get_children_weights(current);
 }
