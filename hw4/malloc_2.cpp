@@ -94,3 +94,17 @@ void *srealloc(void *oldp, size_t size)
     // sfree(oldp);
     return new_address;
 }
+
+size_t _num_free_bytes()
+{
+    size_t metaSize = sizeof(MallocMetadata);
+    size_t current_size = 0;
+    for (MallocMetadata *current = memory; current != nullptr; current = current->next)
+    {
+        if (current->is_free)
+        {
+            current_size += current->size - metaSize;
+        }
+    }
+    return current_size;
+}
