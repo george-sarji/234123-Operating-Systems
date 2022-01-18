@@ -1,4 +1,5 @@
 #include <unistd.h>
+#include <cstring>
 
 struct MallocMetadata
 {
@@ -24,7 +25,8 @@ void *scalloc(size_t num, size_t size)
             // Check if the current block is free and is appropriate.
             if (data->is_free && data->size >= num * (size + sizeof(MallocMetadata)))
             {
-                // Appropriate block. Return address.
+                // Appropriate block. Set the data to zero.
+                memset(data + sizeof(MallocMetadata), 0, size);
                 return data + sizeof(MallocMetadata);
             }
         }
@@ -43,11 +45,12 @@ void *scalloc(size_t num, size_t size)
     new_address->is_free = false;
     new_address->next = new_address->prev = nullptr;
     // Check if had memory to add the address to the list.
-    if(memory != nullptr)
+    if (memory != nullptr)
     {
         // We do have memory. We have to set the new block as the tail of the linked list.
-        MallocMetadata* current = memory;
-        while(current->next != nullptr) current = current->next;
+        MallocMetadata *current = memory;
+        while (current->next != nullptr)
+            current = current->next;
         // Set the next of current to the new block, the previous of the new block to the current.
         current->next = new_address;
         new_address->prev = current;
