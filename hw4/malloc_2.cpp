@@ -63,3 +63,34 @@ void *scalloc(size_t num, size_t size)
     // Return the address finally.
     return new_address + sizeof(MallocMetadata);
 }
+
+void *srealloc(void *oldp, size_t size)
+{
+    if (size == 0 || size > 10e8)
+        return NULL;
+    // We have to check if oldp is null. If so, allocate size bytes.
+    if (oldp == NULL)
+    {
+        // TODO: Change to smalloc.
+        return scalloc(1, size);
+    }
+    // We have a valid pointer. We can assume that it's a valid metadata block.
+    MallocMetadata *old_block = (MallocMetadata *)oldp - sizeof(MallocMetadata);
+    // If the size is smaller than the old block, use the old block.
+    if (size < old_block->size)
+    {
+        old_block->is_free = false;
+        return oldp;
+    }
+
+    // TODO: Change to smalloc.
+    void *new_address = scalloc(1, size);
+    // Check if we got a valid allocation.
+    if (new_address == NULL)
+        return NULL;
+    // Copy the data.
+    memcpy(new_address, oldp, size);
+    // TODO: Free the old block.
+    // sfree(oldp);
+    return new_address;
+}
