@@ -108,3 +108,14 @@ size_t _num_free_bytes()
     }
     return current_size;
 }
+size_t _num_allocated_bytes()
+{
+    size_t metaSize = sizeof(MallocMetadata);
+    size_t current_size = 0;
+    for (MallocMetadata *current = memory; current != nullptr; current = current->next)
+    {
+        current_size += current->size - metaSize;
+    }
+    return current_size;
+}
+
