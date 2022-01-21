@@ -157,6 +157,8 @@ void splitBlock(MallocMetadata *block, size_t new_size)
     // Insert both blocks into the histogram.
     histogramInsert(block);
     histogramInsert(new_data);
+    // Unite to prevent unmerged fragmentation
+    uniteBlock(new_data);
 }
 
 void uniteBlock(MallocMetadata *block)
@@ -391,6 +393,8 @@ void sfree(void *p)
     char *current = (char *)p - sizeof(MallocMetadata);
     MallocMetadata *block = (MallocMetadata *)current;
     block->is_free = true;
+    // Add the block to the histogram.
+    histogramInsert(block);
     uniteBlock(block);
 }
 
