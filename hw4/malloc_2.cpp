@@ -25,7 +25,7 @@ void *smalloc(size_t size)
     MallocMetadata *current = malloc;
     while (current != nullptr)
     {
-        if (current->is_free && current->size >= size + sizeof(MallocMetadata))
+        if (current->is_free && current->size >= size)
         {
             // We found an appropriate block. We can assign here.
             current->is_free = false;
