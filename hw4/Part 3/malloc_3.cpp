@@ -189,7 +189,7 @@ void splitBlock(MallocMetadata *block, size_t new_size)
     // Resize current block.
     block->size = new_size;
     // Get the new block from the secondary data in the previous block.
-    MallocMetadata *new_data = (MallocMetadata *)(block + new_size + sizeof(MallocMetadata));
+    MallocMetadata *new_data = (MallocMetadata*)(block->allocated_addr + new_size);
     // Set the required parameters.
     new_data->is_free = true;
     new_data->size = second_size;
@@ -198,7 +198,7 @@ void splitBlock(MallocMetadata *block, size_t new_size)
     new_data->prev = block;
     new_data->next = block->next;
     // Update block's neighbor's prev.
-    if (block->next->prev != nullptr)
+    if (block->next != nullptr)
     {
         block->next->prev = new_data;
     }
@@ -351,8 +351,8 @@ void *smalloc(size_t size)
     // Set the required parameters for the newly allocated block.
     new_address->is_free = false;
     new_address->size = size;
-    new_address->prev = nullptr;
-    new_address->next = nullptr;
+    new_address->prev = new_address->next = nullptr;
+    new_address->hist_prev = new_address->hist_next = nullptr;
     new_address->allocated_addr = start_address;
     // Successful allocation. Check if we have an allocation list.
     if (metadata != nullptr)
@@ -521,7 +521,7 @@ void *srealloc(void *oldp, size_t size)
                 return nullptr;
             }
             // Assistive cast.
-            char *new_allocation = (char *)new_address;
+            char *new_allocation = (char *)new_address - sizeof(MallocMetadata);
             new_block = (MallocMetadata *)new_allocation;
         }
         // Check if we can perform splitting.
