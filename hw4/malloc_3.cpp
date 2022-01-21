@@ -440,6 +440,26 @@ void *srealloc(void *oldp, size_t size)
             new_block = previous;
             new_block->is_free = false;
         }
+        else if (current->next == nullptr)
+        {
+            // We have the wilderness chunk. Merging did not help.
+            // We can extend it to host the required data.
+            size_t required_size = size - current->size;
+            // Use sbrk.
+            void *extension = sbrk(required_size);
+            if (extension == (void *)(-1))
+            {
+                // Couldn't extend with sbrk. Exit.
+                return nullptr;
+            }
+            // Extend the size inside the previous chunk.
+            current->size = size;
+            // Set as used.
+            current->is_free = false;
+            // Remove the previous chunk from the histogram.
+            histogramRemove(current);
+            new_block = current;
+        }
         else
         {
             // Can't merge. Allocate new.
