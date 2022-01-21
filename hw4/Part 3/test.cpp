@@ -318,7 +318,7 @@ std::string testSplitAndMerge(void *array[MAX_ALLOC]) {
 	expected += "|U:" + default_block;
 	expected += "|U:" + std::to_string(small_part_of_block + default_block_size);
 	expected += "|U:" + std::to_string(small_part_of_block + default_block_size);
-	expected += "|F:" + std::to_string(3086);
+	expected += "|F:" + std::to_string(2 * default_block_size - 2 * small_part_of_block + size_of_metadata);
 	expected += "|U:" + default_block;
 	expected += "|U:" + default_block;
 	expected += "|U:" + std::to_string(small_part_of_block + default_block_size);
