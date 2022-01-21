@@ -378,20 +378,94 @@ void *srealloc(void *oldp, size_t size)
     // Check if the size is appropriate.
     if (current->size < size)
     {
-        // Size is not appropriate. Allocate new block.
-        void *new_address = smalloc(size);
-        // Check for successful allocation.
-        if (!new_address == NULL)
+        // Size is not appropriate. Attempt merging with adjacent blocks.
+        MallocMetadata *previous = current->prev, *next = current->next, *new_block;
+        if (previous != nullptr && previous->is_free && previous->size + current->size >= size)
         {
-            return nullptr;
+            // Appropriate to merge with previous.
+            // Remove previous and current from histogram.
+            histogramRemove(previous);
+            histogramRemove(current);
+            // We need to merge. Set the new size.
+            previous->size += current->size + sizeof(MallocMetadata);
+            // We need to update the pointers.
+            // Previous's pointers, next goes to current's next.
+            previous->next = next;
+            // Set the previous of next (is relevant)
+            if (next != nullptr)
+            {
+                next->prev = previous;
+            }
+            new_block = previous;
+            new_block->is_free = false;
         }
+        else if (next != nullptr && next->is_free && next->size + current->size >= size)
+        {
+            // Appropriate to merge with next.
+            // Remove next and current from histogram.
+            histogramRemove(next);
+            histogramRemove(current);
+            // We need to merge. Set the new size.
+            current->size += next->size + sizeof(MallocMetadata);
+            // We need to update the pointers.
+            // current's pointers, next goes to next's next.
+            current->next = next->next;
+            // Set the next of next (is relevant)
+            if (next->next != nullptr)
+            {
+                next->next->prev = current;
+            }
+            new_block = current;
+            new_block->is_free = false;
+        }
+        else if (next != nullptr && previous != nullptr &&
+                 next->is_free && previous->is_free &&
+                 previous->size + current->size + next->size >= size)
+        {
+            // Merge with previous and next.
+            // Remove previous and current and next from histogram.
+            histogramRemove(previous);
+            histogramRemove(current);
+            histogramRemove(next);
+            // We need to merge. Set the new size.
+            previous->size += current->size + next->size + 2 * sizeof(MallocMetadata);
+            // We need to update the pointers.
+            // Previous's pointers, next goes to next's next.
+            previous->next = next->next;
+            // Set the previous of next's next (is relevant)
+            if (next->next != nullptr)
+            {
+                next->next->prev = previous;
+            }
+            new_block = previous;
+            new_block->is_free = false;
+        }
+        else
+        {
+            // Can't merge. Allocate new.
+            void *new_address = smalloc(size);
+            // Check for successful allocation.
+            if (!new_address == NULL)
+            {
+                return nullptr;
+            }
+            // Assistive cast.
+            char *new_allocation = (char *)new_address;
+            new_block = (MallocMetadata *)new_allocation;
+        }
+        // Check if we can perform splitting.
+        if (new_block->size - size >= 128)
+        {
+            splitBlock(new_block, size);
+        }
+
         // Copy the data from the old block into the new.
-        memcpy(new_address, current->allocated_addr, current->size);
+        memcpy(new_block->allocated_addr, current->allocated_addr, current->size);
         // Set the current block as used.
-        current->is_free = false;
+        new_block->is_free = false;
         // Free the old block.
         sfree(oldp);
-        return new_address;
+        return new_block->allocated_addr;
     }
     else
     {
