@@ -230,7 +230,7 @@ void *smalloc(size_t size)
                 // Remove the block from the histogram.
                 histogramRemove(current);
                 current->is_free = false;
-                return current + sizeof(MallocMetadata);
+                return current->allocated_addr;
             }
             previous = current;
             current = current->hist_next;

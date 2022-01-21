@@ -29,7 +29,7 @@ void *smalloc(size_t size)
         {
             // We found an appropriate block. We can assign here.
             current->is_free = false;
-            return current + sizeof(MallocMetadata);
+            return current->allocated_addr;
         }
         current = current->next;
     }
