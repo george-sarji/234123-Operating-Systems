@@ -168,7 +168,7 @@ void uniteBlock(MallocMetadata *block)
         histogramRemove(block);
         histogramRemove(next);
         // Update the size of the current block.
-        block->size += next->size;
+        block->size += next->size + sizeof(MallocMetadata);
         // Update the pointers to skip over next.
         block->next = next->next;
         // Update the other pointer to correctly point at block.
@@ -189,7 +189,7 @@ void uniteBlock(MallocMetadata *block)
         histogramRemove(block);
         histogramRemove(previous);
         // Update the size of the previous block.
-        previous->size += block->size;
+        previous->size += block->size + sizeof(MallocMetadata);
         // Update the next block.
         previous->next = block->next;
         // Update the other pointer to correctly point at previous.
