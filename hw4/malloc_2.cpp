@@ -17,58 +17,55 @@ MallocMetadata *malloc = nullptr;
 void *smalloc(size_t size)
 {
 
-    if (size == 0 || size >= MAX_SIZE)
+    if (size == 0 || size > MAX_SIZE)
+    {
         return NULL;
-
-    MallocMetadata *ptr = malloc;
-    MallocMetadata *meta;
-    void *start_address;
-    // checks if we can reuse an free sector
-    while (ptr != nullptr)
+    }
+    // We need to check if the current list has any available blocks.
+    MallocMetadata *current = malloc;
+    while (current != nullptr)
     {
-        if (ptr->is_free)
+        if (current->is_free && current->size >= size + sizeof(MallocMetadata))
         {
-            if (ptr->size >= size)
-            {
-                ptr->is_free = false;
-                return ptr->allocated_addr;
-            }
+            // We found an appropriate block. We can assign here.
+            current->is_free = false;
+            return current + sizeof(MallocMetadata);
         }
-        ptr = ptr->next;
     }
-    // here we are sure that there is no free sector that we can use
-    // then we should allocate an new sector using sbrk
-    ptr = malloc;
-    if (ptr != nullptr)
+    // If we reached here - we don't have any appropriate blocks.
+    // Allocate the block as required.
+    MallocMetadata *new_address = (MallocMetadata *)sbrk(size + sizeof(MallocMetadata));
+    // Check if successful.
+    if (new_address == (void *)(-1))
     {
-        while (ptr->next != nullptr)
-            ptr = ptr->next;
+        return NULL;
     }
-    meta = (MallocMetadata *)sbrk(sizeof(MallocMetadata));
-    if (meta == (void *)-1)
-        return nullptr;
-    start_address = sbrk(size);
-    if (start_address == (void *)-1)
-        return nullptr;
-    meta->size = size;
-    meta->is_free = false;
-    meta->allocated_addr = start_address;
+    // Set the required parameters for the newly allocated block.
+    new_address->is_free = false;
+    new_address->size = size;
+    new_address->prev = nullptr;
+    new_address->next = nullptr;
+    new_address->allocated_addr = new_address + sizeof(MallocMetadata);
+    // Successful allocation. Check if we have an allocation list.
     if (malloc != nullptr)
     {
-        ptr = malloc;
-        meta->next = nullptr;
-        while (ptr->next != nullptr)
+        // We have an allocation list.
+        // Get the end item and add the allocation to the list.
+        current = malloc;
+        while (current->next != nullptr)
         {
-            ptr = ptr->next;
+            current = current->next;
         }
-        ptr->next = meta;
-        meta->prev = ptr;
+        // We have the last item in current.
+        current->next = new_address;
+        new_address->prev = current;
+        // We can return the new address here.
     }
     else
-    {
-        malloc = meta;
+    { // We don't have a list. Set it as the new one.
+        malloc = new_address;
     }
-    return start_address;
+    return new_address->allocated_addr;
 }
 
 void *scalloc(size_t num, size_t size)
@@ -77,7 +74,6 @@ void *scalloc(size_t num, size_t size)
     if (size == 0 || size * num > MAX_SIZE)
         return NULL;
     // Check if we have malloc in the first place.
-    int i = 0;
     int new_size = size * num;
     bool zero_flag = true;
     if (malloc)
@@ -86,23 +82,24 @@ void *scalloc(size_t num, size_t size)
         for (MallocMetadata *data = malloc; data != nullptr; data = data->next)
         {
             zero_flag = true;
-            i = 0;
-            char *ptr = (char *)(data->allocated_addr);
+            char *current_char = (char *)(data->allocated_addr);
             // Check if the current block is free and is appropriate.
             if (data->is_free && data->size >= num * (size))
             {
-
-                while (i < new_size)
+                // Iterate through the block.
+                for (int i = 0; i < new_size; i++)
                 {
-                    if (*(ptr + i) != '0')
+                    if (*(current_char + i) != '0')
                     {
+                        // Not a zero. Set flag and break.
                         zero_flag = false;
                         break;
                     }
-                    i++;
                 }
+                // Check if we got a valid flag.
                 if (zero_flag)
                 {
+                    // Valid zero flag = valid block. Return address.
                     return data->allocated_addr;
                 }
             }
@@ -110,31 +107,35 @@ void *scalloc(size_t num, size_t size)
     }
 
     // If we reached this point - we don't have any blocks that are appropriate.
-    // We have to use sbrk.
+    // Use smalloc to allocate a block of size num * size.
     void *new_address = smalloc(size * num);
+    // Did we get a successful allocation?
     if (new_address == nullptr)
     {
         return nullptr;
     }
+    // Set the memory block to zeros.
     memset(new_address, 0, size * num);
     return new_address;
 }
 
 void sfree(void *p)
 {
-
     if (p == nullptr)
         return;
-    MallocMetadata *ptr = malloc;
-
-    while (ptr)
+    // Get the head of the metadata list.
+    MallocMetadata *current = malloc;
+    // Iterate through the list.
+    while (current)
     {
-        if (ptr->allocated_addr == p)
+        // Is this the same address?
+        if (current->allocated_addr == p)
         {
-            ptr->is_free = true;
+            // Yes. Set as free.
+            current->is_free = true;
             return;
         }
-        ptr = ptr->next;
+        current = current->next;
     }
 }
 
@@ -148,29 +149,32 @@ void *srealloc(void *oldp, size_t size)
         return smalloc(size);
     }
     // We have a valid pointer. We can assume that it's a valid metadata block.
-
-    char *ptr1 = (char *)oldp - sizeof(MallocMetadata);
-    MallocMetadata *ptr = (MallocMetadata *)ptr1;
-
-    if (ptr->allocated_addr == oldp)
+    // Assistive cast to char to prevent upscaling of size.
+    char *oldp_cast = (char *)oldp - sizeof(MallocMetadata);
+    MallocMetadata *current = (MallocMetadata *)oldp_cast;
+    // Check if the size is appropriate.
+    if (current->size < size)
     {
-        if (ptr->size < size)
+        // Size is not appropriate. Allocate new block.
+        void *new_address = smalloc(size);
+        // Check for successful allocation.
+        if (!new_address == NULL)
         {
-            void *new_address = smalloc(size);
-            if (!new_address)
-                return nullptr;
-            memcpy(new_address, ptr->allocated_addr, ptr->size);
-            ptr->is_free = true;
-            sfree(oldp);
-            return new_address;
+            return nullptr;
         }
-        else
-        {
-            return ptr->allocated_addr;
-        }
+        // Copy the data from the old block into the new.
+        memcpy(new_address, current->allocated_addr, current->size);
+        // Set the current block as used.
+        current->is_free = false;
+        // Free the old block.
+        sfree(oldp);
+        return new_address;
     }
-
-    return nullptr;
+    else
+    {
+        // Size is appropriate. Reuse the current block.
+        return current->allocated_addr;
+    }
 }
 
 size_t _num_free_blocks()
