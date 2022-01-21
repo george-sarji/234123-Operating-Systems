@@ -131,7 +131,7 @@ void splitBlock(MallocMetadata *block, size_t new_size)
     // Remove the current block from the histogram.
     histogramRemove(block);
     // We want to create a new histogram with the required size.
-    size_t second_size = block->size - new_size;
+    size_t second_size = block->size - new_size - sizeof(MallocMetadata);
     // Resize current block.
     block->size = new_size;
     // Get the new block from the secondary data in the previous block.
