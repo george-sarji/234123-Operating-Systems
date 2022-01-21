@@ -414,6 +414,11 @@ void *srealloc(void *oldp, size_t size)
     // Check if the size is appropriate.
     if (current->size < size)
     {
+        if (size >= MAP_MIN)
+        {
+            sfree(current);
+            return allocateNewMap(size);
+        }
         // Size is not appropriate. Attempt merging with adjacent blocks.
         MallocMetadata *previous = current->prev, *next = current->next, *new_block;
         if (previous != nullptr && previous->is_free && previous->size + current->size >= size)
