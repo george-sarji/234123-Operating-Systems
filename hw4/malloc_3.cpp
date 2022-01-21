@@ -45,7 +45,7 @@ static void split_free(MallocMetadata *to_split, size_t size)
     }
 }
 
-void *allocat128(size_t size)
+void *allocate128(size_t size)
 {
 
     MallocMetadata *ptr = memory;
@@ -106,7 +106,7 @@ void *allocat128(size_t size)
     return meta->allocated_addr;
 }
 
-void *allocatMmap(size_t size)
+void *allocateMmap(size_t size)
 {
 
     MallocMetadata *ptr = memory;
@@ -148,12 +148,12 @@ void *smalloc(size_t size)
     // checks if we can reuse an free sector
     if (size <= KB_128)
     {
-        return allocat128(size);
+        return allocate128(size);
     }
 
     else
     {
-        return allocatMmap(size);
+        return allocateMmap(size);
     }
 }
 
