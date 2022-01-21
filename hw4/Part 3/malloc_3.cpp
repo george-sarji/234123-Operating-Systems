@@ -295,7 +295,7 @@ void *smalloc(size_t size)
                 current->is_free = false;
                 // We found an appropriate block. We can assign here.
                 // Check if the remaining size is bigger than 128 bytes.
-                if (current->size - size >= 128)
+                if (current->size >= 128 + size + sizeof(MallocMetadata))
                 {
                     // We need to split the blocks.
                     splitBlock(current, size);
@@ -531,11 +531,11 @@ void *srealloc(void *oldp, size_t size)
         // Set the current block as used.
         new_block->is_free = false;
         // Check if we can perform splitting.
-        if (new_block->size - size >= 128)
+        if (new_block->size >= 128 + size + sizeof(MallocMetadata))
         {
             splitBlock(new_block, size);
         }
-        
+
         // Copy the data from the old block into the new.
         // If we are overwriting the old data, only copy.
         memcpy(new_block->allocated_addr, current->allocated_addr, current->size);
@@ -551,7 +551,7 @@ void *srealloc(void *oldp, size_t size)
         // Size is appropriate. Reuse the current block.
         current->is_free = false;
         // Check if we have to split.
-        if (current->size - size >= 128)
+        if (current->size >= 128 + size + sizeof(MallocMetadata))
         {
             splitBlock(current, size);
         }
