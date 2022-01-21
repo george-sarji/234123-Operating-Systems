@@ -202,6 +202,9 @@ void uniteBlock(MallocMetadata *block)
     }
 }
 
+/* --------------------------------------------------- Functions --------------------------------------------------- */
+
+
 void *smalloc(size_t size)
 {
 
