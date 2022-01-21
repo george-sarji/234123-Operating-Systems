@@ -431,12 +431,14 @@ void *srealloc(void *oldp, size_t size)
         }
         // Size is not appropriate. Attempt merging with adjacent blocks.
         MallocMetadata *previous = current->prev, *next = current->next, *new_block;
+        bool overwrite = false;
         if (previous != nullptr && previous->is_free && previous->size + current->size >= size)
         {
             // Appropriate to merge with previous.
             // Remove previous and current from histogram.
             histogramRemove(previous);
             histogramRemove(current);
+            overwrite = size > previous->size;
             // We need to merge. Set the new size.
             previous->size += current->size + sizeof(MallocMetadata);
             // We need to update the pointers.
@@ -531,11 +533,12 @@ void *srealloc(void *oldp, size_t size)
         {
             splitBlock(new_block, size);
         }
-
+        
         // Copy the data from the old block into the new.
+        // If we are overwriting the old data, only copy.
         memcpy(new_block->allocated_addr, current->allocated_addr, current->size);
         // Free the old block.
-        if (current->allocated_addr != new_block->allocated_addr)
+        if (!overwrite && current->allocated_addr != new_block->allocated_addr)
         {
             sfree(oldp);
         }
