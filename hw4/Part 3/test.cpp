@@ -18,26 +18,18 @@
 #define USE_COLORS
 
 // Copy your type here
-struct MallocMetadata
-{
-    size_t size;
-    bool is_free;
-    MallocMetadata *next;
-    MallocMetadata *prev;
-    void *allocated_addr;
-
-    // Histogram pointers (buckets)
-    MallocMetadata *hist_prev;
-    MallocMetadata *hist_next;
-};
-
 // don't change anything from the one in malloc_3.c !!not even the order of args!!!
 typedef struct MallocMetadata3 {
 	size_t size;
-	bool is_free;
+    bool is_free;
 	bool on_heap;
-	MallocMetadata3 *next;
-	MallocMetadata3 *prev;
+    MallocMetadata3 *next;
+    MallocMetadata3 *prev;
+    void *allocated_addr;
+
+    // Histogram pointers (buckets)
+    MallocMetadata3 *hist_prev;
+    MallocMetadata3 *hist_next;
 } Metadata3;
 
 
@@ -326,8 +318,7 @@ std::string testSplitAndMerge(void *array[MAX_ALLOC]) {
 	expected += "|U:" + default_block;
 	expected += "|U:" + std::to_string(small_part_of_block + default_block_size);
 	expected += "|U:" + std::to_string(small_part_of_block + default_block_size);
-	expected += "|F:" + std::to_string(default_block_size - 2 * small_part_of_block);
-	expected += "|F:" + default_block;
+	expected += "|F:" + std::to_string(3086);
 	expected += "|U:" + default_block;
 	expected += "|U:" + default_block;
 	expected += "|U:" + std::to_string(small_part_of_block + default_block_size);
