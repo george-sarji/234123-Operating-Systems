@@ -24,13 +24,13 @@ MallocMetadata *histogram[HIST_SIZE];
 
 /* Histogram functions */
 
-int histogramIndex(MallocMetadata *data)
+int histogramIndex(size_t size)
 {
     // Iterate through the buckets and go per size.
     for (int i = 0; i < HIST_SIZE; i++)
     {
         // Does the data belong in the current bucket, according to the size?
-        if (data->size >= i * KILOBYTE && data->size < (i + 1) * KILOBYTE)
+        if (size >= i * KILOBYTE && size < (i + 1) * KILOBYTE)
         {
             return i;
         }
@@ -51,7 +51,7 @@ void histogramRemove(MallocMetadata *data)
     {
         // First entry in the bucket.
         // Get the bucket's index.
-        int bucket_index = histogramIndex(data);
+        int bucket_index = histogramIndex(data->size);
         // Assign the bucket's entry to the next entry.
         histogram[bucket_index] = data->hist_next;
     }
@@ -68,7 +68,7 @@ void histogramRemove(MallocMetadata *data)
 void histogramInsert(MallocMetadata *data)
 {
     // Get the required bucket index.
-    int index = histogramIndex(data);
+    int index = histogramIndex(data->size);
     // Check if the current bucket is valid.
     MallocMetadata *current = histogram[index];
     if (current != nullptr)
@@ -204,7 +204,6 @@ void uniteBlock(MallocMetadata *block)
 
 /* --------------------------------------------------- Functions --------------------------------------------------- */
 
-
 void *smalloc(size_t size)
 {
 
@@ -212,31 +211,33 @@ void *smalloc(size_t size)
     {
         return NULL;
     }
-    // We need to check if the current list has any available blocks.
-    MallocMetadata *current = malloc;
-    MallocMetadata *previous = current;
-    while (current != nullptr)
+    // We need to check if the histogram has any appropriate blocks.
+    MallocMetadata *current, *previous;
+    for (int i = histogramIndex(size); i < HIST_SIZE; i++)
     {
-        if (current->is_free && current->size >= size)
+        current = previous = histogram[i];
+        while (current != nullptr)
         {
-            // We found an appropriate block. We can assign here.
-            // Check if the remaining size is bigger than 128 bytes.
-            if (current->size - size >= 128)
+            if (current->size >= size)
             {
-                // We need to split the blocks.
-                splitBlock(current, size);
+                // We found an appropriate block. We can assign here.
+                // Check if the remaining size is bigger than 128 bytes.
+                if (current->size - size >= 128)
+                {
+                    // We need to split the blocks.
+                    splitBlock(current, size);
+                }
+                // Remove the block from the histogram.
+                histogramRemove(current);
+                current->is_free = false;
+                return current + sizeof(MallocMetadata);
             }
-            // Remove the block from the histogram.
-            histogramRemove(current);
-            current->is_free = false;
-            return current + sizeof(MallocMetadata);
+            previous = current;
+            current = current->hist_next;
         }
-        previous = current;
-        current = current->next;
     }
-    // If we reached here - we don't have any appropriate blocks.
-    // Check if wilderness chunk is free.
-    if (previous->is_free)
+    // Check if we have the wilderness chunk.
+    if (previous != nullptr && previous->next == nullptr)
     {
         // We have a free wilderness chunk. We can extend it to host the required data.
         size_t required_size = size - previous->size;
@@ -247,14 +248,16 @@ void *smalloc(size_t size)
             // Couldn't extend with sbrk. Exit.
             return nullptr;
         }
-        // Extend the size inside the wilderness chunk.
+        // Extend the size inside the previous chunk.
         previous->size = size;
         // Set as used.
         previous->is_free = false;
-        // Remove the wilderness chunk from the histogram.
+        // Remove the previous chunk from the histogram.
         histogramRemove(previous);
         return previous->allocated_addr;
     }
+
+    // If we reached here - we don't have any appropriate blocks in the histogram.
     // Allocate the block as required.
     MallocMetadata *new_address = (MallocMetadata *)sbrk(size + sizeof(MallocMetadata));
     // Check if successful.
@@ -273,7 +276,7 @@ void *smalloc(size_t size)
     {
         // We have an allocation list.
         // Get the end item and add the allocation to the list.
-        current = malloc;
+        MallocMetadata *current = malloc;
         while (current->next != nullptr)
         {
             current = current->next;
@@ -284,7 +287,8 @@ void *smalloc(size_t size)
         // We can return the new address here.
     }
     else
-    { // We don't have a list. Set it as the new one.
+    {
+        // We don't have a list. Set it as the new one.
         malloc = new_address;
     }
     return new_address->allocated_addr;
