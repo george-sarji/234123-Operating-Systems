@@ -292,6 +292,7 @@ void *smalloc(size_t size)
         {
             if (current->size >= size)
             {
+                current->is_free = false;
                 // We found an appropriate block. We can assign here.
                 // Check if the remaining size is bigger than 128 bytes.
                 if (current->size - size >= 128)
@@ -301,7 +302,6 @@ void *smalloc(size_t size)
                 }
                 // Remove the block from the histogram.
                 histogramRemove(current);
-                current->is_free = false;
                 return current->allocated_addr;
             }
             previous = current;
@@ -524,6 +524,8 @@ void *srealloc(void *oldp, size_t size)
             char *new_allocation = (char *)new_address - sizeof(MallocMetadata);
             new_block = (MallocMetadata *)new_allocation;
         }
+        // Set the current block as used.
+        new_block->is_free = false;
         // Check if we can perform splitting.
         if (new_block->size - size >= 128)
         {
@@ -532,8 +534,6 @@ void *srealloc(void *oldp, size_t size)
 
         // Copy the data from the old block into the new.
         memcpy(new_block->allocated_addr, current->allocated_addr, current->size);
-        // Set the current block as used.
-        new_block->is_free = false;
         // Free the old block.
         if (current->allocated_addr != new_block->allocated_addr)
         {
