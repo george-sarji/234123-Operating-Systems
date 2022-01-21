@@ -216,6 +216,12 @@ void *smalloc(size_t size)
         if (current->is_free && current->size >= size + sizeof(MallocMetadata))
         {
             // We found an appropriate block. We can assign here.
+            // Check if the remaining size is bigger than 128 bytes.
+            if (current->size - size >= 128)
+            {
+                // We need to split the blocks.
+                splitBlock(current, size);
+            }
             current->is_free = false;
             return current + sizeof(MallocMetadata);
         }
