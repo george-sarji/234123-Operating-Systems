@@ -12,7 +12,7 @@ struct MallocMetadata
     void *allocated_addr;
 };
 
-MallocMetadata *malloc = nullptr;
+MallocMetadata *metadata = nullptr;
 
 void *smalloc(size_t size)
 {
@@ -22,7 +22,7 @@ void *smalloc(size_t size)
         return NULL;
     }
     // We need to check if the current list has any available blocks.
-    MallocMetadata *current = malloc;
+    MallocMetadata *current = metadata;
     while (current != nullptr)
     {
         if (current->is_free && current->size >= size)
@@ -47,11 +47,11 @@ void *smalloc(size_t size)
     new_address->next = nullptr;
     new_address->allocated_addr = new_address + sizeof(MallocMetadata);
     // Successful allocation. Check if we have an allocation list.
-    if (malloc != nullptr)
+    if (metadata != nullptr)
     {
         // We have an allocation list.
         // Get the end item and add the allocation to the list.
-        current = malloc;
+        current = metadata;
         while (current->next != nullptr)
         {
             current = current->next;
@@ -63,7 +63,7 @@ void *smalloc(size_t size)
     }
     else
     { // We don't have a list. Set it as the new one.
-        malloc = new_address;
+        metadata = new_address;
     }
     return new_address->allocated_addr;
 }
@@ -76,10 +76,10 @@ void *scalloc(size_t num, size_t size)
     // Check if we have malloc in the first place.
     int new_size = size * num;
     bool zero_flag = true;
-    if (malloc)
+    if (metadata)
     {
         // Iterate through the meta data to get the required block.
-        for (MallocMetadata *data = malloc; data != nullptr; data = data->next)
+        for (MallocMetadata *data = metadata; data != nullptr; data = data->next)
         {
             zero_flag = true;
             char *current_char = (char *)(data->allocated_addr);
@@ -148,7 +148,7 @@ void *srealloc(void *oldp, size_t size)
         // Size is not appropriate. Allocate new block.
         void *new_address = smalloc(size);
         // Check for successful allocation.
-        if (!new_address == NULL)
+        if (new_address == nullptr)
         {
             return nullptr;
         }
@@ -170,7 +170,7 @@ void *srealloc(void *oldp, size_t size)
 size_t _num_free_blocks()
 {
     size_t counter = 0;
-    MallocMetadata *ptr = malloc;
+    MallocMetadata *ptr = metadata;
     while (ptr)
     {
         if (ptr->is_free)
@@ -183,7 +183,7 @@ size_t _num_free_blocks()
 size_t _num_free_bytes()
 {
     size_t counter = 0;
-    MallocMetadata *ptr = malloc;
+    MallocMetadata *ptr = metadata;
     while (ptr)
     {
         if (ptr->is_free)
@@ -196,7 +196,7 @@ size_t _num_free_bytes()
 size_t _num_allocated_blocks()
 {
     size_t counter = 0;
-    MallocMetadata *ptr = malloc;
+    MallocMetadata *ptr = metadata;
     while (ptr)
     {
         counter++;
@@ -208,7 +208,7 @@ size_t _num_allocated_blocks()
 size_t _num_allocated_bytes()
 {
     size_t counter = 0;
-    MallocMetadata *ptr = malloc;
+    MallocMetadata *ptr = metadata;
     while (ptr)
     {
         counter += ptr->size;
