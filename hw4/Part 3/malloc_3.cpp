@@ -271,6 +271,11 @@ void *smalloc(size_t size)
     {
         return NULL;
     }
+    if (size >= MAP_MIN)
+    {
+        // Allocate in the memory mapping.
+        return allocateNewMap(size);
+    }
     // We need to check if the histogram has any appropriate blocks.
     MallocMetadata *current, *previous;
     for (int i = histogramIndex(size); i < HIST_SIZE; i++)
