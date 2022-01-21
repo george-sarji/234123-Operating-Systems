@@ -217,7 +217,7 @@ void *smalloc(size_t size)
     MallocMetadata *previous = current;
     while (current != nullptr)
     {
-        if (current->is_free && current->size >= size + sizeof(MallocMetadata))
+        if (current->is_free && current->size >= size)
         {
             // We found an appropriate block. We can assign here.
             // Check if the remaining size is bigger than 128 bytes.
