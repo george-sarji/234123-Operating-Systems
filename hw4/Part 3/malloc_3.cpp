@@ -259,9 +259,15 @@ void *smalloc(size_t size)
 
     // If we reached here - we don't have any appropriate blocks in the histogram.
     // Allocate the block as required.
-    MallocMetadata *new_address = (MallocMetadata *)sbrk(size + sizeof(MallocMetadata));
+    MallocMetadata *new_address = (MallocMetadata *)sbrk(sizeof(MallocMetadata));
     // Check if successful.
     if (new_address == (void *)(-1))
+    {
+        return NULL;
+    }
+
+    void *start_address = sbrk(size);
+    if (start_address == (void *)-1)
     {
         return NULL;
     }
@@ -270,7 +276,7 @@ void *smalloc(size_t size)
     new_address->size = size;
     new_address->prev = nullptr;
     new_address->next = nullptr;
-    new_address->allocated_addr = new_address + sizeof(MallocMetadata);
+    new_address->allocated_addr = start_address;
     // Successful allocation. Check if we have an allocation list.
     if (metadata != nullptr)
     {
