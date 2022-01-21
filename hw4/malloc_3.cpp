@@ -2,6 +2,8 @@
 #include <cstring>
 
 #define MAX_SIZE 1e8
+#define HIST_SIZE 128
+#define KILOBYTE 1024
 
 struct MallocMetadata
 {
@@ -10,9 +12,116 @@ struct MallocMetadata
     MallocMetadata *next;
     MallocMetadata *prev;
     void *allocated_addr;
+
+    // Histogram pointers (buckets)
+    MallocMetadata *hist_prev;
+    MallocMetadata *hist_next;
 };
 
 MallocMetadata *malloc = nullptr;
+
+MallocMetadata *histogram[HIST_SIZE];
+
+/* Histogram functions */
+
+int histogramIndex(MallocMetadata *data)
+{
+    // Iterate through the buckets and go per size.
+    for (int i = 0; i < HIST_SIZE; i++)
+    {
+        // Does the data belong in the current bucket, according to the size?
+        if (data->size >= i * KILOBYTE && data->size < (i + 1) * KILOBYTE)
+        {
+            return i;
+        }
+    }
+    return HIST_SIZE - 1;
+}
+
+void histogramRemove(MallocMetadata *data)
+{
+    // We need to remove the data from its bucket in the histogram.
+    // Check if we have a previous node in the histogram.
+    if (data->hist_prev != nullptr)
+    {
+        // We have a previous entry. Skip the current entry.
+        data->hist_prev->hist_next = data->hist_next;
+    }
+    else
+    {
+        // First entry in the bucket.
+        // Get the bucket's index.
+        int bucket_index = histogramIndex(data);
+        // Assign the bucket's entry to the next entry.
+        histogram[bucket_index] = data->hist_next;
+    }
+    // Check if we have another entry after this.
+    if (data->hist_next != nullptr)
+    {
+        // We do. Set it's previous to the current's previous.
+        data->hist_next->hist_prev = data->hist_prev;
+    }
+    // Remove from the bucket by removing next and previous from node.
+    data->hist_prev = data->hist_next = nullptr;
+}
+
+void histogramInsert(MallocMetadata *data)
+{
+    // Get the required bucket index.
+    int index = histogramIndex(data);
+    // Check if the current bucket is valid.
+    MallocMetadata *current = histogram[index];
+    if (current != nullptr)
+    {
+        bool valid_addition = false;
+        MallocMetadata *previous = current;
+        // Valid bucket. Iterate through the entries and assign.
+        while (current != nullptr)
+        {
+            // Check if the size is appropriate.
+            if (current->size >= data->size)
+            {
+                valid_addition = true;
+                // We found an appropriate spot to add the data, before current.
+                // Do we have an entry before the current bucket?
+                if (current->hist_prev == nullptr)
+                {
+                    // No previous node, bucket entry.
+                    current->hist_prev = data;
+                    data->hist_next = current;
+                    // Update the bucket entry.
+                    histogram[index] = data;
+                    break;
+                }
+                else
+                {
+                    // We have a previous entry.
+                    // Update our new entry.
+                    data->hist_prev = current->hist_prev;
+                    data->hist_next = current;
+
+                    // Update previous entry.
+                    current->hist_prev->hist_next = data;
+
+                    // Update current entry.
+                    current->hist_prev = data;
+                }
+                // We found an appropriate bucket. Exit.
+                break;
+            }
+            previous = current;
+            current = current->next;
+        }
+        // Check if we actually added the item.
+        if (!valid_addition)
+        {
+            // We didn't add it to the bucket because we reached an end. That means it should be the last in the list.
+            previous->hist_next = data;
+            data->hist_prev = previous;
+            data->hist_next = nullptr;
+        }
+    }
+}
 
 void *smalloc(size_t size)
 {
