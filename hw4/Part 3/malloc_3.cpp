@@ -128,39 +128,6 @@ void histogramInsert(MallocMetadata *data)
 
 /* Helper functions */
 
-void splitBlock(MallocMetadata *block, size_t new_size)
-{
-    // We want to split the block into two portions; size and the rest.
-    // Remove the current block from the histogram.
-    histogramRemove(block);
-    // We want to create a new histogram with the required size.
-    size_t second_size = block->size - new_size - sizeof(MallocMetadata);
-    // Resize current block.
-    block->size = new_size;
-    // Get the new block from the secondary data in the previous block.
-    MallocMetadata *new_data = (MallocMetadata *)(block + new_size + sizeof(MallocMetadata));
-    // Set the required parameters.
-    new_data->is_free = true;
-    new_data->size = second_size;
-    new_data->allocated_addr = new_data + sizeof(MallocMetadata);
-    // Assign new_data's neighbor
-    new_data->prev = block;
-    new_data->next = block->next;
-    // Update block's neighbor's prev.
-    if (block->next->prev != nullptr)
-    {
-        block->next->prev = new_data;
-    }
-
-    // Update block's neighbor.
-    block->next = new_data;
-    // Insert both blocks into the histogram.
-    histogramInsert(block);
-    histogramInsert(new_data);
-    // Unite to prevent unmerged fragmentation
-    uniteBlock(new_data);
-}
-
 void uniteBlock(MallocMetadata *block)
 {
     // We need to check if we have blocks that are adjacent to unite.
@@ -205,6 +172,39 @@ void uniteBlock(MallocMetadata *block)
         // Re-add the previous block to the histogram.
         histogramInsert(previous);
     }
+}
+
+void splitBlock(MallocMetadata *block, size_t new_size)
+{
+    // We want to split the block into two portions; size and the rest.
+    // Remove the current block from the histogram.
+    histogramRemove(block);
+    // We want to create a new histogram with the required size.
+    size_t second_size = block->size - new_size - sizeof(MallocMetadata);
+    // Resize current block.
+    block->size = new_size;
+    // Get the new block from the secondary data in the previous block.
+    MallocMetadata *new_data = (MallocMetadata *)(block + new_size + sizeof(MallocMetadata));
+    // Set the required parameters.
+    new_data->is_free = true;
+    new_data->size = second_size;
+    new_data->allocated_addr = new_data + sizeof(MallocMetadata);
+    // Assign new_data's neighbor
+    new_data->prev = block;
+    new_data->next = block->next;
+    // Update block's neighbor's prev.
+    if (block->next->prev != nullptr)
+    {
+        block->next->prev = new_data;
+    }
+
+    // Update block's neighbor.
+    block->next = new_data;
+    // Insert both blocks into the histogram.
+    histogramInsert(block);
+    histogramInsert(new_data);
+    // Unite to prevent unmerged fragmentation
+    uniteBlock(new_data);
 }
 
 void *allocateNewMap(size_t size)
