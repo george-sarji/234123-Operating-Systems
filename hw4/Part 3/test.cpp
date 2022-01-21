@@ -600,10 +600,10 @@ std::string testReallocDecOverwrite(void *array[MAX_ALLOC]) {
 std::string testNoRecMerge(void *array[MAX_ALLOC]) {
 	std::string expected = "" ;
 	std::string start = "|U:" + std::to_string(default_block_size / 3);
-	start += "|F:" + std::to_string(default_block_size - (default_block_size / 3) - size_of_metadata);
+	// start += "|F:" + std::to_string(default_block_size - (default_block_size / 3));
 
 	expected += start;
-	expected += "|F:" + std::to_string(default_block_size);
+	expected += "|F:" + std::to_string(default_block_size + default_block_size - (default_block_size / 3));
 	expected += "|U:" + std::to_string(default_block_size);
 	expected += "|";
 	checkStats(0, 0, __LINE__);
@@ -620,7 +620,7 @@ std::string testNoRecMerge(void *array[MAX_ALLOC]) {
 	checkStats(0, 0, __LINE__);
 	printMemory<Metadata3>(memory_start_addr, true);
 	expected += start;
-	expected += "|F:" + std::to_string(default_block_size *2 + size_of_metadata);
+	expected += "|F:" + std::to_string(default_block_size *2 + size_of_metadata + default_block_size - (default_block_size / 3));
 	expected += "|";
 
 	sfree(array[2]);
