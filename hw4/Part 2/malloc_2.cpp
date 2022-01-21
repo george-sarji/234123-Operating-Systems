@@ -16,7 +16,7 @@ MallocMetadata *metadata = nullptr;
 
 void *smalloc(size_t size)
 {
-
+    
     if (size == 0 || size > MAX_SIZE)
     {
         return NULL;
@@ -34,18 +34,24 @@ void *smalloc(size_t size)
     }
     // If we reached here - we don't have any appropriate blocks.
     // Allocate the block as required.
-    MallocMetadata *new_address = (MallocMetadata *)sbrk(size + sizeof(MallocMetadata));
+    MallocMetadata *new_address = (MallocMetadata *)sbrk(sizeof(MallocMetadata));
     // Check if successful.
     if (new_address == (void *)(-1))
     {
         return NULL;
     }
+    void *start_address = (MallocMetadata *)sbrk(size);
+    if (start_address == (void *)(-1))
+    {
+        return NULL;
+    }
+
     // Set the required parameters for the newly allocated block.
     new_address->is_free = false;
     new_address->size = size;
     new_address->prev = nullptr;
     new_address->next = nullptr;
-    new_address->allocated_addr = new_address + sizeof(MallocMetadata);
+    new_address->allocated_addr = start_address;
     // Successful allocation. Check if we have an allocation list.
     if (metadata != nullptr)
     {
