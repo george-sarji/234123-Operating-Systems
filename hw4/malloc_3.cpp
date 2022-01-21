@@ -156,6 +156,52 @@ void splitBlock(MallocMetadata *block, size_t new_size)
     histogramInsert(new_data);
 }
 
+void uniteBlock(MallocMetadata *block)
+{
+    // We need to check if we have blocks that are adjacent to unite.
+    // Check the next block.
+    MallocMetadata *next = block->next;
+    if (next != nullptr && next->is_free)
+    {
+        // Merge the two blocks into current.
+        // Remove the blocks from the histogram.
+        histogramRemove(block);
+        histogramRemove(next);
+        // Update the size of the current block.
+        block->size += next->size;
+        // Update the pointers to skip over next.
+        block->next = next->next;
+        // Update the other pointer to correctly point at block.
+        if (next->next != nullptr)
+        {
+            next->next->prev = block;
+        }
+        // Re-insert the block into the histogram.
+        histogramInsert(block);
+    }
+
+    // Check the previous.
+    MallocMetadata *previous = block->prev;
+    if (previous != nullptr && previous->is_free)
+    {
+        // Merge the blocks into previous.
+        // Remove the blocks from the histogram
+        histogramRemove(block);
+        histogramRemove(previous);
+        // Update the size of the previous block.
+        previous->size += block->size;
+        // Update the next block.
+        previous->next = block->next;
+        // Update the other pointer to correctly point at previous.
+        if (block->next != nullptr)
+        {
+            block->next->prev = previous;
+        }
+        // Re-add the previous block to the histogram.
+        histogramInsert(previous);
+    }
+}
+
 void *smalloc(size_t size)
 {
 
