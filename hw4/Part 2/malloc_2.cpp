@@ -16,7 +16,7 @@ MallocMetadata *metadata = nullptr;
 
 void *smalloc(size_t size)
 {
-    
+
     if (size == 0 || size > MAX_SIZE)
     {
         return NULL;
@@ -31,6 +31,7 @@ void *smalloc(size_t size)
             current->is_free = false;
             return current + sizeof(MallocMetadata);
         }
+        current = current->next;
     }
     // If we reached here - we don't have any appropriate blocks.
     // Allocate the block as required.
