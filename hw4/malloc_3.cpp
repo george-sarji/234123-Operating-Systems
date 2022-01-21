@@ -321,6 +321,7 @@ void sfree(void *p)
     char *current = (char *)p - sizeof(MallocMetadata);
     MallocMetadata *block = (MallocMetadata *)current;
     block->is_free = true;
+    uniteBlock(block);
 }
 
 void *srealloc(void *oldp, size_t size)
