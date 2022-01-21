@@ -21,7 +21,7 @@ IMPORTANT_NOTE: I HOLD NO responsability for these tests no to their results, th
 
  */
 
-#include "malloc_2.cpp"
+#include "malloc_2.h"
 #include <unistd.h>
 #include <assert.h>
 #include <cstdlib>
@@ -48,12 +48,6 @@ typedef struct
         meta_data_bytes;
 } HeapState;
 
-size_t _num_free_blocks();
-size_t _num_free_bytes();
-size_t _num_allocated_blocks();
-size_t _num_allocated_bytes();
-size_t _num_meta_data_bytes();
-size_t _size_meta_data();
 void *sbrk(intptr_t);
 
 /*******************************************************************************
