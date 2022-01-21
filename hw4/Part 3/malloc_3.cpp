@@ -189,7 +189,7 @@ void splitBlock(MallocMetadata *block, size_t new_size)
     // Resize current block.
     block->size = new_size;
     // Get the new block from the secondary data in the previous block.
-    MallocMetadata *new_data = (MallocMetadata*)(block->allocated_addr + new_size);
+    MallocMetadata *new_data = (MallocMetadata *)(block->allocated_addr + new_size);
     // Set the required parameters.
     new_data->is_free = true;
     new_data->size = second_size;
@@ -325,12 +325,12 @@ void *smalloc(size_t size)
             // Couldn't extend with sbrk. Exit.
             return nullptr;
         }
+        // Remove the current chunk from the histogram.
+        histogramRemove(current);
         // Extend the size inside the current chunk.
         current->size = size;
         // Set as used.
         current->is_free = false;
-        // Remove the current chunk from the histogram.
-        histogramRemove(current);
         return current->allocated_addr;
     }
 
@@ -503,12 +503,12 @@ void *srealloc(void *oldp, size_t size)
                 // Couldn't extend with sbrk. Exit.
                 return nullptr;
             }
+            // Remove the previous chunk from the histogram.
+            histogramRemove(current);
             // Extend the size inside the previous chunk.
             current->size = size;
             // Set as used.
             current->is_free = false;
-            // Remove the previous chunk from the histogram.
-            histogramRemove(current);
             new_block = current;
         }
         else
@@ -535,7 +535,10 @@ void *srealloc(void *oldp, size_t size)
         // Set the current block as used.
         new_block->is_free = false;
         // Free the old block.
-        sfree(oldp);
+        if (current->allocated_addr != new_block->allocated_addr)
+        {
+            sfree(oldp);
+        }
         return new_block->allocated_addr;
     }
     else
