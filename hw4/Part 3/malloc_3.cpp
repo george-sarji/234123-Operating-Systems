@@ -124,6 +124,11 @@ void histogramInsert(MallocMetadata *data)
             data->hist_next = nullptr;
         }
     }
+    else
+    {
+        // We have to initiate the histogram.
+        histogram[index] = data;
+    }
 }
 
 /* Helper functions */
@@ -304,10 +309,15 @@ void *smalloc(size_t size)
         }
     }
     // Check if we have the wilderness chunk.
-    if (previous != nullptr && previous->next == nullptr)
+    current = metadata;
+    while (current != nullptr && current->next != nullptr)
+    {
+        current = current->next;
+    }
+    if (current != nullptr && current->is_free)
     {
         // We have a free wilderness chunk. We can extend it to host the required data.
-        size_t required_size = size - previous->size;
+        size_t required_size = size - current->size;
         // Use sbrk.
         void *extension = sbrk(required_size);
         if (extension == (void *)(-1))
@@ -315,13 +325,13 @@ void *smalloc(size_t size)
             // Couldn't extend with sbrk. Exit.
             return nullptr;
         }
-        // Extend the size inside the previous chunk.
-        previous->size = size;
+        // Extend the size inside the current chunk.
+        current->size = size;
         // Set as used.
-        previous->is_free = false;
-        // Remove the previous chunk from the histogram.
-        histogramRemove(previous);
-        return previous->allocated_addr;
+        current->is_free = false;
+        // Remove the current chunk from the histogram.
+        histogramRemove(current);
+        return current->allocated_addr;
     }
 
     // If we reached here - we don't have any appropriate blocks in the histogram.
