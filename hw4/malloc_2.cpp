@@ -95,7 +95,10 @@ void *scalloc(size_t num, size_t size)
                 while (i < new_size)
                 {
                     if (*(ptr + i) != '0')
+                    {
                         zero_flag = false;
+                        break;
+                    }
                     i++;
                 }
                 if (zero_flag)
