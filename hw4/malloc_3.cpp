@@ -230,6 +230,22 @@ void *smalloc(size_t size)
         current = current->next;
     }
     // If we reached here - we don't have any appropriate blocks.
+    // Check if wilderness chunk is free.
+    if (previous->is_free)
+    {
+        // We have a free wilderness chunk. We can extend it to host the required data.
+        size_t required_size = size - previous->size;
+        // Use sbrk.
+        void *extension = sbrk(required_size);
+        if (extension == (void *)(-1))
+        {
+            // Couldn't extend with sbrk. Exit.
+            return nullptr;
+        }
+        // Extend the size inside the wilderness chunk.
+        previous->size = size;
+        return previous->allocated_addr;
+    }
     // Allocate the block as required.
     MallocMetadata *new_address = (MallocMetadata *)sbrk(size + sizeof(MallocMetadata));
     // Check if successful.
