@@ -223,6 +223,8 @@ void *smalloc(size_t size)
                 // We need to split the blocks.
                 splitBlock(current, size);
             }
+            // Remove the block from the histogram.
+            histogramRemove(current);
             current->is_free = false;
             return current + sizeof(MallocMetadata);
         }
@@ -244,6 +246,10 @@ void *smalloc(size_t size)
         }
         // Extend the size inside the wilderness chunk.
         previous->size = size;
+        // Set as used.
+        previous->is_free = false;
+        // Remove the wilderness chunk from the histogram.
+        histogramRemove(previous);
         return previous->allocated_addr;
     }
     // Allocate the block as required.
@@ -312,7 +318,13 @@ void *scalloc(size_t num, size_t size)
                 // Check if we got a valid flag.
                 if (zero_flag)
                 {
-                    // Valid zero flag = valid block. Return address.
+                    // Valid zero flag = valid block. Split the block as needed.
+                    splitBlock(data, num * size);
+                    // Remove the block from the histogram.
+                    histogramRemove(data);
+                    // Set the block as used.
+                    data->is_free;
+                    // Return the block address.
                     return data->allocated_addr;
                 }
             }
