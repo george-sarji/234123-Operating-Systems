@@ -1,9 +1,12 @@
+#include <iostream>
 #include <unistd.h>
 #include <cstring>
+#include <sys/mman.h>
 
 #define MAX_SIZE 1e8
 #define HIST_SIZE 128
 #define KILOBYTE 1024
+#define MAP_MIN 128 * KILOBYTE
 
 struct MallocMetadata
 {
@@ -19,7 +22,7 @@ struct MallocMetadata
 };
 
 MallocMetadata *metadata = nullptr;
-
+MallocMetadata *mmap_list = nullptr;
 MallocMetadata *histogram[HIST_SIZE];
 
 /* Histogram functions */
@@ -199,6 +202,63 @@ void uniteBlock(MallocMetadata *block)
         }
         // Re-add the previous block to the histogram.
         histogramInsert(previous);
+    }
+}
+
+void *allocateNewMap(size_t size)
+{
+
+    MallocMetadata *current = metadata;
+    MallocMetadata *new_block;
+    // Allocate a new block using memory mapping
+    new_block = ((MallocMetadata *)mmap(nullptr, size + sizeof(MallocMetadata), PROT_EXEC | PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0));
+    if (new_block == (void *)-1)
+    {
+        return nullptr;
+    }
+    // Set the properties of the entry.
+    new_block->size = size;
+    new_block->allocated_addr = ((char *)new_block) + sizeof(MallocMetadata);
+    new_block->is_free = false;
+    // Do we have a memory mapping list?
+    if (mmap_list == nullptr)
+        mmap_list = new_block;
+    else
+    {
+        // Iterate through the memory mapping list and get the last entry to add the new entry.
+        current = mmap_list;
+        while (current->next != nullptr)
+        {
+            current = current->next;
+        }
+        current->next = new_block;
+        new_block->prev = current;
+        new_block->next = nullptr;
+    }
+    return new_block->allocated_addr;
+}
+
+void freeInMap(void *p)
+{
+
+    MallocMetadata *current = mmap_list;
+    // Iterate through the memory mapping list.
+    while (current != nullptr)
+    {
+        // Is this the same allocation?
+        if (current->allocated_addr == p)
+        {
+            // Yes. Skip over block.
+            current->prev->next = current->next;
+            if (current->next != nullptr)
+                current->next->prev = current->prev;
+            if (current->prev == nullptr)
+                mmap_list = current->next;
+            // Unmap the entry.
+            munmap(current, current->size + sizeof(MallocMetadata));
+            return;
+        }
+        current = current->next;
     }
 }
 
