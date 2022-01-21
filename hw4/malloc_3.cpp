@@ -211,6 +211,7 @@ void *smalloc(size_t size)
     }
     // We need to check if the current list has any available blocks.
     MallocMetadata *current = malloc;
+    MallocMetadata *previous = current;
     while (current != nullptr)
     {
         if (current->is_free && current->size >= size + sizeof(MallocMetadata))
@@ -225,6 +226,8 @@ void *smalloc(size_t size)
             current->is_free = false;
             return current + sizeof(MallocMetadata);
         }
+        previous = current;
+        current = current->next;
     }
     // If we reached here - we don't have any appropriate blocks.
     // Allocate the block as required.
