@@ -123,20 +123,10 @@ void sfree(void *p)
 {
     if (p == nullptr)
         return;
-    // Get the head of the metadata list.
-    MallocMetadata *current = malloc;
-    // Iterate through the list.
-    while (current)
-    {
-        // Is this the same address?
-        if (current->allocated_addr == p)
-        {
-            // Yes. Set as free.
-            current->is_free = true;
-            return;
-        }
-        current = current->next;
-    }
+    // Assistive cast to avoid size upscale.
+    char *current = (char *)p - sizeof(MallocMetadata);
+    MallocMetadata *block = (MallocMetadata *)current;
+    block->is_free = true;
 }
 
 void *srealloc(void *oldp, size_t size)
