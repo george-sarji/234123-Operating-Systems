@@ -481,6 +481,8 @@ void *srealloc(void *oldp, size_t size)
             histogramRemove(current);
             histogramRemove(next);
             // We need to merge. Set the new size.
+            // Check if we overwrite the data.
+            overwrite = size > previous->size;
             previous->size += current->size + next->size + 2 * sizeof(MallocMetadata);
             // We need to update the pointers.
             // Previous's pointers, next goes to next's next.
