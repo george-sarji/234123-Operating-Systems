@@ -565,6 +565,12 @@ size_t _num_allocated_blocks()
         counter++;
         ptr = ptr->next;
     }
+    MallocMetadata *mapped = mmap_list;
+    while (mapped)
+    {
+        counter++;
+        mapped = mapped->next;
+    }
     return counter;
 }
 
@@ -576,6 +582,12 @@ size_t _num_allocated_bytes()
     {
         counter += ptr->size;
         ptr = ptr->next;
+    }
+    MallocMetadata *mapped = mmap_list;
+    while (mapped)
+    {
+        counter += mapped->size;
+        mapped = mapped->next;
     }
     return counter;
 }
