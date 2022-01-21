@@ -544,6 +544,13 @@ void *srealloc(void *oldp, size_t size)
     else
     {
         // Size is appropriate. Reuse the current block.
+        current->is_free = false;
+        // Check if we have to split.
+        if (current->size - size >= 128)
+        {
+            splitBlock(current, size);
+        }
+        histogramRemove(current);
         return current->allocated_addr;
     }
 }
