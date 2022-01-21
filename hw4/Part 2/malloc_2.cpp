@@ -114,14 +114,44 @@ void *scalloc(size_t num, size_t size)
     }
 
     // If we reached this point - we don't have any blocks that are appropriate.
-    // Use smalloc to allocate a block of size num * size.
-    void *new_address = smalloc(size * num);
-    // Did we get a successful allocation?
-    if (new_address == nullptr)
+    // We have to allocate a new block on our own.
+    MallocMetadata *new_data = (MallocMetadata *)sbrk(sizeof(MallocMetadata));
+    // Check if the allocation worked.
+    if (new_data == (void *)(-1))
     {
-        return nullptr;
+        return NULL;
     }
-    // Set the memory block to zeros.
+    // Allocate the actual data portion.
+    void *new_address = sbrk(size * num);
+    if (new_address == (void *)(-1))
+    {
+        return NULL;
+    }
+    // Set the properties of the metadata.
+    new_data->size = num * size;
+    new_data->is_free = false;
+    new_data->allocated_addr = new_address;
+    new_data->next = new_data->prev = nullptr;
+    // Do we have a valid metadata?
+    if (metadata != nullptr)
+    {
+        // Get the last item in the metadata.
+        MallocMetadata *current = metadata;
+        while (current->next != nullptr)
+        {
+            current = current->next;
+        }
+        // Set current's next to new_data
+        current->next = new_data;
+        // Set new_data's prev to current.
+        new_data->prev = current;
+    }
+    else
+    {
+        // Set the metadata as the new block.
+        metadata = new_data;
+    }
+    // Set the blocks to zero.
     memset(new_address, 0, size * num);
     return new_address;
 }
