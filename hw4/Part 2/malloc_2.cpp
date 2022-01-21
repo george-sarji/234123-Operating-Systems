@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <cstring>
+#include <iostream>
 
 #define MAX_SIZE 1e8
 
@@ -80,78 +81,14 @@ void *scalloc(size_t num, size_t size)
     // We are looking for a continous free area, num blocks, each of at least size bytes.
     if (size == 0 || size * num > MAX_SIZE)
         return NULL;
-    // Check if we have malloc in the first place.
-    int new_size = size * num;
-    bool zero_flag = true;
-    if (metadata)
-    {
-        // Iterate through the meta data to get the required block.
-        for (MallocMetadata *data = metadata; data != nullptr; data = data->next)
-        {
-            zero_flag = true;
-            char *current_char = (char *)(data->allocated_addr);
-            // Check if the current block is free and is appropriate.
-            if (data->is_free && data->size >= num * (size))
-            {
-                // Iterate through the block.
-                for (int i = 0; i < new_size; i++)
-                {
-                    if (*(current_char + i) != '0')
-                    {
-                        // Not a zero. Set flag and break.
-                        zero_flag = false;
-                        break;
-                    }
-                }
-                // Check if we got a valid flag.
-                if (zero_flag)
-                {
-                    // Valid zero flag = valid block. Return address.
-                    return data->allocated_addr;
-                }
-            }
-        }
-    }
-
-    // If we reached this point - we don't have any blocks that are appropriate.
-    // We have to allocate a new block on our own.
-    MallocMetadata *new_data = (MallocMetadata *)sbrk(sizeof(MallocMetadata));
-    // Check if the allocation worked.
-    if (new_data == (void *)(-1))
+    // We can use smalloc to allocate a block for us.
+    void *new_address = smalloc(num * size);
+    // Check if we got a valid address.
+    if (new_address == NULL)
     {
         return NULL;
     }
-    // Allocate the actual data portion.
-    void *new_address = sbrk(size * num);
-    if (new_address == (void *)(-1))
-    {
-        return NULL;
-    }
-    // Set the properties of the metadata.
-    new_data->size = num * size;
-    new_data->is_free = false;
-    new_data->allocated_addr = new_address;
-    new_data->next = new_data->prev = nullptr;
-    // Do we have a valid metadata?
-    if (metadata != nullptr)
-    {
-        // Get the last item in the metadata.
-        MallocMetadata *current = metadata;
-        while (current->next != nullptr)
-        {
-            current = current->next;
-        }
-        // Set current's next to new_data
-        current->next = new_data;
-        // Set new_data's prev to current.
-        new_data->prev = current;
-    }
-    else
-    {
-        // Set the metadata as the new block.
-        metadata = new_data;
-    }
-    // Set the blocks to zero.
+    // Set the data to zero.
     memset(new_address, 0, size * num);
     return new_address;
 }
