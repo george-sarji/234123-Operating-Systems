@@ -2,16 +2,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int main()
+int main(int argc, char* argv[])
 {
-    // Get the number from input.
-    int bytes = 0;
-    scanf("%d", &bytes);
-    // Allocate bytes.
-    usleep(1);
-    void *address = malloc(bytes);
-    usleep(2);
-    // Free and exit.
-    // free(address);
+    int bytes = atoi(argv[1]);
+    sleep(1);
+    malloc(bytes);
+    sleep(1);
     return 1;
 }
