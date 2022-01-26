@@ -189,7 +189,7 @@ void splitBlock(MallocMetadata *block, size_t new_size)
     // Resize current block.
     block->size = new_size;
     // Get the new block from the secondary data in the previous block.
-    MallocMetadata *new_data = (MallocMetadata *)(block->allocated_addr + new_size);
+    MallocMetadata *new_data = (MallocMetadata *)((char *)block->allocated_addr + new_size);
     // Set the required parameters.
     new_data->is_free = true;
     new_data->size = second_size;
@@ -225,7 +225,7 @@ void *allocateNewMap(size_t size)
     }
     // Set the properties of the entry.
     new_block->size = size;
-    new_block->allocated_addr = ((char *)new_block) + sizeof(MallocMetadata);
+    new_block->allocated_addr = (void *)(((char *)new_block) + sizeof(MallocMetadata));
     new_block->is_free = false;
     // Do we have a memory mapping list?
     if (mmap_list == nullptr)
@@ -256,13 +256,13 @@ void freeInMap(void *p)
         if (current->allocated_addr == p)
         {
             // Yes. Skip over block.
-            current->prev->next = current->next;
+            if (current->prev != nullptr)
+                current->prev->next = current->next;
             if (current->next != nullptr)
                 current->next->prev = current->prev;
             if (current->prev == nullptr)
                 mmap_list = current->next;
-            // Unmap the entry.
-            munmap(current, current->size + sizeof(MallocMetadata));
+            munmap((char *)current->allocated_addr + sizeof(MallocMetadata), current->size + sizeof(MallocMetadata));
             return;
         }
         current = current->next;
@@ -424,10 +424,12 @@ void *srealloc(void *oldp, size_t size)
     // Check if the size is appropriate.
     if (current->size < size)
     {
-        if (size >= MAP_MIN)
+        if (size >= MAP_MIN && current->size >= MAP_MIN)
         {
-            sfree(current);
-            return allocateNewMap(size);
+            void *to_ret = allocateNewMap(size);
+            memcpy(to_ret, current->allocated_addr, current->size);
+            sfree(oldp);
+            return to_ret;
         }
         // Size is not appropriate. Attempt merging with adjacent blocks.
         MallocMetadata *previous = current->prev, *next = current->next, *new_block;
@@ -548,6 +550,13 @@ void *srealloc(void *oldp, size_t size)
     }
     else
     {
+        if (current->size >= size && size >= MAP_MIN)
+        {
+            void *to_ret = allocateNewMap(size);
+            memcpy(to_ret, current->allocated_addr, size);
+            sfree(oldp);
+            return to_ret;
+        }
         // Size is appropriate. Reuse the current block.
         current->is_free = false;
         // Check if we have to split.
