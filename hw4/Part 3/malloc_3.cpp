@@ -500,22 +500,58 @@ void *srealloc(void *oldp, size_t size)
         else if (current->next == nullptr)
         {
             // We have the wilderness chunk. Merging did not help.
-            // We can extend it to host the required data.
-            size_t required_size = size - current->size;
-            // Use sbrk.
-            void *extension = sbrk(required_size);
-            if (extension == (void *)(-1))
+            // Check if the previous block is free so we can merge.
+            if (current->prev != nullptr && current->prev->is_free)
             {
-                // Couldn't extend with sbrk. Exit.
-                return nullptr;
+                // We can merge with the previous block.
+                // Remove previous and current from histogram.
+                histogramRemove(previous);
+                histogramRemove(current);
+                overwrite = size > previous->size;
+                // We need to merge. Set the new size.
+                previous->size += current->size + sizeof(MallocMetadata);
+                // We need to update the pointers.
+                // Previous's pointers, next goes to current's next.
+                previous->next = next;
+                // Set the previous of next (is relevant)
+                if (next != nullptr)
+                {
+                    next->prev = previous;
+                }
+                size_t required_size = size - current->size;
+                // Use sbrk.
+                void *extension = sbrk(required_size);
+                if (extension == (void *)(-1))
+                {
+                    // Couldn't extend with sbrk. Exit.
+                    return nullptr;
+                }
+                // Remove the previous chunk from the histogram.
+                // Extend the size inside the previous chunk.
+                previous->size = size;
+                // Set as used.
+                previous->is_free = false;
+                new_block = previous;
             }
-            // Remove the previous chunk from the histogram.
-            histogramRemove(current);
-            // Extend the size inside the previous chunk.
-            current->size = size;
-            // Set as used.
-            current->is_free = false;
-            new_block = current;
+            else
+            {
+                // We can extend it to host the required data.
+                size_t required_size = size - current->size;
+                // Use sbrk.
+                void *extension = sbrk(required_size);
+                if (extension == (void *)(-1))
+                {
+                    // Couldn't extend with sbrk. Exit.
+                    return nullptr;
+                }
+                // Remove the previous chunk from the histogram.
+                histogramRemove(current);
+                // Extend the size inside the previous chunk.
+                current->size = size;
+                // Set as used.
+                current->is_free = false;
+                new_block = current;
+            }
         }
         else
         {
