@@ -208,7 +208,7 @@ std::string testRealloc(void *array[MAX_ALLOC]) {
 
 	for (int i = 0 ; i < default_block_size ; ++i) {
 		if (((char *) array[0])[i] != 'a') {
-			std::cout << "realloc didnt copy the char b to index " << i << std::endl;
+			std::cout << "realloc didnt copy the char a to index " << i << std::endl;
 			break;
 		}
 	}
@@ -318,7 +318,8 @@ std::string testSplitAndMerge(void *array[MAX_ALLOC]) {
 	expected += "|U:" + default_block;
 	expected += "|U:" + std::to_string(small_part_of_block + default_block_size);
 	expected += "|U:" + std::to_string(small_part_of_block + default_block_size);
-	expected += "|F:" + std::to_string(2 * default_block_size - 2 * small_part_of_block + size_of_metadata);
+	expected += "|F:" + std::to_string(default_block_size - 2 * small_part_of_block + default_block_size + size_of_metadata);
+	//expected += "|F:" + default_block;
 	expected += "|U:" + default_block;
 	expected += "|U:" + default_block;
 	expected += "|U:" + std::to_string(small_part_of_block + default_block_size);
@@ -354,10 +355,13 @@ std::string testSplitAndMerge(void *array[MAX_ALLOC]) {
 	DO_MALLOC(srealloc(array[5], default_block_size + default_block_size / 3));
 	checkStats(0, 0, __LINE__);
 	sfree(array[10]);
+	//printMemory<Metadata3>(memory_start_addr, true);
+	//std::cout << "\n" << std::endl;
 	checkStats(0, 0, __LINE__);
 	DO_MALLOC(srealloc(array[9], default_block_size + default_block_size / 3));
 	checkStats(0, 0, __LINE__);
-
+	//printMemory<Metadata3>(memory_start_addr, true);
+	//std::cout << "\n" << std::endl;
 	sfree(array[12]);
 	checkStats(0, 0, __LINE__);
 	DO_MALLOC(srealloc(array[13], default_block_size + default_block_size / 3));
@@ -442,7 +446,9 @@ std::string testInit(void *array[MAX_ALLOC]) {
 	}
 	printMemory<Metadata3>(memory_start_addr, true);
 	checkStats(0, 0, __LINE__);
+	//std::cout << "what" << std::endl;
 	DO_MALLOC(array[0] = smalloc(2));
+	//std::cout << " the fuck" <<std::endl;
 	checkStats(0, 0, __LINE__);
 	printMemory<Metadata3>(memory_start_addr, true);
 	return expected;
@@ -460,7 +466,7 @@ std::string testBadArgs(void *array[MAX_ALLOC]) {
 		checkStats(0, 0, __LINE__);
 		array[2] = scalloc(1, option); //need to fail
 		checkStats(0, 0, __LINE__);
-		array[3] = srealloc(array[9], option); //need to fail
+		array[3] = srealloc(array[9], option); //need to fail - our program fails here
 		checkStats(0, 0, __LINE__);
 		if (array[0] || array[1] || array[2] || array[3]) {
 			std::cout << "missed edge case: " << std::to_string(option) << std::endl;
@@ -555,10 +561,10 @@ std::string testReallocDecOverwrite(void *array[MAX_ALLOC]) {
 	checkStats(size_for_mmap, 1, __LINE__);
 
 	for (int i = 0 ; i < default_block_size * 2 ; ++i) {
-		((char *) array[1])[i] = (char) i;
+		((char *) array[1])[i] = (char) (i);
 	}
 	for (int i = 0 ; i < default_block_size ; ++i) {
-		((char *) array[0])[i] = (char) i;
+		((char *) array[0])[i] = (char) (i);
 	}
 	for (int i = 0 ; i < size_for_mmap ; ++i) {
 		((char *) array[2])[i] = (char) i;
@@ -600,10 +606,8 @@ std::string testReallocDecOverwrite(void *array[MAX_ALLOC]) {
 std::string testNoRecMerge(void *array[MAX_ALLOC]) {
 	std::string expected = "" ;
 	std::string start = "|U:" + std::to_string(default_block_size / 3);
-	// start += "|F:" + std::to_string(default_block_size - (default_block_size / 3));
-
 	expected += start;
-	expected += "|F:" + std::to_string(default_block_size + default_block_size - (default_block_size / 3));
+	expected += "|F:" + std::to_string(2*default_block_size - (default_block_size / 3));
 	expected += "|U:" + std::to_string(default_block_size);
 	expected += "|";
 	checkStats(0, 0, __LINE__);
@@ -620,7 +624,7 @@ std::string testNoRecMerge(void *array[MAX_ALLOC]) {
 	checkStats(0, 0, __LINE__);
 	printMemory<Metadata3>(memory_start_addr, true);
 	expected += start;
-	expected += "|F:" + std::to_string(default_block_size *2 + size_of_metadata + default_block_size - (default_block_size / 3));
+	expected += "|F:" + std::to_string(3*default_block_size - (default_block_size / 3) + size_of_metadata);
 	expected += "|";
 
 	sfree(array[2]);
@@ -634,7 +638,6 @@ std::string testReallocWildLikePiazza(void *array[MAX_ALLOC]) {
 	std::string expected = "" ;
 	expected += "|F:" + std::to_string(default_block_size*4);
 	expected += "|U:" + std::to_string(default_block_size);
-	expected += "|F:" + std::to_string(default_block_size);
 	expected += "|U:" + std::to_string( default_block_size *3) + "|";
 	checkStats(0, 0, __LINE__);
 	DO_MALLOC(array[0] = smalloc(default_block_size*4));
@@ -753,7 +756,7 @@ std::string mergeVariations(void *array[MAX_ALLOC]) {
 	checkStats(0, 0, __LINE__);
 
 	sfree(array[3]);
-	char firstByteInFreedBlock = ((char *)array[3])[0];
+	//char firstByteInFreedBlock = ((char *)array[3])[0];
 	checkStats(0, 0, __LINE__);
 	void *last2ndItem = array[2];
 	DO_MALLOC(array[2] = srealloc(array[2], default_block_size * 2));
